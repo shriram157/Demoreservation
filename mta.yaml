@@ -1,0 +1,59 @@
+ID: demoreservation
+_schema-version: '2.1'
+description: Demo reservation consolidated app
+version: 0.0.1
+
+modules:
+ - name: demoreservation-node
+   type: nodejs
+   path: demoreservation-node
+   parameters:
+      host: demoreservation-node
+      disk-quota: 256M
+      memory: 256M
+   provides:
+    - name: demoreservation-node_api
+      properties:
+         url: ${default-url}
+   requires:
+    - name: application-logs_demoreservation
+    - name: uaa_demoreservation
+    - name: DEMO_RESERVATION_APIM_CUPS
+
+ - name: demoreservation
+   type: html5
+   path: demoreservation
+   parameters:
+      host: demoreservation
+      disk-quota: 256M
+      memory: 256M
+   build-parameters:
+      builder: grunt
+   requires:
+    - name: application-logs_demoreservation
+    - name: uaa_demoreservation
+    - name: demoreservation-node_api
+      group: destinations
+      properties:
+         name: demoreservation-node
+         forwardAuthToken: true
+         url: '~{url}'
+
+resources:
+ - name: application-logs_demoreservation
+   parameters:
+      service: application-logs
+      service-plan: lite
+   type: org.cloudfoundry.managed-service
+
+ - name: uaa_demoreservation
+   parameters:
+      path: ./xs-security.json
+      service-plan: application
+      service: xsuaa
+   type: org.cloudfoundry.managed-service
+
+ - name: DEMO_RESERVATION_APIM_CUPS
+   parameters:
+     service-name: DEMO_RESERVATION_APIM_CUPS
+   type: org.cloudfoundry.existing-service

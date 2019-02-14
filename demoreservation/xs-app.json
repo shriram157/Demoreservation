@@ -1,0 +1,18 @@
+{
+  "welcomeFile": "/demoreservation/index.html",
+  "authenticationMethod": "none",
+  "logout": {
+    "logoutEndpoint": "/do/logout"
+  },
+  "routes": [
+    {
+      "source": "^/demoreservation/(.*)$",
+      "target": "$1",
+      "localDir": "webapp"
+    }, {
+      "source": "/node(.*)",
+      "destination": "demoreservation-node",
+      "csrfProtection": false
+    }
+  ]
+}
