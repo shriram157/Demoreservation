@@ -37,6 +37,7 @@ modules:
       properties:
          name: demoreservation-node
          forwardAuthToken: true
+         timeout: 60000
          url: '~{url}'
 
 resources:
@@ -55,5 +56,5 @@ resources:
 
  - name: DEMO_RESERVATION_APIM_CUPS
    parameters:
-     service-name: DEMO_RESERVATION_APIM_CUPS
+      service-name: DEMO_RESERVATION_APIM_CUPS
    type: org.cloudfoundry.existing-service
