@@ -20,25 +20,7 @@ modules:
     - name: uaa_demoreservation
     - name: DEMO_RESERVATION_APIM_CUPS
 
- - name: demoreservation
-   type: html5
-   path: demoreservation
-   parameters:
-      host: demoreservation
-      disk-quota: 256M
-      memory: 256M
-   build-parameters:
-      builder: grunt
-   requires:
-    - name: application-logs_demoreservation
-    - name: uaa_demoreservation
-    - name: demoreservation-node_api
-      group: destinations
-      properties:
-         name: demoreservation-node
-         forwardAuthToken: true
-         timeout: 60000
-         url: '~{url}'
+ 
 
 resources:
  - name: application-logs_demoreservation

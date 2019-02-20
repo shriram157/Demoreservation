@@ -5,8 +5,8 @@ sap.ui.define([
 
 	return Opa5.extend("ca.toyota.demoreservation.demoreservation.test.integration.arrangements.Startup", {
 
-		iStartMyApp: function (oOptionsParameter) {
-			var oOptions = oOptionsParameter || {};
+		iStartMyApp: function (oOptions) {
+			oOptions = oOptions || {};
 
 			// start the app with a minimal delay to make tests fast but still async to discover basic timing issues
 			oOptions.delay = oOptions.delay || 50;

@@ -10,11 +10,19 @@
 		"title": "{{appTitle}}",
 		"description": "{{appDescription}}",
 		"sourceTemplate": {
-			"id": "html5moduletemplates.basicSAPUI5ApplicationProjectModule",
-			"version": "1.40.12"
+			"id": "servicecatalog.connectivityComponentForManifest",
+			"version": "0.0.0"
+		},
+		"dataSources": {
+			"ZCDS_DEMO_RESERVATION_CDS": {
+				"uri": "/demoreservation-node/node/ZCDS_DEMO_RESERVATION_CDS/",
+				"type": "OData",
+				"settings": {
+					"localUri": "localService/ZCDS_DEMO_RESERVATION_CDS/metadata.xml"
+				}
+			}
 		}
 	},
-
 	"sap.ui": {
 		"technology": "UI5",
 		"icons": {
@@ -29,22 +37,20 @@
 			"desktop": true,
 			"tablet": true,
 			"phone": true
-		}
+		},
+		"supportedThemes": ["sap_hcb", "sap_belize"]
 	},
-
 	"sap.ui5": {
 		"rootView": {
-			"viewName": "ca.toyota.demoreservation.demoreservation.view.View1",
-			"type": "XML",
-			"async": true,
-			"id": "View1"
+			"viewName": "ca.toyota.demoreservation.demoreservation.view.App",
+			"type": "XML"
 		},
 		"dependencies": {
 			"minUI5Version": "1.60.1",
 			"libs": {
+				"sap.ui.layout": {},
 				"sap.ui.core": {},
-				"sap.m": {},
-				"sap.ui.layout": {}
+				"sap.m": {}
 			}
 		},
 		"contentDensities": {
@@ -57,6 +63,22 @@
 				"settings": {
 					"bundleName": "ca.toyota.demoreservation.demoreservation.i18n.i18n"
 				}
+			},
+			"vehicles": {
+				"type": "sap.ui.model.json.JSONModel",
+				"settings": {},
+				"uri": "model/demoData.json",
+				"preload": false
+			},
+			"": {
+				"type": "sap.ui.model.odata.v2.ODataModel",
+				"settings": {
+					"defaultOperationMode": "Server",
+					"defaultBindingMode": "OneWay",
+					"defaultCountMode": "Request"
+				},
+				"dataSource": "ZCDS_DEMO_RESERVATION_CDS",
+				"preload": true
 			}
 		},
 		"resources": {
@@ -71,21 +93,38 @@
 				"async": true,
 				"viewPath": "ca.toyota.demoreservation.demoreservation.view",
 				"controlAggregation": "pages",
-				"controlId": "app",
+				"controlId": "idAppControl",
 				"clearControlAggregation": false
 			},
 			"routes": [{
-				"name": "RouteView1",
-				"pattern": "RouteView1",
-				"target": ["TargetView1"]
+				"name": "TargetApp",
+				"pattern": "RouteApp",
+				"target": ["TargetApp"]
+			}, {
+				"name": "Home",
+				"pattern": "",
+				"target": ["Home"]
+			}, {
+				"name": "VehicleDetails",
+				"pattern": "VehicleDetails/{vguid}",
+				"target": ["VehicleDetails"]
 			}],
 			"targets": {
-				"TargetView1": {
+				"TargetApp": {
 					"viewType": "XML",
 					"transition": "slide",
 					"clearControlAggregation": false,
-					"viewId": "View1",
-					"viewName": "View1"
+					"viewName": "App"
+				},
+				"Home": {
+					"viewType": "XML",
+					"viewName": "Home",
+					"viewLevel": 1
+				},
+				"VehicleDetails": {
+					"viewType": "XML",
+					"viewName": "VehicleDetails",
+					"viewLevel": 2
 				}
 			}
 		}

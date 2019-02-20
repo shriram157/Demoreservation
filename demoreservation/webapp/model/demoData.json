@@ -1,0 +1,223 @@
+{
+	"MyVehicles": [{
+		"series": "4Runner",
+		"model": "4 Runner",
+		"zone": "Central",
+		"est_assoc_price": "32000 CAD",
+		"est_end_date": "2018-01-20",
+		"year": 2018,
+		"colour": "Magnetic Grey Metallic",
+		"driver": "Nancy Duguay",
+		"vin": "Text",
+		"status": "Available"
+	}, {
+		"series": "4Runner",
+		"model": "4 Runner",
+		"zone": "Central",
+		"est_assoc_price": "32000 CAD",
+		"est_end_date": "2018-01-20",
+		"year": 2018,
+		"colour": "Magnetic Grey Metallic",
+		"driver": "Nancy Duguay",
+		"vin": "Text",
+		"status": "Available"
+	}, {
+		"series": "4Runner",
+		"model": "4 Runner",
+		"zone": "Central",
+		"est_assoc_price": "32000 CAD",
+		"est_end_date": "2018-01-20",
+		"year": 2018,
+		"colour": "Magnetic Grey Metallic",
+		"driver": "Nancy Duguay",
+		"vin": "Text",
+		"status": "Available"
+	}, {
+		"series": "4Runner",
+		"model": "4 Runner",
+		"zone": "Central",
+		"est_assoc_price": "32000 CAD",
+		"est_end_date": "2018-01-20",
+		"year": 2018,
+		"colour": "Magnetic Grey Metallic",
+		"driver": "Nancy Duguay",
+		"vin": "Text",
+		"status": "Available"
+	}, {
+		"series": "4Runner",
+		"model": "4 Runner",
+		"zone": "Central",
+		"est_assoc_price": "32000 CAD",
+		"est_end_date": "2018-01-20",
+		"year": 2018,
+		"colour": "Magnetic Grey Metallic",
+		"driver": "Nancy Duguay",
+		"vin": "Text",
+		"status": "Available"
+	}],
+	"AllVehicles": [{
+		"series": "4Runner",
+		"model": "4 Runner",
+		"zone": "Central",
+		"est_assoc_price": "32000 CAD",
+		"est_end_date": "2018-01-20",
+		"year": 2018,
+		"colour": "Magnetic Grey Metallic",
+		"driver": "Nancy Duguay",
+		"vin": "Text",
+		"status": "Available"
+	}, {
+		"series": "4Runner",
+		"model": "4 Runner",
+		"zone": "Central",
+		"est_assoc_price": "32000 CAD",
+		"est_end_date": "2018-01-20",
+		"year": 2018,
+		"colour": "Magnetic Grey Metallic",
+		"driver": "Nancy Duguay",
+		"vin": "Text",
+		"status": "Available"
+	}, {
+		"series": "4Runner",
+		"model": "4 Runner",
+		"zone": "Central",
+		"est_assoc_price": "32000 CAD",
+		"est_end_date": "2018-01-20",
+		"year": 2018,
+		"colour": "Magnetic Grey Metallic",
+		"driver": "Nancy Duguay",
+		"vin": "Text",
+		"status": "Available"
+	}, {
+		"series": "4Runner",
+		"model": "4 Runner",
+		"zone": "Central",
+		"est_assoc_price": "32000 CAD",
+		"est_end_date": "2018-01-20",
+		"year": 2018,
+		"colour": "Magnetic Grey Metallic",
+		"driver": "Nancy Duguay",
+		"vin": "Text",
+		"status": "Available"
+	}, {
+		"series": "4Runner",
+		"model": "4 Runner",
+		"zone": "Central",
+		"est_assoc_price": "32000 CAD",
+		"est_end_date": "2018-01-20",
+		"year": 2018,
+		"colour": "Magnetic Grey Metallic",
+		"driver": "Nancy Duguay",
+		"vin": "Text",
+		"status": "Available"
+	}, {
+		"series": "4Runner",
+		"model": "4 Runner",
+		"zone": "Central",
+		"est_assoc_price": "32000 CAD",
+		"est_end_date": "2018-01-20",
+		"year": 2018,
+		"colour": "Magnetic Grey Metallic",
+		"driver": "Nancy Duguay",
+		"vin": "Text",
+		"status": "Available"
+	}, {
+		"series": "4Runner",
+		"model": "4 Runner",
+		"zone": "Central",
+		"est_assoc_price": "32000 CAD",
+		"est_end_date": "2018-01-20",
+		"year": 2018,
+		"colour": "Magnetic Grey Metallic",
+		"driver": "Nancy Duguay",
+		"vin": "Text",
+		"status": "Available"
+	}, {
+		"series": "4Runner",
+		"model": "4 Runner",
+		"zone": "Central",
+		"est_assoc_price": "32000 CAD",
+		"est_end_date": "2018-01-20",
+		"year": 2018,
+		"colour": "Magnetic Grey Metallic",
+		"driver": "Nancy Duguay",
+		"vin": "Text",
+		"status": "Available"
+	}, {
+		"series": "4Runner",
+		"model": "4 Runner",
+		"zone": "Central",
+		"est_assoc_price": "32000 CAD",
+		"est_end_date": "2018-01-20",
+		"year": 2018,
+		"colour": "Magnetic Grey Metallic",
+		"driver": "Nancy Duguay",
+		"vin": "Text",
+		"status": "Available"
+	}, {
+		"series": "4Runner",
+		"model": "4 Runner",
+		"zone": "Central",
+		"est_assoc_price": "32000 CAD",
+		"est_end_date": "2018-01-20",
+		"year": 2018,
+		"colour": "Magnetic Grey Metallic",
+		"driver": "Nancy Duguay",
+		"vin": "Text",
+		"status": "Available"
+	}],
+	"FilterData":{
+		"Zone": [{
+			"key": "Zone1",
+			"name": "Zone 1"
+		},{
+			"key": "Zone2",
+			"name": "Zone 2"
+		},{
+			"key": "Zone3",
+			"name": "Zone 3"
+		},{
+			"key": "Zone4",
+			"name": "Zone 4"
+		}],
+		"Series": [{
+			"key": "Series1",
+			"name": "Series 1"
+		},{
+			"key": "Series2",
+			"name": "Series 2"
+		},{
+			"key": "Series3",
+			"name": "Series 3"
+		},{
+			"key": "Series4",
+			"name": "Series 4"
+		}],
+		"Model": [{
+			"key": "Model1",
+			"name": "Model 1"
+		},{
+			"key": "Model2",
+			"name": "Model 2"
+		},{
+			"key": "Model3",
+			"name": "Model 3"
+		},{
+			"key": "Model4",
+			"name": "Model 4"
+		}],
+		"ReservationStatus": [{
+			"key": "PA",
+			"name": "Pending Approval"
+		},{
+			"key": "AP",
+			"name": "Approved"
+		},{
+			"key": "DL",
+			"name": "Declined"
+		},{
+			"key": "WL",
+			"name": "Waitlist"
+		}]
+	}
+}
