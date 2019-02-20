@@ -29,8 +29,15 @@ modules:
    build-parameters:
       builder: grunt
    requires:
+    - name: application-logs_demoreservation
     - name: uaa_demoreservation
-
+    - name: demoreservation-node_api
+      group: destinations
+      properties:
+         name: demoreservation-node
+         forwardAuthToken: true
+         timeout: 60000
+         url: '~{url}'
 
 resources:
  - name: application-logs_demoreservation
@@ -50,5 +57,3 @@ resources:
    parameters:
       service-name: DEMO_RESERVATION_APIM_CUPS
    type: org.cloudfoundry.existing-service
-
-
