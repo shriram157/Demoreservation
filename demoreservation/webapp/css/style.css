@@ -1,1 +1,69 @@
 /* Enter your custom styles here */
+/* Search input */
+.sapMSFF {
+    border: 1px solid #7891a7;
+    background: #495e70;
+}
+.sapContrastPlus .sapMSFI {
+    color: #ffffff;
+    background: transparent;
+    border: none;
+    outline: none;
+    text-indent: 0.125rem;
+}
+.sapContrastPlus .sapMSFB {
+    color: #cae4fb;
+}
+/* Combo Box */
+.sapContrastPlus .sapMComboBoxTextField {
+    background-color: #495e70;
+    border: 1px solid #7891a7;
+}
+.sapContrastPlus .sapMComboBoxTextFieldArrow {
+    outline: none;
+    border: none;
+    background: transparent;
+    color: #cae4fb;
+}
+.sapContrastPlus .sapMInputBaseIcon {
+	 background: #495e70; 
+	  color: #cae4fb;
+}
+.sapContrastPlus .sapMInputBaseInner {
+    color: #ffffff;
+    background: #495e70;
+}
+
+/* Button */
+.sapContrastPlus .sapMBtnTransparent {
+    background-image: none;
+    background-color: transparent;
+    border-color: transparent;
+    color: #cae4fb;
+}
+.sapContrastPlus .sapMBtnInner {
+    text-shadow: 0 0 0.125rem #000000;
+}
+
+
+
+
+
+
+.sapContrastPlus .sapMLabel {
+    color: #dddddd;
+}
+
+
+.sapContrastPlus .sapFDynamicPageTitle {
+    background: #3f5161;
+}
+.sapContrastPlus.sapFDynamicPageHeader, .sapContrastPlus .sapFDynamicPageHeader {
+    background: #3f5161;
+}
+.sapContrastPlus.sapFDynamicPageHeader.sapFDynamicPageHeaderWithContent, .sapContrastPlus .sapFDynamicPageHeader.sapFDynamicPageHeaderWithContent {
+    box-shadow: 0 0.125rem 0 0 #3f5161, inset 0 -0.125rem 0 0 #4f667a;
+}
+.sapFDynamicPage.sapFDynamicPageTitleClickEnabled.sapFDynamicPageTitleForceHovered .sapFDynamicPageTitle{
+ background-color: #394958
+}

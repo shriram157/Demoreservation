@@ -15,7 +15,7 @@
 		},
 		"dataSources": {
 			"ZCDS_DEMO_RESERVATION_CDS": {
-				"uri": "/demoreservation-node/node/ZCDS_DEMO_RESERVATION_CDS/",
+				"uri": "/node/ZCDS_DEMO_RESERVATION_CDS/",
 				"type": "OData",
 				"settings": {
 					"localUri": "localService/ZCDS_DEMO_RESERVATION_CDS/metadata.xml"

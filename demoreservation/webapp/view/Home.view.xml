@@ -22,47 +22,63 @@
 				<f:content>
 					<fb:FilterBar id="filterbar" reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="true">
 						<fb:filterItems>
-							<fb:FilterItem name="G" label="">
+							<fb:FilterItem name="G">
 								<fb:control>
 									<SearchField placeholder="Search"/>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="A" label="Zone">
 								<fb:control>
-									<Select id="zoneFilter" forceSelection="true" change="onSelectChange" items="{ path: 'vehicles>/FilterData/Zone' }">
+									<ComboBox id="zoneFilter" change="onSelectChange" items="{ path: 'vehicles>/FilterData/Zone' }" placeholder="Select Zone">
 										<core:Item key="{vehicles>key}" text="{vehicles>name}"/>
-									</Select>
+									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="B" label="Series">
 								<fb:control>
-									<Select id="seriesFilter" change="onSelectChange" forceSelection="true" items="{/zc_mmfields}">
+									<ComboBox id="seriesFilter" change="onSelectChange" items="{/zc_mmfields}" placeholder="Select Series">
 										<core:Item key="{ModelSeriesNo}" text="{TCIModelDescriptionEN}"/>
-									</Select>
+									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="C" label="Model">
 								<fb:control>
-									<Select id="modelFilter" change="onSelectChange" forceSelection="true" items="{/zc_model}">
+<!--									<ComboBox id="modelFilter" change="onSelectChange" items="{/zc_model}">
 										<core:Item key="{Model}" text="{ModelDescriptionEN}"/>
-									</Select>
+									</ComboBox>-->
+									<Input
+										id="modelFilter"
+										type="Text"
+										textFormatMode="KeyValue"
+										placeholder="Enter Model ..."
+										showSuggestion="true"
+										showValueHelp="true"
+										valueHelpRequest="handleModelValueHelp"
+										suggestionItems="{/zc_model}"
+										suggestionItemSelected="suggestionItemSelected">
+										<suggestionItems>
+											<core:ListItem key="{Model}" text="{ModelDescriptionEN}" />
+										</suggestionItems>
+									</Input>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="D" label="Year">
 								<fb:control>
-									<Input id="yearFilter"/>
+									<ComboBox id="yearFilter" change="onSelectChange" items="{YearModel>/}" placeholder="Select Year">
+										<core:Item key="{YearModel>dkey}" text="{YearModel>dtext}"/>
+									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="E" label="Reservation Status">
 								<fb:control>
-									<Select id="resStatusFilter" change="onSelectChange" forceSelection="true" items="{ path: 'vehicles>/FilterData/ReservationStatus' }">
+									<ComboBox id="resStatusFilter" change="onSelectChange" items="{ path: 'vehicles>/FilterData/ReservationStatus' }" placeholder="Select Status">
 										<core:Item key="{vehicles>key}" text="{vehicles>name}"/>
-									</Select>
+									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="F" label="Vin">
 								<fb:control>
-									<Input id="vinFilter"/>
+									<Input id="vinFilter" placeholder="Enter VIN ..."/>
 								</fb:control>
 							</fb:FilterItem>
 						</fb:filterItems>
@@ -122,8 +138,8 @@
 										<Text text="{ETATo}"/>
 										<Text text="{ModelYear}"/>
 										<Text text="{ExteriorColourCode}"/>
+										<Text text="{}"/>
 										<Text text="{VehicleIdentificationNumber}"/>
-										<Text text="{ExternalVehicleNumber}"/>
 										<Text text="{PrimaryStatusText}"/>
 									</cells>
 								</ColumnListItem>
