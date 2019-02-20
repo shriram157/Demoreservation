@@ -18,13 +18,14 @@
         "entryPath": "/test-resources"
       },
       "description": "SAPUI5 Test Resources"
-    }, {
-      "path": "dest_demoreservation",
+    },
+    {
+      "path": "/demoreservation-node",
       "target": {
         "type": "destination",
-        "name": "dest_demoreservation"
+        "name": "demoreservation-node"
       },
-      "description": "dest_demoreservation"
+      "description": "demoreservation-node"
     }
   ],
   "sendWelcomeFileRedirect": true

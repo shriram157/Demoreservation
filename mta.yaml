@@ -20,12 +20,6 @@ modules:
     - name: uaa_demoreservation
     - name: DEMO_RESERVATION_APIM_CUPS
 
- 
-
-
- 
-
-
  - name: demoreservation
    type: html5
    path: demoreservation
