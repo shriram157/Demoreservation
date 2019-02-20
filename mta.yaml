@@ -30,7 +30,7 @@ modules:
       builder: grunt
    requires:
     - name: uaa_demoreservation
-    - name: dest_demoreservation
+
 
 resources:
  - name: application-logs_demoreservation
@@ -51,9 +51,4 @@ resources:
       service-name: DEMO_RESERVATION_APIM_CUPS
    type: org.cloudfoundry.existing-service
 
- - name: dest_demoreservation
-   parameters:
-      service-plan: lite
-      service: destination
-   type: org.cloudfoundry.managed-service
 
