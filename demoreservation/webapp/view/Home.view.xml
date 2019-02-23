@@ -20,17 +20,18 @@
 		<f:header>
 			<f:DynamicPageHeader pinnable="true">
 				<f:content>
-					<fb:FilterBar id="filterbar" reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="true">
+					<fb:FilterBar id="filterbar" reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="true" filterContainerWidth="14rem">
 						<fb:filterItems>
-							<fb:FilterItem name="G">
+							<fb:FilterItem class="sapMSFFFilter" name="G">
 								<fb:control>
-									<SearchField placeholder="Search"/>
+									<SearchField class="sapMSFFFilter" placeholder="Search"/>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="A" label="Zone">
 								<fb:control>
-									<ComboBox id="zoneFilter" change="onSelectChange" items="{ path: 'vehicles>/FilterData/Zone' }" placeholder="Select Zone">
-										<core:Item key="{vehicles>key}" text="{vehicles>name}"/>
+									<ComboBox id="zoneFilter" change="onSelectChange" placeholder="Select Zone"
+										items="{ path: '/ZC_ZONES', filters: {path: 'spras',operator: 'EQ',value1: 'E'} }">
+										<core:Item key="{vkbur}" text="{bezei}"/>
 									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
@@ -43,21 +44,13 @@
 							</fb:FilterItem>
 							<fb:FilterItem name="C" label="Model">
 								<fb:control>
-<!--									<ComboBox id="modelFilter" change="onSelectChange" items="{/zc_model}">
+									<!--									<ComboBox id="modelFilter" change="onSelectChange" items="{/zc_model}">
 										<core:Item key="{Model}" text="{ModelDescriptionEN}"/>
 									</ComboBox>-->
-									<Input
-										id="modelFilter"
-										type="Text"
-										textFormatMode="KeyValue"
-										placeholder="Enter Model ..."
-										showSuggestion="true"
-										showValueHelp="true"
-										valueHelpRequest="handleModelValueHelp"
-										suggestionItems="{/zc_model}"
-										suggestionItemSelected="suggestionItemSelected">
+									<Input id="modelFilter" type="Text" textFormatMode="KeyValue" placeholder="Enter Model ..." showSuggestion="true" showValueHelp="true"
+										valueHelpRequest="handleModelValueHelp" suggestionItems="{/zc_model}" suggestionItemSelected="suggestionItemSelected">
 										<suggestionItems>
-											<core:ListItem key="{Model}" text="{ModelDescriptionEN}" />
+											<core:ListItem key="{Model}" text="{ModelDescriptionEN}"/>
 										</suggestionItems>
 									</Input>
 								</fb:control>
@@ -66,13 +59,6 @@
 								<fb:control>
 									<ComboBox id="yearFilter" change="onSelectChange" items="{YearModel>/}" placeholder="Select Year">
 										<core:Item key="{YearModel>dkey}" text="{YearModel>dtext}"/>
-									</ComboBox>
-								</fb:control>
-							</fb:FilterItem>
-							<fb:FilterItem name="E" label="Reservation Status">
-								<fb:control>
-									<ComboBox id="resStatusFilter" change="onSelectChange" items="{ path: 'vehicles>/FilterData/ReservationStatus' }" placeholder="Select Status">
-										<core:Item key="{vehicles>key}" text="{vehicles>name}"/>
 									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
@@ -88,230 +74,79 @@
 		</f:header>
 		<!-- DynamicPage Content -->
 		<f:content>
-			<IconTabBar id="idIconTabBarNoIcons" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding">
+			<FlexBox direction="Column" alignItems="Start">
+			<items>
+			<VBox>
+				<Button text="My Reservations"/>
+				<Button text="All Reservations"/>
+			</VBox>
+			<Table id="idMyReservationsTable" inset="false" growing="true" updateFinished="onUpdateFinished"
+					items="{ path: '/vehicleListSet', 
+						     filters: {path: 'ZZZONE',operator: 'EQ',value1: '3000'},
+						     sorter : {path : 'SeriesDesc'} }">
+				<headerToolbar>
+					<Toolbar>
+						<Title id="tabTitle" level="H2"/>
+						<ToolbarSpacer/>
+						<Button
+							class="sapMBtnIconSort"
+							tooltip="View Sort Settings"
+							icon="sap-icon://sort"
+							press="handleSortButtonPressed" />
+					</Toolbar>
+				</headerToolbar>
+				<columns>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<Text text="Series"/>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<Text text="Model"/>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<Text text="Zone"/>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<Text text="Est. Assoc. Price"/>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<Text text="Est. End Date"/>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<Text text="Year"/>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<Text text="Colour"/>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<Text text="Driver"/>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<Text text="Vin"/>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<Text text="Status"/>
+					</Column>
+				</columns>
 				<items>
-					<IconTabFilter text="Vehicle List">
-						<!--						<Table headerText="Vehicle List" id="idMyReservationsTable" inset="false" items="{/ZCDS_DEMO_RESERVATION}" growing="true"> -->
-						<Table headerText="Vehicle List" id="idMyReservationsTable" inset="false"
-							items="{ path:'/ZCDS_DEMO_RESERVATION',
-							        parameters : { countMode: 'Inline', select :'ModelSeriesNo,VehicleModel,Zone1,Stprs,ETATo,ModelYear,ExteriorColourCode,ExternalVehicleNumber,PrimaryStatusText,VehicleIdentificationNumber'} }"
-							growing="true">
-							<columns>
-								<Column minScreenWidth="Tablet" demandPopin="true">
-									<Text text="Series"/>
-								</Column>
-								<Column minScreenWidth="Tablet" demandPopin="true">
-									<Text text="Model"/>
-								</Column>
-								<Column minScreenWidth="Tablet" demandPopin="true">
-									<Text text="Zone"/>
-								</Column>
-								<Column minScreenWidth="Tablet" demandPopin="true">
-									<Text text="Est. Assoc. Price"/>
-								</Column>
-								<Column minScreenWidth="Tablet" demandPopin="true">
-									<Text text="Est. End Date"/>
-								</Column>
-								<Column minScreenWidth="Tablet" demandPopin="true">
-									<Text text="Year"/>
-								</Column>
-								<Column minScreenWidth="Tablet" demandPopin="true">
-									<Text text="Colour"/>
-								</Column>
-								<Column minScreenWidth="Tablet" demandPopin="true">
-									<Text text="Driver"/>
-								</Column>
-								<Column minScreenWidth="Tablet" demandPopin="true">
-									<Text text="Vin"/>
-								</Column>
-								<Column minScreenWidth="Tablet" demandPopin="true">
-									<Text text="Status"/>
-								</Column>
-							</columns>
-							<items>
-								<ColumnListItem vAlign="Middle" type="Navigation" press="onListItemPress">
-									<cells>
-										<Text text="{ModelSeriesNo}"/>
-										<Text text="{VehicleModel}"/>
-										<Text text="{Zone1}"/>
-										<Text text="{Stprs}"/>
-										<Text text="{ETATo}"/>
-										<Text text="{ModelYear}"/>
-										<Text text="{ExteriorColourCode}"/>
-										<Text text="{}"/>
-										<Text text="{VehicleIdentificationNumber}"/>
-										<Text text="{PrimaryStatusText}"/>
-									</cells>
-								</ColumnListItem>
-							</items>
-						</Table>
-					</IconTabFilter>
-					<IconTabFilter text="">
-	<!--					<Table headerText="All Vehicle List" id="idAllReservationsTable" inset="false" items="{/ZCDS_DEMO_RESERVATION}">
-							<columns>
-								<Column minScreenWidth="Tablet" demandPopin="true">
-									<Text text="Series"/>
-								</Column>
-								<Column minScreenWidth="Tablet" demandPopin="true">
-									<Text text="Model"/>
-								</Column>
-								<Column minScreenWidth="Tablet" demandPopin="true">
-									<Text text="Zone"/>
-								</Column>
-								<Column minScreenWidth="Tablet" demandPopin="true">
-									<Text text="Est. Assoc. Price"/>
-								</Column>
-								<Column minScreenWidth="Tablet" demandPopin="true">
-									<Text text="Est. End Date"/>
-								</Column>
-								<Column minScreenWidth="Tablet" demandPopin="true">
-									<Text text="Year"/>
-								</Column>
-								<Column minScreenWidth="Tablet" demandPopin="true">
-									<Text text="Colour"/>
-								</Column>
-								<Column minScreenWidth="Tablet" demandPopin="true">
-									<Text text="Driver"/>
-								</Column>
-								<Column minScreenWidth="Tablet" demandPopin="true">
-									<Text text="Vin"/>
-								</Column>
-								<Column minScreenWidth="Tablet" demandPopin="true">
-									<Text text="Status"/>
-								</Column>
-							</columns>
-							<items>
-								<ColumnListItem vAlign="Middle" type="Navigation" press="onListItemPress">
-									<cells>
-										<Text text="{ModelSeriesNo}"/>
-										<Text text="{VehicleModel}"/>
-										<Text text="{Zone1}"/>
-										<Text text="{Stprs}"/>
-										<Text text="{ETATo}"/>
-										<Text text="{ModelYear}"/>
-										<Text text="{ExteriorColourCode}"/>
-										<Text text="{}"/>
-										<Text text="{ExternalVehicleNumber}"/>
-										<Text text="{PrimaryStatusText}"/>
-									</cells>
-								</ColumnListItem>
-							</items>
-						</Table>
-		-->				</IconTabFilter>
-			</items>
-			</IconTabBar>
-			<!--<VBox>-->
-			<!--	<SegmentedButton selectedKey="myReservations" selectionChange="onSegmentedButtonPress" class="sapUiSmallMarginBottom">-->
-			<!--		<items>-->
-			<!--			<SegmentedButtonItem text="My Reservations" key="myReservations"/>-->
-			<!--			<SegmentedButtonItem text="All Reservations" key="allReservations"/>-->
-			<!--		</items>-->
-			<!--	</SegmentedButton>-->
-			<!--	<VBox id="myReservationsTable">-->
-			<!--		<Table headerText="Vehicle List" id="idMyReservationsTable" inset="false" items="{ path: 'vehicles>/MyVehicles' }">-->
-			<!--			<columns>-->
-			<!--				<Column minScreenWidth="Tablet" demandPopin="true">-->
-			<!--					<Text text="Series"/>-->
-			<!--				</Column>-->
-			<!--				<Column minScreenWidth="Tablet" demandPopin="true">-->
-			<!--					<Text text="Model"/>-->
-			<!--				</Column>-->
-			<!--				<Column minScreenWidth="Tablet" demandPopin="true">-->
-			<!--					<Text text="Zone"/>-->
-			<!--				</Column>-->
-			<!--				<Column minScreenWidth="Tablet" demandPopin="true">-->
-			<!--					<Text text="Est. Assoc. Price"/>-->
-			<!--				</Column>-->
-			<!--				<Column minScreenWidth="Tablet" demandPopin="true">-->
-			<!--					<Text text="Est. End Date"/>-->
-			<!--				</Column>-->
-			<!--				<Column minScreenWidth="Tablet" demandPopin="true">-->
-			<!--					<Text text="Year"/>-->
-			<!--				</Column>-->
-			<!--				<Column minScreenWidth="Tablet" demandPopin="true">-->
-			<!--					<Text text="Colour"/>-->
-			<!--				</Column>-->
-			<!--				<Column minScreenWidth="Tablet" demandPopin="true">-->
-			<!--					<Text text="Driver"/>-->
-			<!--				</Column>-->
-			<!--				<Column minScreenWidth="Tablet" demandPopin="true">-->
-			<!--					<Text text="Vin"/>-->
-			<!--				</Column>-->
-			<!--				<Column minScreenWidth="Tablet" demandPopin="true">-->
-			<!--					<Text text="Status"/>-->
-			<!--				</Column>-->
-			<!--			</columns>-->
-			<!--			<items>-->
-			<!--				<ColumnListItem vAlign="Middle" type="Navigation" press="onListItemPress">-->
-			<!--					<cells>-->
-			<!--						<Text text="{vehicles>series}"/>-->
-			<!--						<Text text="{vehicles>model}"/>-->
-			<!--						<Text text="{vehicles>zone}"/>-->
-			<!--						<Text text="{vehicles>est_assoc_price}"/>-->
-			<!--						<Text text="{vehicles>est_end_date}"/>-->
-			<!--						<Text text="{vehicles>year}"/>-->
-			<!--						<Text text="{vehicles>colour}"/>-->
-			<!--						<Text text="{vehicles>driver}"/>-->
-			<!--						<Text text="{vehicles>vin}"/>-->
-			<!--						<Text text="{vehicles>status}"/>-->
-			<!--					</cells>-->
-			<!--				</ColumnListItem>-->
-			<!--			</items>-->
-			<!--		</Table>-->
-			<!--	</VBox>-->
-			<!--	<VBox id="allReservationsTable">-->
-			<!--		<Table headerText="All Vehicle List" id="idAllReservationsTable" inset="false" items="{ path: 'vehicles>/AllVehicles' }">-->
-			<!--			<columns>-->
-			<!--				<Column minScreenWidth="Tablet" demandPopin="true">-->
-			<!--					<Text text="Series"/>-->
-			<!--				</Column>-->
-			<!--				<Column minScreenWidth="Tablet" demandPopin="true">-->
-			<!--					<Text text="Model"/>-->
-			<!--				</Column>-->
-			<!--				<Column minScreenWidth="Tablet" demandPopin="true">-->
-			<!--					<Text text="Zone"/>-->
-			<!--				</Column>-->
-			<!--				<Column minScreenWidth="Tablet" demandPopin="true">-->
-			<!--					<Text text="Est. Assoc. Price"/>-->
-			<!--				</Column>-->
-			<!--				<Column minScreenWidth="Tablet" demandPopin="true">-->
-			<!--					<Text text="Est. End Date"/>-->
-			<!--				</Column>-->
-			<!--				<Column minScreenWidth="Tablet" demandPopin="true">-->
-			<!--					<Text text="Year"/>-->
-			<!--				</Column>-->
-			<!--				<Column minScreenWidth="Tablet" demandPopin="true">-->
-			<!--					<Text text="Colour"/>-->
-			<!--				</Column>-->
-			<!--				<Column minScreenWidth="Tablet" demandPopin="true">-->
-			<!--					<Text text="Driver"/>-->
-			<!--				</Column>-->
-			<!--				<Column minScreenWidth="Tablet" demandPopin="true">-->
-			<!--					<Text text="Vin"/>-->
-			<!--				</Column>-->
-			<!--				<Column minScreenWidth="Tablet" demandPopin="true">-->
-			<!--					<Text text="Status"/>-->
-			<!--				</Column>-->
-			<!--			</columns>-->
-			<!--			<items>-->
-			<!--				<ColumnListItem vAlign="Middle" type="Navigation" press="onListItemPress">-->
-			<!--					<cells>-->
-			<!--						<Text text="{vehicles>series}"/>-->
-			<!--						<Text text="{vehicles>model}"/>-->
-			<!--						<Text text="{vehicles>zone}"/>-->
-			<!--						<Text text="{vehicles>est_assoc_price}"/>-->
-			<!--						<Text text="{vehicles>est_end_date}"/>-->
-			<!--						<Text text="{vehicles>year}"/>-->
-			<!--						<Text text="{vehicles>colour}"/>-->
-			<!--						<Text text="{vehicles>driver}"/>-->
-			<!--						<Text text="{vehicles>vin}"/>-->
-			<!--						<Text text="{vehicles>status}"/>-->
-			<!--					</cells>-->
-			<!--				</ColumnListItem>-->
-			<!--			</items>-->
-			<!--		</Table>-->
-			<!--	</VBox>-->
-			<!--</VBox>-->
+					<ColumnListItem vAlign="Middle" type="Navigation" press="onListItemPress">
+						<cells>
+							<Text text="{SeriesDesc}"/>
+							<Text text="{ModelDesc}"/>
+							<Text text="{ZoneDesc}"/>
+							<Text text="{Price}"/>
+							<Text text="{EndDate}"/>
+							<Text text="{ZZMOYR}"/>
+							<Text text="{ColorDesc}"/>
+							<Text text="{Driver}"/>
+							<Text text="{VHVIN}"/>
+							<Text text="{Status}"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+				</items>
+				</FlexBox>
+
 		</f:content>
 		<!-- DynamicPage Footer -->
 		<f:footer>

@@ -1,7 +1,8 @@
 sap.ui.define([
 	"ca/toyota/demoreservation/demoreservation/controller/BaseController",
-	"sap/ui/model/Filter"
-], function (BaseController, Filter) {
+	"sap/ui/model/Filter",
+	"sap/ui/model/Sorter",
+], function (BaseController, Filter, Sorter) {
 	"use strict";
 
 	return BaseController.extend("ca.toyota.demoreservation.demoreservation.controller.Home", {
@@ -9,6 +10,7 @@ sap.ui.define([
 		onInit: function () {
 			this.populateYear();
 			this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
+			this.getView().byId("zoneFilter").setSelectedKey("3000");
 		},
 
 		onRouteMatched: function (oEvent) {
@@ -20,7 +22,7 @@ sap.ui.define([
 
 		onListItemPress: function (oEvent) {
 			var listItemContext = oEvent.getSource().getBindingContext();
-			var selectedvguid = listItemContext.getProperty("VehicleIdentificationNumber");
+			var selectedvguid = listItemContext.getProperty("VHVIN");
 			this.doRoute("VehicleDetails",selectedvguid);
 		},
 
@@ -36,29 +38,34 @@ sap.ui.define([
 				idAllReservationsTable.setVisible(true);
 			}
 		},
-		
+		onUpdateFinished: function(oEvent) {
+			// count and display number of nominations in Table Header title
+			var sTitle, oTable = this.getView().byId("idMyReservationsTable");
+			var title = this.getView().byId("tabTitle");
+			sTitle = "Vehicle List";
+			var lengthTotal = oTable.getBinding("items").getLength();
+			title.setText(sTitle + " ("+lengthTotal+")");
+
+		},
 		onSearch: function (oEvent){
 			var zoneFilter = this.getView().byId("zoneFilter").getSelectedKey();
 			var seriesFilter = this.getView().byId("seriesFilter").getSelectedKey();
 			var modelFilter = this.getView().byId("modelFilter").getSelectedKey();
-			var resStatusFilter = this.getView().byId("resStatusFilter").getSelectedKey();
 			var yearFilter = this.getView().byId("yearFilter").getValue();
 			var vinFilter = this.getView().byId("vinFilter").getValue();
 
 			var aFilters = [];
-			var Zone1 = new sap.ui.model.Filter("Zone1", sap.ui.model.FilterOperator.EQ, zoneFilter);
-			var ModelSeriesNo = new sap.ui.model.Filter("ModelSeriesNo", sap.ui.model.FilterOperator.EQ, seriesFilter);
-			var VehicleModel = new sap.ui.model.Filter("VehicleModel", sap.ui.model.FilterOperator.EQ, modelFilter);
-		//	var Zrstat = new sap.ui.model.Filter("Zrstat", sap.ui.model.FilterOperator.EQ, resStatusFilter);
-			var ModelYear = new sap.ui.model.Filter("ModelYear", sap.ui.model.FilterOperator.EQ, yearFilter);
-			var VehicleIdentificationNumber = new sap.ui.model.Filter("VehicleIdentificationNumber", sap.ui.model.FilterOperator.EQ, vinFilter);
+			var ZZZONE = new sap.ui.model.Filter("ZZZONE", sap.ui.model.FilterOperator.EQ, zoneFilter);
+			var ZZSERIES = new sap.ui.model.Filter("ZZSERIES", sap.ui.model.FilterOperator.EQ, seriesFilter);
+			var MATNR = new sap.ui.model.Filter("MATNR", sap.ui.model.FilterOperator.EQ, modelFilter);
+			var ZZMOYR = new sap.ui.model.Filter("ZZMOYR", sap.ui.model.FilterOperator.EQ, yearFilter);
+			var VHVIN = new sap.ui.model.Filter("VHVIN", sap.ui.model.FilterOperator.EQ, vinFilter);
 			aFilters = [
-				Zone1,
-				ModelSeriesNo,
-				VehicleModel,
-		//		Zrstat,
-				ModelYear,
-				VehicleIdentificationNumber
+				ZZZONE,
+				ZZSERIES,
+				MATNR,
+				ZZMOYR,
+				VHVIN
 			];
 			var finalFilter = new sap.ui.model.Filter({
 				filters: aFilters,
@@ -141,8 +148,36 @@ sap.ui.define([
 				sKey = oItem ? oItem.getKey() : '';
 
 		//	oText.setText(sKey);
-		}
+		},
+		
+		handleSortButtonPressed: function () {
+			if (!this._sortDialog) {
+				this._sortDialog = sap.ui.xmlfragment(
+					"ca.toyota.demoreservation.demoreservation.fragments.SortDialog",
+					this
+				);
+				this.getView().addDependent(this._sortDialog);
+			}
+			// open value help dialog filtered by the input value
+			this._sortDialog.open();
+			
+	//		this.createViewSettingsDialog("ca.toyota.demoreservation.demoreservation.fragments.SortDialog").open();
+		},
+		handleSortDialogConfirm: function (oEvent) {
+			var oTable = this.byId("idMyReservationsTable"),
+				mParams = oEvent.getParameters(),
+				oBinding = oTable.getBinding("items"),
+				sPath,
+				bDescending,
+				aSorters = [];
 
+			sPath = mParams.sortItem.getKey();
+			bDescending = mParams.sortDescending;
+			aSorters.push(new Sorter(sPath, bDescending));
+
+			// apply the selected sort and group settings
+			oBinding.sort(aSorters);
+		}
 
 	});
 

@@ -45,16 +45,11 @@
     text-shadow: 0 0 0.125rem #000000;
 }
 
-
-
-
-
-
 .sapContrastPlus .sapMLabel {
     color: #dddddd;
 }
 
-
+/* Header */
 .sapContrastPlus .sapFDynamicPageTitle {
     background: #3f5161;
 }
@@ -64,6 +59,31 @@
 .sapContrastPlus.sapFDynamicPageHeader.sapFDynamicPageHeaderWithContent, .sapContrastPlus .sapFDynamicPageHeader.sapFDynamicPageHeaderWithContent {
     box-shadow: 0 0.125rem 0 0 #3f5161, inset 0 -0.125rem 0 0 #4f667a;
 }
-.sapFDynamicPage.sapFDynamicPageTitleClickEnabled.sapFDynamicPageTitleForceHovered .sapFDynamicPageTitle{
- background-color: #394958
+.sap-Desktop .sapFDynamicPage .sapFDynamicPageTitleClickEnabled .sapFDynamicPageTitleForceHovered .sapFDynamicPageTitle{
+ background-color: #394958;
+  color: #cae4fb;
+}
+/* Default button and arrow */
+.sapFDynamicPageTitleMain>.sapFDynamicPageTitleMainInner .sapFDynamicPageTitleMainHeading .sapFDynamicPageTitleMainHeadingInner .sapMTitle {
+    font-size: 1.25rem;
+    color: #cae4fb;
+}
+:not(.sapMBtnDisabled) .sapMBtnTransparent>.sapMBtnIcon{
+    color: #cae4fb;
+}
+.sapFDynamicPageToggleHeaderIndicator .sapMBtnInner .sapMBtnIcon, .sapFDynamicPageHeaderPinButton .sapMBtnInner .sapMBtnIcon{
+	 background-color: #394958;
+     color: #cae4fb;
+     border-color: #394958;
+}
+/* Sort Button */
+.sapMBtnIconSort {
+    font-size: 1.25rem;
+}
+.sapMBarChild .sapMSF .sapMSFF {
+    border: 1px solid #7891a7;
+    background: #cae4fb;
+}
+.sapMSFI {
+    color: #ffffff;
 }

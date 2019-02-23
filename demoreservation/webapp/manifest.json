@@ -14,11 +14,11 @@
 			"version": "0.0.0"
 		},
 		"dataSources": {
-			"ZCDS_DEMO_RESERVATION_CDS": {
-				"uri": "/demoreservation-node/node/ZCDS_DEMO_RESERVATION_CDS/",
+			"Z_VEHICLE_DEMO_RESERVATION_SRV_02": {
+				"uri": "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
 				"type": "OData",
 				"settings": {
-					"localUri": "localService/ZCDS_DEMO_RESERVATION_CDS/metadata.xml"
+					"localUri": "localService/Z_VEHICLE_DEMO_RESERVATION_SRV_02/metadata.xml"
 				}
 			}
 		}
@@ -80,7 +80,7 @@
 					"defaultBindingMode": "OneWay",
 					"defaultCountMode": "Request"
 				},
-				"dataSource": "ZCDS_DEMO_RESERVATION_CDS",
+				"dataSource": "Z_VEHICLE_DEMO_RESERVATION_SRV_02",
 				"preload": true
 			}
 		},
