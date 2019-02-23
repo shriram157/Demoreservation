@@ -9,9 +9,6 @@
 			<ViewSettingsItem text="Zone" key="ZoneDesc" />
 			<ViewSettingsItem text="Est.Assoc.Price" key="Price" />
 			<ViewSettingsItem text="Est.End Date" key="EndDate"/>
-			<ViewSettingsItem text="Year" key="ZZMOYR" />
-			<ViewSettingsItem text="Colour" key="ColorDesc" />
-			<ViewSettingsItem text="Driver" key="Driver" />
 		</sortItems>
 	</ViewSettingsDialog>
 </core:FragmentDefinition>

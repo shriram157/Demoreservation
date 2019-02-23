@@ -22,9 +22,9 @@
 				<f:content>
 					<fb:FilterBar id="filterbar" reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="true" filterContainerWidth="14rem">
 						<fb:filterItems>
-							<fb:FilterItem class="sapMSFFFilter" name="G">
+							<fb:FilterItem name="V" label="VIN">
 								<fb:control>
-									<SearchField class="sapMSFFFilter" placeholder="Search"/>
+									<Input id="vinFilter" placeholder="Enter VIN ..."/>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem name="A" label="Zone">
@@ -62,9 +62,9 @@
 									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem name="F" label="Vin">
+							<fb:FilterItem name="F" label="Status">
 								<fb:control>
-									<Input id="vinFilter" placeholder="Enter VIN ..."/>
+									<Input id="inpStatus" placeholder="Enter Status"/>
 								</fb:control>
 							</fb:FilterItem>
 						</fb:filterItems>
@@ -121,7 +121,7 @@
 						<Text text="Driver"/>
 					</Column>
 					<Column minScreenWidth="Tablet" demandPopin="true">
-						<Text text="Vin"/>
+						<Text text="VIN"/>
 					</Column>
 					<Column minScreenWidth="Tablet" demandPopin="true">
 						<Text text="Status"/>
