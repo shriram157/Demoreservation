@@ -8,7 +8,7 @@ modules:
    type: nodejs
    path: demoreservation-node
    parameters:
-      host: tci-dev-${app-name}
+      host: tci-dev-demoreservation-node
       disk-quota: 256M
       memory: 256M
    provides:
@@ -24,7 +24,7 @@ modules:
    type: html5
    path: demoreservation
    parameters:
-      host: tci-dev-${app-name}
+      host: tci-dev-demoreservation
       disk-quota: 256M
       memory: 256M
    build-parameters:
