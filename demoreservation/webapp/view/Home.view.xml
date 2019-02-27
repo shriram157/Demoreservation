@@ -3,22 +3,22 @@
 	height="100%">
 	<f:DynamicPage id="dynamicPageId" headerExpanded="{/headerExpanded}">
 		<!-- DynamicPage Title -->
-		<f:title>
-			<f:DynamicPageTitle>
-				<f:heading>
-					<vm:VariantManagement standardItemText="Default"/>
-				</f:heading>
-				<f:actions>
-					<ToolbarSpacer/>
+		<!--<f:title>-->
+		<!--	<f:DynamicPageTitle>-->
+		<!--		<f:heading>-->
+		<!--			<vm:VariantManagement standardItemText="Default"/>-->
+		<!--		</f:heading>-->
+		<!--		<f:actions>-->
+		<!--			<ToolbarSpacer/>-->
 					<!--<Button text="Global Action" type="Transparent"/>-->
 					<!--<Button text="Toggle Footer" type="Transparent" press="onToggleFooter"/>-->
-					<Button icon="sap-icon://action" type="Transparent"/>
-				</f:actions>
-			</f:DynamicPageTitle>
-		</f:title>
+		<!--			<Button icon="sap-icon://action" type="Transparent"/>-->
+		<!--		</f:actions>-->
+		<!--	</f:DynamicPageTitle>-->
+		<!--</f:title>-->
 		<!-- DynamicPage Header -->
 		<f:header>
-			<f:DynamicPageHeader pinnable="true">
+			<f:DynamicPageHeader pinnable="false">
 				<f:content>
 					<fb:FilterBar id="filterbar" reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="true" filterContainerWidth="14rem">
 						<fb:filterItems>
@@ -44,9 +44,6 @@
 							</fb:FilterItem>
 							<fb:FilterItem name="C" label="Model">
 								<fb:control>
-									<!--									<ComboBox id="modelFilter" change="onSelectChange" items="{/zc_model}">
-										<core:Item key="{Model}" text="{ModelDescriptionEN}"/>
-									</ComboBox>-->
 									<Input id="modelFilter" type="Text" textFormatMode="KeyValue" placeholder="Enter Model ..." showSuggestion="true" showValueHelp="true"
 										valueHelpRequest="handleModelValueHelp" suggestionItems="{/zc_model}" suggestionItemSelected="suggestionItemSelected">
 										<suggestionItems>
@@ -77,12 +74,12 @@
 			<FlexBox direction="Column" alignItems="Start">
 			<items>
 			<VBox>
-				<Button text="My Reservations"/>
-				<Button text="All Reservations"/>
+                    <Button id="MyResButton" text="My Reservations" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onReservationPress"/>
+                    <Button id="AllResButton" text="All Reservations" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onReservationPress"/>
 			</VBox>
 			<Table id="idMyReservationsTable" inset="false" growing="true" updateFinished="onUpdateFinished"
 					items="{ path: '/vehicleListSet', 
-						     filters: {path: 'ZZZONE',operator: 'EQ',value1: '3000'},
+							 filters: {path: 'ZZZONE',operator: 'EQ',value1: '3000'},
 						     sorter : {path : 'SeriesDesc'} }">
 				<headerToolbar>
 					<Toolbar>

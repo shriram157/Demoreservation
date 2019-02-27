@@ -1,0 +1,173 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" controllerName="ca.toyota.demoreservation.demoreservation.controller.Reservation" xmlns:f="sap.f" xmlns:variants="sap.ui.comp.variants" xmlns="sap.m" xmlns:filterbar="sap.ui.comp.filterbar" xmlns:core="sap.ui.core">
+    <f:DynamicPage headerExpanded="true" showFooter="false" class="sapUiSizeCompact">
+        <!--<f:title>-->
+        <!--    <f:DynamicPageTitle>-->
+        <!--        <f:heading>-->
+        <!--            <variants:VariantManagement/>-->
+        <!--        </f:heading>-->
+        <!--        <f:actions>-->
+        <!--            <ToolbarSpacer/>-->
+        <!--            <Button icon="sap-icon://action" type="Transparent"/>-->
+        <!--        </f:actions>-->
+        <!--    </f:DynamicPageTitle>-->
+        <!--</f:title>-->
+        <f:header>
+            <f:DynamicPageHeader pinnable="false">
+                <f:content>
+                    <filterbar:FilterBar id="ListReportFilterBar" useToolbar="false" showGoOnFB="true" searchEnabled="true">
+                        <filterbar:filterItems>
+                            <filterbar:FilterItem label="Request Status" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1537538709735---0">
+                                <filterbar:control>
+                                    <ComboBox editable="true" enabled="true" visible="true" width="auto" valueState="None" maxWidth="100%">
+                                        <items>
+                                            <core:Item text="Pending Approval" enabled="true" key="Pending Approval"/>
+                                            <core:Item text="Approved" enabled="true" key="Approved"/>
+                                            <core:Item text="Declined" enabled="true" key="Declined"/>
+                                            <core:Item text="Waitlist" enabled="true" key="Waitlist"/>
+                                        </items>
+                                    </ComboBox>
+                                </filterbar:control>
+                            </filterbar:FilterItem>
+                            <filterbar:FilterItem label="VIN" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1538428831201---0">
+                                <filterbar:control>
+                                    <Input type="Text" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" maxLength="0"/>
+                                </filterbar:control>
+                            </filterbar:FilterItem>
+                            <filterbar:FilterItem label="Model" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1538428832851---0">
+                                <filterbar:control>
+                                    <ComboBox editable="true" enabled="true" visible="true" width="auto" valueState="None" maxWidth="100%">
+                                        <items>
+                                            <core:Item text="Item" enabled="true" key="Item"/>
+                                            <core:Item text="Item" enabled="true" key="Item"/>
+                                            <core:Item text="Item" enabled="true" key="Item"/>
+                                        </items>
+                                    </ComboBox>
+                                </filterbar:control>
+                            </filterbar:FilterItem>
+                            <filterbar:FilterItem label="Model Year" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1538428836358---0">
+                                <filterbar:control>
+                                    <Input type="Text" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" maxLength="0"/>
+                                </filterbar:control>
+                            </filterbar:FilterItem>
+                        </filterbar:filterItems>
+                    </filterbar:FilterBar>
+                </f:content>
+            </f:DynamicPageHeader>
+        </f:header>
+        <f:content>
+            <VBox fitContainer="true">
+                <items>
+                    <Table width="100%" growing="true" growingScrollToLoad="true" growingThreshold="25" mode="None" itemPress="_onFioriListReportTableItemPress" updateFinished="_onFioriListReportTableUpdateFinished">
+                        <headerToolbar>
+                            <OverflowToolbar design="Transparent">
+                                <content>
+                                    <Title textAlign="Begin" text="Objects"/>
+                                    <Title text="(1)"/>
+                                    <ToolbarSpacer/>
+                                    <Button icon="sap-icon://action-settings" type="Transparent">
+                                        <layoutData>
+                                            <OverflowToolbarLayoutData moveToOverflow="true"/>
+                                        </layoutData>
+                                    </Button>
+                                </content>
+                            </OverflowToolbar>
+                        </headerToolbar>
+                        <columns>
+                            <Column width="auto" minScreenWidth="Phone">
+                                <header>
+                                    <Text text="Status" width="auto"/>
+                                </header>
+                            </Column>
+                            <Column width="auto" minScreenWidth="Phone">
+                                <header>
+                                    <Text text="Model" width="auto"/>
+                                </header>
+                            </Column>
+                            <Column width="auto" minScreenWidth="Phone">
+                                <header>
+                                    <Text text="Model Year" width="auto"/>
+                                </header>
+                            </Column>
+                            <Column width="auto" minScreenWidth="Phone">
+                                <header>
+                                    <Text text="Colour" width="auto"/>
+                                </header>
+                            </Column>
+                            <Column width="auto" minScreenWidth="Phone">
+                                <header>
+                                    <Text text="Request Date and Time" width="auto"/>
+                                </header>
+                            </Column>
+                            <Column width="auto" minScreenWidth="Phone">
+                                <header>
+                                    <Text text="Reserver" width="auto"/>
+                                </header>
+                            </Column>
+                            <Column width="auto" minScreenWidth="Phone">
+                                <header>
+                                    <Text text="VIN" width="auto"/>
+                                </header>
+                            </Column>
+                            <Column width="auto" minScreenWidth="Phone">
+                                <header>
+                                    <Text text="Purchaser" width="auto"/>
+                                </header>
+                            </Column>
+                            <Column width="auto" minScreenWidth="Phone">
+                                <header>
+                                    <Text text="Driver" width="auto"/>
+                                </header>
+                            </Column>
+                            <Column width="auto" minScreenWidth="Phone">
+                                <header>
+                                    <Text text="Assoc. Price" width="auto"/>
+                                </header>
+                            </Column>
+                            <Column width="auto" minScreenWidth="Phone">
+                                <header>
+                                    <Text text="Est.End Date" width="auto"/>
+                                </header>
+                            </Column>
+                            <Column minScreenWidth="Phone">
+                                <header>
+                                    <Text text=""/>
+                                </header>
+                            </Column>
+                            <Column width="5%"/>
+                            <Column width="5%"/>
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <ObjectStatus text="Approved" width="auto"/>
+                                    <ObjectStatus text="RX450HL" width="auto"/>
+                                    <ObjectStatus text="2018" width="auto"/>
+                                    <ObjectStatus text="01-G3-Magnetic Grey" width="auto"/>
+                                    <ObjectStatus text="09/15/2018 10:22:20 PM" width="auto"/>
+                                    <ObjectStatus text="Maria D'Souza" width="auto"/>
+                                    <ObjectStatus text="JT2xxxxxxxxxxxxxx" width="auto"/>
+                                    <ObjectStatus text="Maria D'Souza" width="auto"/>
+                                    <ObjectStatus text="Ram Mohabir" width="auto"/>
+                                    <ObjectStatus text="$32,000" width="auto"/>
+                                    <ObjectStatus text="26/09/2019" width="auto"/>
+                                    <Button icon="sap-icon://hint" press="onReservationInfoPress"/>
+                                    <Button text="Approve" press="onApprovePress"/>
+                                    <Button text="Reject"/>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </items>
+            </VBox>
+        </f:content>
+        <f:footer>
+            <OverflowToolbar design="auto">
+                <content>
+                    <ToolbarSpacer/>
+                    <Button text="Save" type="Emphasized" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                    <Button text="Cancel" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                </content>
+            </OverflowToolbar>
+        </f:footer>
+    </f:DynamicPage>
+</mvc:View>

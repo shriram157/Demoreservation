@@ -122,6 +122,20 @@
 					"target": [
 						"VehicleDetails"
 					]
+				},
+				{
+					"name": "RequestDetail",
+					"pattern": "RequestDetail",
+					"target": [
+						"RequestDetail"
+					]
+				},
+				{
+					"name": "Reservation",
+					"pattern": "Reservation",
+					"target": [
+						"Reservation"
+					]
 				}
 			],
 			"targets": {
@@ -140,6 +154,16 @@
 					"viewType": "XML",
 					"viewName": "VehicleDetails",
 					"viewLevel": 2
+				},
+				"RequestDetail": {
+					"viewType": "XML",
+					"viewName": "RequestDetail",
+					"viewLevel": 3
+				},
+				"Reservation": {
+					"viewType": "XML",
+					"viewName": "Reservation",
+					"viewLevel": 4
 				}
 			}
 		}

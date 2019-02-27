@@ -1,0 +1,257 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+	controllerName="ca.toyota.demoreservation.demoreservation.controller.RequestDetail" xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:layout1="sap.ui.commons.layout" xmlns:form="sap.ui.layout.form">
+	<Page title="Request Detail" showHeader="true" showFooter="true" showNavButton="true" navButtonPress="onNavButtonPress">
+		<content>
+			<layout1:AbsoluteLayout horizontalScrolling="Hidden" verticalScrolling="Auto">
+				<layout1:positions>
+					<layout1:PositionContainer left="24px" top="723px">
+						<layout1:control>
+							<form:Form width="100%" editable="true" visible="true">
+								<form:title>
+									<core:Title text="Administrator Section" level="Auto"/>
+								</form:title>
+								<form:formContainers>
+									<form:FormContainer visible="true">
+										<form:formElements>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Notes for requestor" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<Input type="Text" showValueHelp="false" enabled="true" visible="true" width="880.0499877929688px" valueHelpOnly="false" maxLength="0"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Cheque Required?" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<CheckBox text="" selected="true" editable="true" enabled="true" visible="true" width="auto" textDirection="Inherit" wrapping="false"
+														useEntireWidth="true"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Date Cheque Due" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<DatePicker value="20180920" width="128.6750030517578px" displayFormat="short" enabled="true" visible="true" valueFormat="yyyyMMdd"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Date Cheque Received" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<DatePicker width="128.3125px" displayFormat="medium" enabled="true" visible="true" valueFormat="yyyyMMdd"/>
+												</form:fields>
+											</form:FormElement>
+										</form:formElements>
+										<form:title/>
+									</form:FormContainer>
+								</form:formContainers>
+								<form:layout>
+									<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+								</form:layout>
+							</form:Form>
+						</layout1:control>
+					</layout1:PositionContainer>
+					<layout1:PositionContainer left="31px" top="136px">
+						<layout1:control>
+							<form:Form width="100%" editable="true" visible="true">
+								<form:title>
+									<core:Title text="Requestor Information" level="Auto"/>
+								</form:title>
+								<form:formContainers>
+									<form:FormContainer visible="true">
+										<form:formElements>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Requestor Type" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<ComboBox editable="true" enabled="true" visible="true" width="292.00000000px" valueState="None" maxWidth="100%">
+														<items>
+															<core:Item text="TCI Employee" enabled="true" key="TCI Employee"/>
+															<core:Item text="Contractor" enabled="true" key="Contractor"/>
+															<core:Item text="Department" enabled="true" key="Department"/>
+														</items>
+													</ComboBox>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="First Name" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<Input type="Text" showValueHelp="false" enabled="true" visible="true" width="293.3500061035156px" valueHelpOnly="false" maxLength="20"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Last Name" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<Input type="Text" showValueHelp="false" enabled="true" visible="true" width="395.63751220703125px" valueHelpOnly="false" maxLength="20"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Department" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<Input type="Text" showValueHelp="false" enabled="true" visible="true" width="391.7124938964844px" valueHelpOnly="false" maxLength="20"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Phone Number" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<Input type="Text" showValueHelp="false" enabled="true" visible="true" width="290.625px" valueHelpOnly="false" maxLength="0"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Email Address" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<Input type="Text" showValueHelp="false" enabled="true" visible="true" width="391.3125px" valueHelpOnly="false" maxLength="50"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Is this request on behalf of someone else?" design="Standard" width="100%" required="false" textAlign="Begin"
+														textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<CheckBox text="" selected="true" editable="true" enabled="true" visible="true" width="auto" textDirection="Inherit" wrapping="false"
+														useEntireWidth="true"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Purchaser Type" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<ComboBox editable="true" enabled="true" visible="true" width="401.95001220703125px" valueState="None" maxWidth="100%">
+														<items>
+															<core:Item text="TCI Employee Spouse/Child" enabled="true" key="TCI Employee Spouse/Child"/>
+															<core:Item text="TCI/TFS Employee" enabled="true" key="TCI/TFS Employee"/>
+															<core:Item text="TCI/TFS Retiree" enabled="true" key="TCI/TFS Retiree"/>
+															<core:Item text="TCI Contractor Spouse" enabled="true" key="TCI Contractor Spouse"/>
+															<core:Item text="Other" enabled="true" key="Other"/>
+														</items>
+													</ComboBox>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Purchaser Name" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<Input type="Text" showValueHelp="false" enabled="true" visible="true" width="527.3624877929688px" valueHelpOnly="false" maxLength="0"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Ideal Purchase Date" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<DatePicker width="130.3125px" displayFormat="medium" enabled="true" visible="true" valueFormat="yyyyMMdd"/>
+												</form:fields>
+											</form:FormElement>
+										</form:formElements>
+										<form:title/>
+									</form:FormContainer>
+								</form:formContainers>
+								<form:layout>
+									<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+								</form:layout>
+							</form:Form>
+						</layout1:control>
+					</layout1:PositionContainer>
+					<layout1:PositionContainer left="2px" top="3px">
+						<layout1:control>
+							<form:Form width="100%" editable="false" visible="true">
+								<form:title>
+									<core:Title text="Vehicle Summary" level="Auto"/>
+								</form:title>
+								<form:formContainers>
+									<form:FormContainer visible="true">
+										<form:formElements>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="VIN" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Model Year" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<ObjectAttribute text="2018" active="false" visible="true"/>
+												</form:fields>
+											</form:FormElement>
+										</form:formElements>
+										<form:title/>
+									</form:FormContainer>
+									<form:FormContainer visible="true">
+										<form:formElements>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Model Description" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Colour" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:fields>
+											</form:FormElement>
+										</form:formElements>
+										<form:title/>
+									</form:FormContainer>
+								</form:formContainers>
+								<form:layout>
+									<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+								</form:layout>
+							</form:Form>
+						</layout1:control>
+					</layout1:PositionContainer>
+				</layout1:positions>
+			</layout1:AbsoluteLayout>
+		</content>
+		<footer>
+			<!--<OverflowToolbar width="100%" height="auto" design="Auto" enabled="true" visible="true">-->
+			<!--	<content>-->
+			<!--		<ToolbarSpacer/>-->
+			<!--		<Button text="Submit" type="Emphasized" press="onSubmitPress"/>-->
+			<!--		<Button text="Cancel" press="onCancelPress"/>-->
+			<!--		<Button text="Delete" press="onDeletePress"/>-->
+			<!--		<Button text="Approve" press="onApprovePress"/>-->
+			<!--		<Button text="Decline" press="onDeclinePress"/>-->
+			<!--	</content>-->
+			<!--</OverflowToolbar>-->
+			<OverflowToolbar width="100%" height="auto" design="Auto" enabled="true" visible="true">
+                <content>
+                    <ToolbarSpacer width="834.9500122070312px"/>
+                    <Button text="Submit" type="Emphasized" iconFirst="true" width="86.63750457763672px" enabled="true" visible="true" iconDensityAware="false" press="onSubmitPress"/>
+                    <Button text="Cancel" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onCancelPress"/>
+                    <Button text="Delete" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onDeletePress"/>
+                    <Button text="Approve" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onApprovePress"/>
+                    <Button text="Decline" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onDeclinePress"/>
+                </content>
+            </OverflowToolbar>
+		</footer>
+	</Page>
+</mvc:View>

@@ -1,0 +1,101 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" controllerName="ca.toyota.demoreservation.demoreservation.controller.VehicleDetails">
+	<Page title="Vehicle Details" showNavButton="true" navButtonPress="onNavButtonPress">
+		<content>
+			<!--<HBox>-->
+			<f:SimpleForm width="75%" id="SimpleFormDisplayColumn_oneGroup2341" editable="false" layout="ColumnLayout" title="Vehicle Info" columnsM="2" columnsL="2" columnsXL="4">
+				<f:content>
+					<Label text="Description"/>
+					<Text id="nameText1" text="4*4 Tundra Crewmax SRS 5.7L"/>
+					<Label text="Model Year"/>
+					<Text text="{ModelYear}"/>
+					<Label text="Colour"/>
+					<Text text="{int_trim_desc_en}"/>
+					<Label text="Driver"/>
+					<Text text="{}"/>
+					<Label text="Start Date"/>
+					<Text text="{ETAFrom}"/>
+					<Label text="Est. Assoc Price"/>
+					<Text text="{Stprs}"/>
+					<Label text="Status"/>
+					<Text text="{PrimaryStatusText}"/>
+					<Label text="SFX"/>
+					<Text text="{Suffix}"/>
+					<Label text="APX"/>
+					<Text text="{zzapx}"/>
+					<Label text="Zone"/>
+					<Text text="{Zone1}"/>
+					<Label text="Series"/>
+					<Text text="{ModelSeriesNo}"/>
+					<Label text="VIN"/>
+					<Text text="{VehicleIdentificationNumber}"/>
+					<Label text="Colour Code"/>
+					<Text text="{InteriorColourCode}"/>
+					<Label text="Driver Dept."/>
+					<Text text="{}"/>
+					<Label text="Est. End Date"/>
+					<Text text="{ETATo}"/>
+					<Label text="Est. Non Assoc Price"/>
+					<Text text="{}"/>
+					<Label text="Type"/>
+					<Text text="{ValuationType}"/>
+					<Label text="SFX Options"/>
+					<Text text="{suffix_desc_en}"/>
+					<Label text="APX Options"/>
+					<Text text="{}"/>
+					<Label text="Last Updated"/>
+					<Text text="{}"/>
+					<!--<Link text="Payment Calculator"/>-->
+				</f:content>
+			</f:SimpleForm>
+			<!--<Link text="Payment Calculator"/>-->
+			<!--</HBox>-->
+			<IconTabBar id="idIconTabBarNoIcons" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding">
+				<items>
+					<IconTabFilter text="Repair Information">
+						<f:SimpleForm id="SimpleFormDisplay480" editable="false" layout="ResponsiveGridLayout" title="Options" labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="3" columnsL="2" columnsM="2" singleContainerFullSize="false">
+							<f:content>
+								<core:Title text="Factory Options"/>
+								<VBox>
+									<Text text="20 Aluminium Alloy Wheels" class="sapUiTinyMargin"/>
+									<Text text="250/70R Spare Tire With Steel Wheel" class="sapUiTinyMargin"/>
+									<Text text="225/SSR20 Tires" class="sapUiTinyMargin"/>
+									<Text text="Auto Dimming Rear View Mirror With Compass" class="sapUiTinyMargin"/>
+									<Text text="Etc. List All Factory Options" class="sapUiTinyMargin"/>
+								</VBox>
+								<core:Title text="Dealer Options"/>
+								<VBox>
+									<Text text="2 Hitch Ball" class="sapUiTinyMargin"/>
+									<Text text="Bedliner" class="sapUiTinyMargin"/>
+									<Text text="Hard Tri-Fold Tonneau Cover" class="sapUiTinyMargin"/>
+									<Text text="Etc. List All Dealer Options" class="sapUiTinyMargin"/>
+								</VBox>
+							</f:content>
+						</f:SimpleForm>
+						<f:SimpleForm id="SimpleFormDisplay480_Trial" editable="false" layout="ResponsiveGridLayout" title="Reservation Details" labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="3" columnsL="2" columnsM="2" singleContainerFullSize="false">
+							<f:content>
+								<core:Title text="Requestor Information"/>
+								<Label text="Requestor Type"/>
+								<Text text="Employee"/>
+								<Label text="Requestor Name"/>
+								<Text text="Maria D'Souza"/>
+								<Label text="Request Date"/>
+								<Text text="26/08/2018"/>
+								<Label text="Requests Approved"/>
+								<Text text="1"/>
+								<Label text="Requests Pending Approval"/>
+								<Text text="1"/>
+								<core:Title text="Reserved For Information"/>
+								<Label text="Reserved For Type"/>
+								<Text text="TCI Spouse/ Child"/>
+								<Label text="Reserved For Name"/>
+								<Text text="Brian D'Souza"/>
+							</f:content>
+						</f:SimpleForm>
+					</IconTabFilter>
+					<IconTabFilter text="Options"/>
+					<IconTabFilter text="Reservation Details"/>
+				</items>
+			</IconTabBar>
+		</content>
+	</Page>
+</mvc:View>

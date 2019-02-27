@@ -10,9 +10,20 @@ sap.ui.define([
 		onInit: function () {
 			this.populateYear();
 			this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
-			this.getView().byId("zoneFilter").setSelectedKey("3000");
+			this.initialFilter();
 		},
-
+		initialFilter: function () {
+			this.getView().byId("zoneFilter").setSelectedKey("3000");
+/*			var ZZZONE = new sap.ui.model.Filter("ZZZONE", sap.ui.model.FilterOperator.EQ, "3000");
+			var finalFilter = new sap.ui.model.Filter({
+				filters: ZZZONE,
+				and: false
+			});
+			// // update list binding
+			var list = this.getView().byId("idMyReservationsTable");
+			var binding = list.getBinding("items");
+			binding.filter(finalFilter, "Application");
+*/		},
 		onRouteMatched: function (oEvent) {
 			// var idMyReservationsTable = this.byId("idMyReservationsTable");
 			// var idAllReservationsTable = this.byId("idAllReservationsTable");
@@ -24,6 +35,10 @@ sap.ui.define([
 			var listItemContext = oEvent.getSource().getBindingContext();
 			var selectedvguid = listItemContext.getProperty("VHVIN");
 			this.doRoute("VehicleDetails",selectedvguid);
+		},
+		
+		onReservationPress: function (oEvent){
+			this.doRoute("Reservation");
 		},
 
 		onSegmentedButtonPress: function (oEvent) {
@@ -60,8 +75,8 @@ sap.ui.define([
 			var ZZSERIES = new sap.ui.model.Filter("ZZSERIES", sap.ui.model.FilterOperator.EQ, seriesFilter);
 			var MATNR = new sap.ui.model.Filter("MATNR", sap.ui.model.FilterOperator.EQ, modelFilter);
 			var ZZMOYR = new sap.ui.model.Filter("ZZMOYR", sap.ui.model.FilterOperator.EQ, yearFilter);
-			var VHVIN = new sap.ui.model.Filter("VHVIN", sap.ui.model.FilterOperator.EQ, vinFilter);
-			var Status = new sap.ui.model.Filter("Status", sap.ui.model.FilterOperator.EQ, inpStatus);
+			var VHVIN = new sap.ui.model.Filter("VHVIN", sap.ui.model.FilterOperator.Contains, vinFilter);
+			var Status = new sap.ui.model.Filter("Status", sap.ui.model.FilterOperator.Contains, inpStatus);
 			aFilters = [
 				ZZZONE,
 				ZZSERIES,
@@ -85,9 +100,9 @@ sap.ui.define([
 			var yearFilter = new sap.ui.model.json.JSONModel();
 			var today = new Date();
 			var currYear = today.getFullYear();
-			currYear = currYear -2;
+			currYear = currYear -1;
 			var a_moreFilter =[];
-			for (var i = 0; i < 10; i++) {
+			for (var i = 0; i < 3; i++) {
 				var oNewFilter = {
 					dkey: currYear,
 					dtext: currYear
@@ -114,7 +129,7 @@ sap.ui.define([
 
 			// create a filter for the binding
 			this._valueHelpDialog.getBinding("items").filter([new Filter(
-				"ModelDescriptionEN",
+				"Model",
 				sap.ui.model.FilterOperator.Contains, sInputValue
 			)]);
 
@@ -125,7 +140,7 @@ sap.ui.define([
 		_handleValueHelpSearch : function (evt) {
 			var sValue = evt.getParameter("value");
 			var oFilter = new Filter(
-				"ModelDescriptionEN",
+				"Model",
 				sap.ui.model.FilterOperator.Contains, sValue
 			);
 			evt.getSource().getBinding("items").filter([oFilter]);

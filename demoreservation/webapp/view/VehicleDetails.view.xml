@@ -1,101 +1,309 @@
-<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" controllerName="ca.toyota.demoreservation.demoreservation.controller.VehicleDetails">
-	<Page title="Vehicle Details" showNavButton="true" navButtonPress="onNavButtonPress">
-		<content>
-			<!--<HBox>-->
-			<f:SimpleForm width="75%" id="SimpleFormDisplayColumn_oneGroup2341" editable="false" layout="ColumnLayout" title="Vehicle Info" columnsM="2" columnsL="2" columnsXL="4">
-				<f:content>
-					<Label text="Description"/>
-					<Text id="nameText1" text="4*4 Tundra Crewmax SRS 5.7L"/>
-					<Label text="Model Year"/>
-					<Text text="{ModelYear}"/>
-					<Label text="Colour"/>
-					<Text text="{int_trim_desc_en}"/>
-					<Label text="Driver"/>
-					<Text text="{}"/>
-					<Label text="Start Date"/>
-					<Text text="{ETAFrom}"/>
-					<Label text="Est. Assoc Price"/>
-					<Text text="{Stprs}"/>
-					<Label text="Status"/>
-					<Text text="{PrimaryStatusText}"/>
-					<Label text="SFX"/>
-					<Text text="{Suffix}"/>
-					<Label text="APX"/>
-					<Text text="{zzapx}"/>
-					<Label text="Zone"/>
-					<Text text="{Zone1}"/>
-					<Label text="Series"/>
-					<Text text="{ModelSeriesNo}"/>
-					<Label text="VIN"/>
-					<Text text="{VehicleIdentificationNumber}"/>
-					<Label text="Colour Code"/>
-					<Text text="{InteriorColourCode}"/>
-					<Label text="Driver Dept."/>
-					<Text text="{}"/>
-					<Label text="Est. End Date"/>
-					<Text text="{ETATo}"/>
-					<Label text="Est. Non Assoc Price"/>
-					<Text text="{}"/>
-					<Label text="Type"/>
-					<Text text="{ValuationType}"/>
-					<Label text="SFX Options"/>
-					<Text text="{suffix_desc_en}"/>
-					<Label text="APX Options"/>
-					<Text text="{}"/>
-					<Label text="Last Updated"/>
-					<Text text="{}"/>
-					<!--<Link text="Payment Calculator"/>-->
-				</f:content>
-			</f:SimpleForm>
-			<!--<Link text="Payment Calculator"/>-->
-			<!--</HBox>-->
-			<IconTabBar id="idIconTabBarNoIcons" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding">
-				<items>
-					<IconTabFilter text="Repair Information">
-						<f:SimpleForm id="SimpleFormDisplay480" editable="false" layout="ResponsiveGridLayout" title="Options" labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="3" columnsL="2" columnsM="2" singleContainerFullSize="false">
-							<f:content>
-								<core:Title text="Factory Options"/>
-								<VBox>
-									<Text text="20 Aluminium Alloy Wheels" class="sapUiTinyMargin"/>
-									<Text text="250/70R Spare Tire With Steel Wheel" class="sapUiTinyMargin"/>
-									<Text text="225/SSR20 Tires" class="sapUiTinyMargin"/>
-									<Text text="Auto Dimming Rear View Mirror With Compass" class="sapUiTinyMargin"/>
-									<Text text="Etc. List All Factory Options" class="sapUiTinyMargin"/>
-								</VBox>
-								<core:Title text="Dealer Options"/>
-								<VBox>
-									<Text text="2 Hitch Ball" class="sapUiTinyMargin"/>
-									<Text text="Bedliner" class="sapUiTinyMargin"/>
-									<Text text="Hard Tri-Fold Tonneau Cover" class="sapUiTinyMargin"/>
-									<Text text="Etc. List All Dealer Options" class="sapUiTinyMargin"/>
-								</VBox>
-							</f:content>
-						</f:SimpleForm>
-						<f:SimpleForm id="SimpleFormDisplay480_Trial" editable="false" layout="ResponsiveGridLayout" title="Reservation Details" labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="3" columnsL="2" columnsM="2" singleContainerFullSize="false">
-							<f:content>
-								<core:Title text="Requestor Information"/>
-								<Label text="Requestor Type"/>
-								<Text text="Employee"/>
-								<Label text="Requestor Name"/>
-								<Text text="Maria D'Souza"/>
-								<Label text="Request Date"/>
-								<Text text="26/08/2018"/>
-								<Label text="Requests Approved"/>
-								<Text text="1"/>
-								<Label text="Requests Pending Approval"/>
-								<Text text="1"/>
-								<core:Title text="Reserved For Information"/>
-								<Label text="Reserved For Type"/>
-								<Text text="TCI Spouse/ Child"/>
-								<Label text="Reserved For Name"/>
-								<Text text="Brian D'Souza"/>
-							</f:content>
-						</f:SimpleForm>
-					</IconTabFilter>
-					<IconTabFilter text="Options"/>
-					<IconTabFilter text="Reservation Details"/>
-				</items>
-			</IconTabBar>
-		</content>
-	</Page>
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns:uxap="sap.uxap" xmlns="sap.m" xmlns:layout="sap.ui.layout" xmlns:form="sap.ui.layout.form" controllerName="ca.toyota.demoreservation.demoreservation.controller.VehicleDetails">
+    <uxap:ObjectPageLayout showTitleInHeaderContent="false" showHeaderContent="true" showEditHeaderButton="false" showFooter="true" class="sapUiSizeCompact">
+        <uxap:headerTitle>
+            <uxap:ObjectPageHeader objectTitle="Vehicle Details" objectSubtitle="" isObjectIconAlwaysVisible="false" isObjectTitleAlwaysVisible="true" isObjectSubtitleAlwaysVisible="true" showPlaceholder="false">
+                <uxap:navigationBar>
+                    <Bar>
+                        <contentLeft>
+                            <Button type="Back" press="onNavButtonPress"/>
+                        </contentLeft>
+                        <contentMiddle>
+                            <Title text="Vehicle Info"/>
+                        </contentMiddle>
+                        <contentRight/>
+                    </Bar>
+                </uxap:navigationBar>
+                <uxap:actions/>
+                <uxap:breadCrumbsLinks/>
+            </uxap:ObjectPageHeader>
+        </uxap:headerTitle>
+        <uxap:headerContent>
+            <VBox>
+                <items>
+                    <HBox>
+                        <items>
+                            <Label text="Description"/>
+                            <Label text=":" class="sapUiTinyMarginEnd"/>
+                            <Label design="Bold" text="{/VehicleDetailSet/MATNR}"/>
+                        </items>
+                    </HBox>
+                    <HBox>
+                        <items>
+                            <Label text="Model year"/>
+                            <Label text=":" class="sapUiTinyMarginEnd"/>
+                            <Label design="Bold" text="{/VehicleDetailSet/ZZMOYR}"/>
+                        </items>
+                    </HBox>
+                    <HBox>
+                        <items>
+                            <Label text="Colour"/>
+                            <Label text=":" class="sapUiTinyMarginEnd"/>
+                            <Label design="Bold" text="{/VehicleDetailSet/Colour}"/>
+                        </items>
+                    </HBox>
+                    <HBox>
+                        <items>
+                            <Label text="Driver"/>
+                            <Label text=":" class="sapUiTinyMarginEnd"/>
+                            <Label design="Bold" text="{/VehicleDetailSet/Driver}"/>
+                        </items>
+                    </HBox>
+                    <HBox>
+                        <items>
+                            <Label text="Start Date"/>
+                            <Label text=":" class="sapUiTinyMarginEnd"/>
+                            <Label design="Bold" text="{/VehicleDetailSet/EstStartDt}"/>
+                        </items>
+                    </HBox>
+                    <HBox>
+                        <items>
+                            <Label text="Est. Assoc Price"/>
+                            <Label text=":" class="sapUiTinyMarginEnd"/>
+                            <Label design="Bold" text="{/VehicleDetailSet/EstAssPrice}"/>
+                        </items>
+                    </HBox>
+                    <HBox>
+                        <items>
+                            <Label text="Status"/>
+                            <Label text=":" class="sapUiTinyMarginEnd"/>
+                            <Label design="Bold" text="{/VehicleDetailSet/Status}"/>
+                        </items>
+                    </HBox>
+                    <HBox>
+                        <items>
+                            <Label text="SFX"/>
+                            <Label text=":" class="sapUiTinyMarginEnd"/>
+                            <Label design="Bold" text="{/VehicleDetailSet/ZZSUFFIX}"/>
+                        </items>
+                    </HBox>
+                    <HBox>
+                        <items>
+                            <Label text="APX"/>
+                            <Label text=":" class="sapUiTinyMarginEnd"/>
+                            <Label design="Bold" text="{/VehicleDetailSet/ZZAPX}"/>
+                        </items>
+                    </HBox>
+                    <HBox>
+                        <items>
+                            <Label text="Zone"/>
+                            <Label text=":" class="sapUiTinyMarginEnd"/>
+                            <Label design="Bold" text="{/VehicleDetailSet/ZZZONE}"/>
+                        </items>
+                    </HBox>
+                </items>
+            </VBox>
+            <VBox>
+                <items>
+                    <HBox>
+                        <items>
+                            <Label text="Series"/>
+                            <Label text=":" class="sapUiTinyMarginEnd"/>
+                            <Label design="Bold" text="{/VehicleDetailSet/ZZSERIES}"/>
+                        </items>
+                    </HBox>
+                    <HBox>
+                        <items>
+                            <Label text="VIN"/>
+                            <Label text=":" class="sapUiTinyMarginEnd"/>
+                            <Label design="Bold" text="{/VehicleDetailSet/VHVIN}"/>
+                        </items>
+                    </HBox>
+                    <HBox>
+                        <items>
+                            <Label text="Colour Code"/>
+                            <Label text=":" class="sapUiTinyMarginEnd"/>
+                            <Label design="Bold" text="{/VehicleDetailSet/ZZEXTCOL}"/>
+                        </items>
+                    </HBox>
+                    <HBox>
+                        <items>
+                            <Label text="Driver Dept"/>
+                            <Label text=":" class="sapUiTinyMarginEnd"/>
+                            <Label design="Bold" text="{/VehicleDetailSet/QAUSP}"/>
+                        </items>
+                    </HBox>
+                    <HBox>
+                        <items>
+                            <Label text="Est. End Date"/>
+                            <Label text=":" class="sapUiTinyMarginEnd"/>
+                            <Label design="Bold" text="{/VehicleDetailSet/EndDate}"/>
+                        </items>
+                    </HBox>
+                    <HBox>
+                        <items>
+                            <Label text="Est. Non Assoc. Price"/>
+                            <Label text=":" class="sapUiTinyMarginEnd"/>
+                            <Label design="Bold" text="{/VehicleDetailSet/NonAssPrice}"/>
+                        </items>
+                    </HBox>
+                    <HBox>
+                        <items>
+                            <Label text="Type"/>
+                            <Label text=":" class="sapUiTinyMarginEnd"/>
+                            <Label design="Bold" text="Demo"/>
+                        </items>
+                    </HBox>
+                    <HBox>
+                        <items>
+                            <Label text="SFX Options"/>
+                            <Label text=":" class="sapUiTinyMarginEnd"/>
+                            <Label design="Bold" text="{/VehicleDetailSet/Option}"/>
+                        </items>
+                    </HBox>
+                    <HBox>
+                        <items>
+                            <Label text="APX Options"/>
+                            <Label text=":" class="sapUiTinyMarginEnd"/>
+                            <Label design="Bold" text="{/VehicleDetailSet/ZPPO_CODE}"/>
+                        </items>
+                    </HBox>
+                    <HBox>
+                        <items>
+                            <Label text="Last Updated"/>
+                            <Label text=":" class="sapUiTinyMarginEnd"/>
+                            <Label design="Bold" text="{/VehicleDetailSet/LastUpdated}"/>
+                        </items>
+                    </HBox>
+                </items>
+            </VBox>
+            <Link href="http://tcipb2eiis1a.tci.internal.toyota.ca/DemoVehicleFeederWeb/mvc/init/5TFDY5F10JX754791" text="PAYMENT CALCULATOR" textAlign="Begin" width="165.625px" target="_blank" wrapping="true" enabled="true" visible="true" emphasized="true" subtle="false" class="sapUiMediumMargin"/>
+        </uxap:headerContent>
+        <uxap:sections>
+            <uxap:ObjectPageSection title="Pricing Disclaimer">
+                <uxap:subSections>
+                    <uxap:ObjectPageSubSection title="Pricing Disclaimer">
+                        <uxap:blocks>
+                            <FormattedText htmlText="&lt;p&gt;&lt;!-- x-tinymce/html --&gt;&lt;span style=&quot;color: #ff0000; font-family: 'Arial',sans-serif; font-size: 10pt;&quot;&gt;The prices displayed above are estimates only. The actual price will be determined at time of sale. &lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;color: #ff0000; font-family: 'Arial',sans-serif; font-size: 10pt;&quot;&gt;If PDI &amp;amp; accessories are not listed under &amp;ldquo;Dealer Options&amp;rdquo; it means the invoice has not yet been received and updated. The price could be substantially higher depending on the number of accessories being added.&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;color: #ff0000; font-family: 'Arial',sans-serif; font-size: 10pt;&quot;&gt;Please check again in a few weeks.&lt;/span&gt;&lt;/p&gt;" width="auto" visible="true"/>
+                        </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
+            </uxap:ObjectPageSection>
+            <uxap:ObjectPageSection title="Repair Information">
+                <uxap:subSections>
+                    <uxap:ObjectPageSubSection title="Repair Information">
+                        <uxap:blocks>
+                            <MessageStrip text="{/VehicleDetailSet/RepairInfo}" type="None" customIcon="" showIcon="false" showCloseButton="false" visible="true">
+                                <link/>
+                            </MessageStrip>
+                        </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
+            </uxap:ObjectPageSection>
+            <uxap:ObjectPageSection title="Options">
+                <uxap:subSections>
+                    <uxap:ObjectPageSubSection title="Options">
+                        <uxap:blocks>
+                            <layout:Grid defaultSpan="XL12 L12 M12 S12">
+                                <layout:content>
+ 								<List id="listFacOption" items="{/VehicleDetailSet/NAVFACOPTION/results}" headerText="Factory Options" width="70%" showSeparators="None" backgroundDesign="Transparent" growing="true" growingThreshold="10" growingScrollToLoad="false">
+									<StandardListItem title="{FacDesc}"/>
+								</List>
+                            	</layout:content>
+                            </layout:Grid>
+                            <layout:Grid defaultSpan="XL12 L12 M12 S12">
+                                <layout:content>
+									<List id="listDealOption" items="{/VehicleDetailSet/NAVDEALEROPTION/results}" headerText="Dealer Options" width="100%" showSeparators="None" backgroundDesign="Transparent" growing="true" growingThreshold="10" growingScrollToLoad="false">
+										<StandardListItem title="{DealerDesc}"/>
+									</List>
+                                </layout:content>
+                            </layout:Grid>
+                        </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
+            </uxap:ObjectPageSection>
+            <uxap:ObjectPageSection title="Reservation Details">
+                <uxap:subSections>
+                    <uxap:ObjectPageSubSection title="Reservation Details">
+                        <uxap:blocks>
+                            <layout:Grid defaultSpan="XL12 L12 M12 S12">
+                                <layout:content>
+                                    <form:Form>
+                                        <form:layout>
+                                            <form:ResponsiveGridLayout labelSpanXL="12" labelSpanL="12" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="4" columnsL="3" columnsM="2" singleContainerFullSize="false"/>
+                                        </form:layout>
+                                        <form:formContainers>
+                                            <form:FormContainer title="Requestor Information">
+                                                <form:formElements>
+                                                    <form:FormElement>
+                                                        <form:label>
+                                                            <Label text="Requestor Type" required="false"/>
+                                                        </form:label>
+                                                        <form:fields>
+                                                            <Label text="{/VehicleDetailSet/ZZREQTYP}"/>
+                                                        </form:fields>
+                                                    </form:FormElement>
+                                                    <form:FormElement>
+                                                        <form:label>
+                                                            <Label text="Requestor Name" required="false"/>
+                                                        </form:label>
+                                                        <form:fields>
+                                                            <Label text="{/VehicleDetailSet/RequestorName}"/>
+                                                        </form:fields>
+                                                    </form:FormElement>
+                                                    <form:FormElement>
+                                                        <form:label>
+                                                            <Label text="Request Date" required="false"/>
+                                                        </form:label>
+                                                        <form:fields>
+                                                            <Label text="{/VehicleDetailSet/zzcretms}"/>
+                                                        </form:fields>
+                                                    </form:FormElement>
+                                                    <form:FormElement>
+                                                        <form:label>
+                                                            <Label text="Requests Approved" required="false"/>
+                                                        </form:label>
+                                                        <form:fields>
+                                                            <Label text="{/VehicleDetailSet/ReqAppr}"/>
+                                                        </form:fields>
+                                                    </form:FormElement>
+                                                    <form:FormElement>
+                                                        <form:label>
+                                                            <Label text="Requests Pending Approval" required="false"/>
+                                                        </form:label>
+                                                        <form:fields>
+                                                            <Label text="{/VehicleDetailSet/ReqPend}"/>
+                                                        </form:fields>
+                                                    </form:FormElement>
+                                                </form:formElements>
+                                            </form:FormContainer>
+                                            <form:FormContainer title="Reserved For Information">
+                                                <form:formElements>
+                                                    <form:FormElement>
+                                                        <form:label>
+                                                            <Label text="Reserved for  Type" required="false"/>
+                                                        </form:label>
+                                                        <form:fields>
+                                                            <Label text="{/VehicleDetailSet/ZZPURTYP}"/>
+                                                        </form:fields>
+                                                    </form:FormElement>
+                                                    <form:FormElement>
+                                                        <form:label>
+                                                            <Label text="Reserved For Name" required="false"/>
+                                                        </form:label>
+                                                        <form:fields>
+                                                            <Label text="{/VehicleDetailSet/ZZPURNAME}"/>
+                                                        </form:fields>
+                                                    </form:FormElement>
+                                                </form:formElements>
+                                            </form:FormContainer>
+                                        </form:formContainers>
+                                    </form:Form>
+                                </layout:content>
+                            </layout:Grid>
+                            <Button text="Edit Reservation" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onButtonPress"/>
+                        </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
+            </uxap:ObjectPageSection>
+        </uxap:sections>
+        <uxap:footer>
+           <OverflowToolbar>
+                <content>
+                    <ToolbarSpacer/>
+                    <Button text="Reserve" type="Emphasized" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="action"/>
+                    <Button text="Return" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onNavButtonPress"/>
+                </content>
+            </OverflowToolbar>
+        </uxap:footer>
+    </uxap:ObjectPageLayout>
 </mvc:View>

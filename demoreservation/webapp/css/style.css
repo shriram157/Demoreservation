@@ -1,4 +1,5 @@
 /* Enter your custom styles here */
+/**********************************************Screen 1************************************************/
 /* Search input */
 .sapMSFF {
     border: 1px solid #7891a7;
@@ -87,3 +88,51 @@
 .sapMSFI {
     color: #ffffff;
 }
+/**** Factory and Dealer Option List **************/
+.sapUiSizeCompact .sapMSLITitleOnly {
+    /* font-size: 0.875rem; */
+    color: #666666;
+    font-size: 0.875rem;
+    font-family: "72",Arial,Helvetica,sans-serif;
+    font-weight: normal;
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: text;
+}
+.sapMListHdrText {
+     font-size: 1rem;
+    height: 2rem;
+    line-height: 2rem;
+}
+
+/**********************************************Screen 2************************************************/
+/** Vehicle Info Bar  
+.sapUxAPObjectPageHeader .sapMBar {
+    background-color: #394958;
+}
+/**Header - Vehicle Detail  
+.sapUxAPObjectPageHeaderIdentifier {
+    background-color: #394958;
+}
+/**Header Data 
+.sapUxAPObjectPageLayout-Std-Tablet .sapUxAPObjectPageHeaderContent, html .sapUiContainer-Medium .sapUxAPObjectPageHeaderContent {
+    background: #394958;
+}
+/**Icon Tab Bar 
+.sapUxAPAnchorBar.sapMTB {
+    background: #394958;
+}
+/** Icon tab bar text  
+.sapUxAPAnchorBar .sapUxAPAnchorBarButton.sapUxAPAnchorBarButtonSelected .sapMBtnContent, .sapUxAPAnchorBar .sapUxAPAnchorBarButton.sapUxAPAnchorBarButtonSelected .sapMBtnIcon {
+    color: #dddddd;
+}
+/** Icon tab bar - underline  
+.sapUxAPAnchorBarButton.sapUxAPAnchorBarButtonSelected .sapMBtnContent {
+    border-bottom: 0.125rem solid #dddddd;
+}
+.sapUxAPObjectPageHeaderDetails .sapMLabel {
+    color: #dddddd;
+}
+**/

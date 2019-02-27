@@ -1,0 +1,61 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:layout="sap.ui.layout" xmlns:uxap="sap.uxap"
+	xmlns:form="sap.ui.layout.form">
+	<Dialog title="Administrator Section" showHeader="false" type="Message" contentHeight="60%" contentWidth="60%" id="feedbackDialog">
+		<content>
+			<form:Form width="100%" editable="true" visible="true">
+				<form:title>
+					<core:Title text="Administrator Section" level="Auto"/>
+				</form:title>
+				<form:formContainers>
+					<form:FormContainer visible="true">
+						<form:formElements>
+							<form:FormElement visible="true">
+								<form:label>
+									<Label text="Notes for requestor" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+								</form:label>
+								<form:fields>
+									<Input type="Text" showValueHelp="false" enabled="true" visible="true" width="100%" valueHelpOnly="false" maxLength="0"/>
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement visible="true">
+								<form:label>
+									<Label text="Cheque Required?" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+								</form:label>
+								<form:fields>
+									<CheckBox text="" selected="true" editable="true" enabled="true" visible="true" width="auto" textDirection="Inherit" wrapping="false"
+										useEntireWidth="true"/>
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement visible="true">
+								<form:label>
+									<Label text="Date Cheque Due" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+								</form:label>
+								<form:fields>
+									<DatePicker value="20180920" width="128.6750030517578px" displayFormat="short" enabled="true" visible="true" valueFormat="yyyyMMdd"/>
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement visible="true">
+								<form:label>
+									<Label text="Date Cheque Received" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+								</form:label>
+								<form:fields>
+									<DatePicker width="128.3125px" displayFormat="medium" enabled="true" visible="true" valueFormat="yyyyMMdd"/>
+								</form:fields>
+							</form:FormElement>
+						</form:formElements>
+						<form:title/>
+					</form:FormContainer>
+				</form:formContainers>
+				<form:layout>
+					<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+				</form:layout>
+			</form:Form>
+		</content>
+		<beginButton>
+			<Button press="onApprovePress" text="Approve"/>
+		</beginButton>
+		<endButton>
+			<Button press="onCloseDialog" text="Cancel"/>
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>
