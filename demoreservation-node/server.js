@@ -6,7 +6,7 @@
 var cors = require("cors");
 var express = require("express");
 var https = require("https");
-var log = require("cf-nodejs-logging-support");
+var logging = require("@sap/logging");
 var passport = require("passport");
 var xsenv = require("@sap/xsenv");
 var xssec = require("@sap/xssec");
@@ -18,8 +18,12 @@ var port = process.env.PORT || 3000;
 var app = express();
 
 // Logging
-log.setLoggingLevel(process.env.LOG_LEVEL || "info");
-app.use(log.logNetwork);
+var appContext = logging.createAppContext();
+app.use(logging.middleware({
+	appContext: appContext,
+	logNetwork: true
+}));
+var logger = appContext.createLogContext().getLogger("/Application/Server");
 
 // XSUAA
 passport.use("JWT", new xssec.JWTStrategy(xsenv.getServices({
@@ -39,10 +43,10 @@ app.use(passport.authenticate("JWT", {
 app.use(cors());
 
 // Router
-var router = require("./router")(app, log);
+var router = require("./router")(app, appContext);
 
 // Start server
 server.on("request", app);
 server.listen(port, function () {
-	log.logMessage("info", "Server is listening on port %d", port);
+	logger.info("Server is listening on port %d", port);
 });

@@ -12,10 +12,10 @@ modules:
       disk-quota: 256M
       memory: 256M
    properties:
-      LOG_LEVEL: info
-      LOG_REFERER: true
-      LOG_REMOTE_USER: true
-      LOG_SENSITIVE_CONNECTION_DATA: true
+      XS_APP_LOG_LEVEL: info
+      XS_LOG_USER: true
+      XS_LOG_REFERER: true
+      XS_LOG_CONNECTION_DATA: true
       NODE_TLS_REJECT_UNAUTHORIZED: 0
    provides:
     - name: demoreservation-node_api
