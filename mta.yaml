@@ -13,6 +13,9 @@ modules:
       memory: 256M
    properties:
       LOG_LEVEL: info
+      LOG_REFERER: true
+      LOG_REMOTE_USER: true
+      LOG_SENSITIVE_CONNECTION_DATA: true
       NODE_TLS_REJECT_UNAUTHORIZED: 0
    provides:
     - name: demoreservation-node_api
