@@ -18,7 +18,7 @@ var port = process.env.PORT || 3000;
 var app = express();
 
 // Logging
-log.setLoggingLevel(process.env.XS_APP_LOG_LEVEL || "info");
+log.setLoggingLevel(process.env.LOG_LEVEL || "info");
 app.use(log.logNetwork);
 
 // XSUAA
@@ -39,7 +39,7 @@ app.use(passport.authenticate("JWT", {
 app.use(cors());
 
 // Router
-var router = require("./router")(app, server);
+var router = require("./router")(app, log);
 
 // Start server
 server.on("request", app);

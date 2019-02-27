@@ -11,6 +11,9 @@ modules:
       host: tci-dev-demoreservation-node
       disk-quota: 256M
       memory: 256M
+   properties:
+      LOG_LEVEL: info
+      NODE_TLS_REJECT_UNAUTHORIZED: 0
    provides:
     - name: demoreservation-node_api
       properties:

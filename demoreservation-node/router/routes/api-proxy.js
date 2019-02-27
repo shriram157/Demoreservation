@@ -3,9 +3,8 @@
 
 "use strict";
 
-module.exports = function () {
+module.exports = function (log) {
 	var express = require("express");
-	var log = require("cf-nodejs-logging-support");
 	var request = require("request");
 	var xsenv = require("@sap/xsenv");
 
