@@ -1,14 +1,14 @@
 <mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns:uxap="sap.uxap" xmlns="sap.m" xmlns:layout="sap.ui.layout" xmlns:form="sap.ui.layout.form" controllerName="ca.toyota.demoreservation.demoreservation.controller.VehicleDetails">
-    <uxap:ObjectPageLayout showTitleInHeaderContent="false" showHeaderContent="true" showEditHeaderButton="false" showFooter="true" class="sapUiSizeCompact">
-        <uxap:headerTitle>
-            <uxap:ObjectPageHeader objectTitle="Vehicle Details" objectSubtitle="" isObjectIconAlwaysVisible="false" isObjectTitleAlwaysVisible="true" isObjectSubtitleAlwaysVisible="true" showPlaceholder="false">
+    <uxap:ObjectPageLayout  showTitleInHeaderContent="false" showHeaderContent="true" showEditHeaderButton="false" showFooter="true" class="sapUiSizeCompact">
+        <uxap:headerTitle class="toyota-header-backgroud-color">
+            <uxap:ObjectPageHeader objectTitle="Vehicle Info" objectSubtitle="" isObjectIconAlwaysVisible="false" isObjectTitleAlwaysVisible="true" isObjectSubtitleAlwaysVisible="true" showPlaceholder="false">
                 <uxap:navigationBar>
                     <Bar>
                         <contentLeft>
                             <Button type="Back" press="onNavButtonPress"/>
                         </contentLeft>
                         <contentMiddle>
-                            <Title text="Vehicle Info"/>
+                            <Title text="Vehicle Details"/>
                         </contentMiddle>
                         <contentRight/>
                     </Bar>
@@ -17,8 +17,8 @@
                 <uxap:breadCrumbsLinks/>
             </uxap:ObjectPageHeader>
         </uxap:headerTitle>
-        <uxap:headerContent>
-            <VBox>
+        <uxap:headerContent width="100%">
+            <VBox width="30%">
                 <items>
                     <HBox>
                         <items>
@@ -92,7 +92,7 @@
                     </HBox>
                 </items>
             </VBox>
-            <VBox>
+            <VBox  width="30%">
                 <items>
                     <HBox>
                         <items>
@@ -168,7 +168,7 @@
             </VBox>
             <Link href="http://tcipb2eiis1a.tci.internal.toyota.ca/DemoVehicleFeederWeb/mvc/init/5TFDY5F10JX754791" text="PAYMENT CALCULATOR" textAlign="Begin" width="165.625px" target="_blank" wrapping="true" enabled="true" visible="true" emphasized="true" subtle="false" class="sapUiMediumMargin"/>
         </uxap:headerContent>
-        <uxap:sections>
+        <uxap:sections class="toyota-header-backgroud-color">
             <uxap:ObjectPageSection title="Pricing Disclaimer">
                 <uxap:subSections>
                     <uxap:ObjectPageSubSection title="Pricing Disclaimer">
@@ -229,7 +229,7 @@
                                                             <Label text="Requestor Type" required="false"/>
                                                         </form:label>
                                                         <form:fields>
-                                                            <Label text="{/VehicleDetailSet/ZZREQTYP}"/>
+                                                            <Label design="Bold" text="{/VehicleDetailSet/ZZREQTYP}"/>
                                                         </form:fields>
                                                     </form:FormElement>
                                                     <form:FormElement>
@@ -237,7 +237,7 @@
                                                             <Label text="Requestor Name" required="false"/>
                                                         </form:label>
                                                         <form:fields>
-                                                            <Label text="{/VehicleDetailSet/RequestorName}"/>
+                                                            <Label design="Bold" text="{/VehicleDetailSet/RequestorName}"/>
                                                         </form:fields>
                                                     </form:FormElement>
                                                     <form:FormElement>
@@ -245,7 +245,7 @@
                                                             <Label text="Request Date" required="false"/>
                                                         </form:label>
                                                         <form:fields>
-                                                            <Label text="{/VehicleDetailSet/zzcretms}"/>
+                                                            <Label design="Bold" text="{/VehicleDetailSet/zzcretms}"/>
                                                         </form:fields>
                                                     </form:FormElement>
                                                     <form:FormElement>
@@ -253,7 +253,7 @@
                                                             <Label text="Requests Approved" required="false"/>
                                                         </form:label>
                                                         <form:fields>
-                                                            <Label text="{/VehicleDetailSet/ReqAppr}"/>
+                                                            <Label design="Bold" text="{/VehicleDetailSet/ReqAppr}"/>
                                                         </form:fields>
                                                     </form:FormElement>
                                                     <form:FormElement>
@@ -261,7 +261,7 @@
                                                             <Label text="Requests Pending Approval" required="false"/>
                                                         </form:label>
                                                         <form:fields>
-                                                            <Label text="{/VehicleDetailSet/ReqPend}"/>
+                                                            <Label design="Bold" text="{/VehicleDetailSet/ReqPend}"/>
                                                         </form:fields>
                                                     </form:FormElement>
                                                 </form:formElements>
@@ -273,7 +273,7 @@
                                                             <Label text="Reserved for  Type" required="false"/>
                                                         </form:label>
                                                         <form:fields>
-                                                            <Label text="{/VehicleDetailSet/ZZPURTYP}"/>
+                                                            <Label design="Bold" text="{/VehicleDetailSet/ZZPURTYP}"/>
                                                         </form:fields>
                                                     </form:FormElement>
                                                     <form:FormElement>
@@ -281,7 +281,7 @@
                                                             <Label text="Reserved For Name" required="false"/>
                                                         </form:label>
                                                         <form:fields>
-                                                            <Label text="{/VehicleDetailSet/ZZPURNAME}"/>
+                                                            <Label design="Bold" text="{/VehicleDetailSet/ZZPURNAME}"/>
                                                         </form:fields>
                                                     </form:FormElement>
                                                 </form:formElements>

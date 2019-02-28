@@ -3,7 +3,99 @@
 	xmlns:layout1="sap.ui.commons.layout" xmlns:form="sap.ui.layout.form">
 	<Page title="Request Detail" showHeader="true" showFooter="true" showNavButton="true" navButtonPress="onNavButtonPress">
 		<content>
-			<layout1:AbsoluteLayout horizontalScrolling="Hidden" verticalScrolling="Auto">
+			<Text text="Vehicle Summary" class="font_size_larger sapUiTinyMargin" />
+			<HBox>
+				<VBox width="50%" class="sapUiLargeMarginBegin">
+					<!--<HBox>-->
+					<!--	<Text text="VIN : "/>-->
+					<!--	<Text text="Text"/>-->
+					<!--</HBox>-->
+					<!--<HBox>-->
+					<!--	<Text text="Model Year : "/>-->
+					<!--	<Text text="2018"/>-->
+					<!--</HBox>-->
+					<HBox width="80%">
+						<Label width="12rem" text="VIN : " text-align="left" />
+						<Text width="12rem" text="Enter Text ..."/>
+					</HBox>
+					<HBox width="80%">
+						<Label width="12rem" text="Model Year : " text-align="left" />
+						<Text width="12rem" text="Enter Text ..."/>
+					</HBox>
+				</VBox>
+				<VBox width="50%">
+					<!--<HBox>-->
+					<!--	<Text text="Model Description : "/>-->
+					<!--	<Text text="Text"/>-->
+					<!--</HBox>-->
+					<!--<HBox>-->
+					<!--	<Text text="Colour : "/>-->
+					<!--	<Text text="Text"/>-->
+					<!--</HBox>-->
+					<HBox width="80%">
+						<Label width="12rem" text="Model Description : " text-align="left" />
+						<Text width="12rem" text="Enter Text ..."/>
+					</HBox>
+					<HBox width="80%">
+						<Label width="12rem" text="Colour : " text-align="left" />
+						<Text width="12rem" text="Enter Text ..."/>
+					</HBox>
+				</VBox>
+			</HBox>
+			<Text text="Requestor Information" class="font_size_larger sapUiMediumMarginTop sapUiTinyMargin" />
+			<HBox>
+				<VBox width="100%" class="sapUiLargeMarginBegin">
+					<HBox width="80%">
+						<Label width="12rem" class="sapUiSmallMarginTop" text="Requestor Type : " text-align="left" required="true"/>
+						<ComboBox selectionChange="onSelectReqTypeChange" width="90%" items="{LocalDataModel>/RequestorType}">
+							<core:Item key="{LocalDataModel>itemCode}" text="{LocalDataModel>label}" enabled="{= ${LocalDataModel>status} === 'ACTIVE'}"/>
+						</ComboBox>
+					</HBox>
+					<HBox width="80%">
+						<Label width="12rem" class="sapUiSmallMarginTop" text="On behalf of : " text-align="left" editable="false" visible="true"/>
+						<ComboBox id="idPriority" width="90%" items="{LocalDataModel>/Employee}" selectedKey="" selectionChange="onSelectPriorityChange">
+							<core:Item key="{LocalDataModel>itemCode}" text="{LocalDataModel>label}"/>
+						</ComboBox>
+					</HBox>
+					<HBox width="80%">
+						<Label width="12rem" class="sapUiSmallMarginTop" text="Requestor Type : " text-align="left" required="true"/>
+						<Input width="12rem" placeholder="Enter Text ..."/>
+					</HBox>
+					<HBox width="80%">
+						<Label width="12rem" class="sapUiSmallMarginTop" text="First Name : " text-align="left" required="true"/>
+						<Input width="12rem" placeholder="Enter Text ..."/>
+					</HBox>
+					<HBox width="80%">
+						<Label width="12rem" class="sapUiSmallMarginTop" text="Last Name : " text-align="left" required="true"/>
+						<Input width="12rem" placeholder="Enter Text ..."/>
+					</HBox>
+					<HBox width="80%">
+						<Label width="12rem" class="sapUiSmallMarginTop" text="Email Address : " text-align="left" required="true"/>
+						<Input width="12rem" placeholder="Enter Text ..."/>
+					</HBox>
+					<HBox width="80%">
+						<Label width="12rem" class="sapUiSmallMarginTop" text="Phone Number : " text-align="left" required="true"/>
+						<Input width="12rem" placeholder="Enter Text ..."/>
+					</HBox>
+				</VBox>
+				<VBox width="100%">
+					<HBox width="80%">
+						<Label width="12rem" text="Department : " text-align="left" required="true" class="statusLabel nes-label-font-white"/>
+						<ComboBox selectionChange="onSelectTopicChange" width="90%" items="{LocalDataModel>/RequestorType}">
+							<core:Item key="{LocalDataModel>itemCode}" text="{LocalDataModel>label}" enabled="{= ${LocalDataModel>status} === 'ACTIVE'}"/>
+						</ComboBox>
+					</HBox>
+					<!--				<HBox width="80%">
+					<Label width="12rem" text="{i18n>ACTION_TOPIC_PRIORITY}" text-align="left" class="nes-label-font-white statusLabel" required="true" editable="false"/>
+					<ComboBox width="90%" items="{LocalDataModel>/Dropdowns/ACTION_PRIORITY}" selectedKey=""
+						selectionChange="onSelectPriorityChange">
+						<core:Item key="{LocalDataModel>itemCode}" text="{LocalDataModel>label}"/>
+					</ComboBox>
+				</HBox>
+-->
+				</VBox>
+			</HBox> 
+			<!--			<layout1:AbsoluteLayout horizontalScrolling="Hidden" verticalScrolling="Auto">
 				<layout1:positions>
 					<layout1:PositionContainer left="24px" top="723px">
 						<layout1:control>
@@ -229,7 +321,7 @@
 						</layout1:control>
 					</layout1:PositionContainer>
 				</layout1:positions>
-			</layout1:AbsoluteLayout>
+			</layout1:AbsoluteLayout>-->
 		</content>
 		<footer>
 			<!--<OverflowToolbar width="100%" height="auto" design="Auto" enabled="true" visible="true">-->
@@ -243,15 +335,20 @@
 			<!--	</content>-->
 			<!--</OverflowToolbar>-->
 			<OverflowToolbar width="100%" height="auto" design="Auto" enabled="true" visible="true">
-                <content>
-                    <ToolbarSpacer width="834.9500122070312px"/>
-                    <Button text="Submit" type="Emphasized" iconFirst="true" width="86.63750457763672px" enabled="true" visible="true" iconDensityAware="false" press="onSubmitPress"/>
-                    <Button text="Cancel" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onCancelPress"/>
-                    <Button text="Delete" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onDeletePress"/>
-                    <Button text="Approve" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onApprovePress"/>
-                    <Button text="Decline" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onDeclinePress"/>
-                </content>
-            </OverflowToolbar>
+				<content>
+					<ToolbarSpacer/>
+					<Button text="Submit" type="Emphasized" iconFirst="true" width="86.63750457763672px" enabled="true" visible="true" iconDensityAware="false"
+						press="onSubmitPress"/>
+					<Button text="Cancel" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"
+						press="onCancelPress"/>
+					<Button text="Delete" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"
+						press="onDeletePress"/>
+					<Button text="Approve" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"
+						press="onApprovePress"/>
+					<Button text="Decline" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"
+						press="onDeclinePress"/>
+				</content>
+			</OverflowToolbar>
 		</footer>
 	</Page>
 </mvc:View>

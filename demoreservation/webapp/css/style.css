@@ -1,4 +1,45 @@
 /* Enter your custom styles here */
+
+/*--------Generic CSS------------*/
+.toyota-header-backgroud-color {
+    background-color: #495e70 !important;
+    -webkit-text-fill-color: white;
+}
+.toyota-header-font-color {
+	color: white;
+}
+
+.font_size_larger {
+	font-size: larger !important;
+	margin-top: 1rem;
+} 
+
+/* Below are the extention if standard SAP css and it need to be in theme */
+.sapUxAPObjectPageHeaderContentDesign-Light, .sapUxAPObjectPageHeaderContentDesign-Dark{
+    background-color: #495e70 !important;
+    -webkit-text-fill-color: white;
+}
+
+.sapUxAPAnchorBar.sapMTB {
+    border: none;
+    background-color: #495e70 !important;
+    -webkit-text-fill-color: white;
+}
+
+.sapUxAPObjectPageHeaderIdentifier {
+    background-color: #495e70 !important;
+    -webkit-text-fill-color: white;
+}
+
+.sapUxAPObjectPageHeader .sapMBar {
+    background-color: #495e70 !important;
+    text-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    -webkit-text-fill-color: white;
+}
+
+
 /**********************************************Screen 1************************************************/
 /* Search input */
 .sapMSFF {
