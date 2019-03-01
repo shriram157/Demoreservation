@@ -33,6 +33,8 @@ modules:
       host: tci-dev-demoreservation
       disk-quota: 256M
       memory: 256M
+   properties:
+      XS_APP_LOG_LEVEL: info
    build-parameters:
       builder: grunt
    requires:
