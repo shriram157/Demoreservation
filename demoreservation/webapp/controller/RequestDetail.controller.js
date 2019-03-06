@@ -306,7 +306,7 @@ sap.ui.define([
 					  "ZCREDT" : "",
 					  "ZCREATED_BY" : "",
 					  "ZCREATED_ON" : "",
-					  "Vehicleaction" : "ZRRD",
+					  "Vehicleaction" : "",
 					  "Vehiclenumber" : "0000000624",
 					  "Vehicleidentnumb" : "VNKKTUD83JA090890"
 				};
