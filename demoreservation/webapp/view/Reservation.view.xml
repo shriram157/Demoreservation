@@ -57,7 +57,7 @@
         <f:content>
             <VBox fitContainer="true">
                 <items>
-                    <Table width="100%" growing="true" growingScrollToLoad="true" growingThreshold="25" mode="None" itemPress="_onFioriListReportTableItemPress" updateFinished="_onFioriListReportTableUpdateFinished">
+                    <Table id="tabRservation" width="100%" growing="true" growingScrollToLoad="true" growingThreshold="25" mode="None" itemPress="_onFioriListReportTableItemPress" updateFinished="_onFioriListReportTableUpdateFinished">
                         <headerToolbar>
                             <OverflowToolbar design="Transparent">
                                 <content>
@@ -95,7 +95,7 @@
                             </Column>
                             <Column width="auto" minScreenWidth="Phone">
                                 <header>
-                                    <Text text="Request Date and Time" width="auto"/>
+                                    <Text text="Request Date" width="auto"/>
                                 </header>
                             </Column>
                             <Column width="auto" minScreenWidth="Phone">
@@ -143,7 +143,7 @@
                                     <ObjectStatus text="RX450HL" width="auto"/>
                                     <ObjectStatus text="2018" width="auto"/>
                                     <ObjectStatus text="01-G3-Magnetic Grey" width="auto"/>
-                                    <ObjectStatus text="09/15/2018 10:22:20 PM" width="auto"/>
+                                    <ObjectStatus text="09/15/2018" width="auto"/>
                                     <ObjectStatus text="Maria D'Souza" width="auto"/>
                                     <ObjectStatus text="JT2xxxxxxxxxxxxxx" width="auto"/>
                                     <ObjectStatus text="Maria D'Souza" width="auto"/>

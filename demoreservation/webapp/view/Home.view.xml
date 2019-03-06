@@ -38,7 +38,7 @@
 							<fb:FilterItem name="B" label="Series">
 								<fb:control>
 									<ComboBox id="seriesFilter" change="onSelectChange" items="{/zc_mmfields}" placeholder="Select Series">
-										<core:Item key="{ModelSeriesNo}" text="{TCIModelDescriptionEN}"/>
+										<core:Item key="{ModelSeriesNo}" text="{ModelSeriesNo}"/>
 									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
@@ -61,7 +61,11 @@
 							</fb:FilterItem>
 							<fb:FilterItem name="F" label="Status">
 								<fb:control>
-									<Input id="inpStatus" placeholder="Enter Status"/>
+									<!--<Input id="inpStatus" placeholder="Enter Status"/>-->
+									<ComboBox id="inpStatus" change="onSelectChange" items="{path: 'vehicles>/FilterData/ReservationStatus'}" placeholder="Select Status">
+										<core:Item key="{vehicles>key}" text="{vehicles>name}"/>
+									</ComboBox>
+
 								</fb:control>
 							</fb:FilterItem>
 						</fb:filterItems>
@@ -93,22 +97,22 @@
 					</Toolbar>
 				</headerToolbar>
 				<columns>
-					<Column minScreenWidth="Tablet" demandPopin="true">
+					<Column width="5rem" minScreenWidth="Tablet" demandPopin="true">
 						<Text text="Series"/>
 					</Column>
-					<Column minScreenWidth="Tablet" demandPopin="true">
+					<Column width="14rem" minScreenWidth="Tablet" demandPopin="true">
 						<Text text="Model"/>
 					</Column>
 					<Column minScreenWidth="Tablet" demandPopin="true">
 						<Text text="Zone"/>
 					</Column>
-					<Column minScreenWidth="Tablet" demandPopin="true">
+					<Column width="10rem" minScreenWidth="Tablet" demandPopin="true">
 						<Text text="Est. Assoc. Price"/>
 					</Column>
-					<Column minScreenWidth="Tablet" demandPopin="true">
+					<Column width="10rem" minScreenWidth="Tablet" demandPopin="true">
 						<Text text="Est. End Date"/>
 					</Column>
-					<Column minScreenWidth="Tablet" demandPopin="true">
+					<Column width="5rem" minScreenWidth="Tablet" demandPopin="true">
 						<Text text="Year"/>
 					</Column>
 					<Column minScreenWidth="Tablet" demandPopin="true">
@@ -117,8 +121,11 @@
 					<Column minScreenWidth="Tablet" demandPopin="true">
 						<Text text="Driver"/>
 					</Column>
-					<Column minScreenWidth="Tablet" demandPopin="true">
-						<Text text="VIN"/>
+					<!--<Column minScreenWidth="Tablet" demandPopin="true">-->
+					<!--	<Text text="VIN"/>-->
+					<!--</Column>-->
+					<Column width="6rem" minScreenWidth="Tablet" demandPopin="true">
+						<Text text="Repaired"/>
 					</Column>
 					<Column minScreenWidth="Tablet" demandPopin="true">
 						<Text text="Status"/>
@@ -127,15 +134,16 @@
 				<items>
 					<ColumnListItem vAlign="Middle" type="Navigation" press="onListItemPress">
 						<cells>
-							<Text text="{SeriesDesc}"/>
+							<Text width="5rem" text="{ZZSERIES}"/>
 							<Text text="{ModelDesc}"/>
 							<Text text="{ZoneDesc}"/>
 							<Text text="{Price}"/>
 							<Text text="{EndDate}"/>
-							<Text text="{ZZMOYR}"/>
+							<Text width="5rem" text="{ZZMOYR}"/>
 							<Text text="{ColorDesc}"/>
 							<Text text="{Driver}"/>
-							<Text text="{VHVIN}"/>
+							<!--<Text text="{VHVIN}"/>-->
+							<Text width="6rem" text="{path: 'Repair' ,formatter: '.formatRepair'}"/>
 							<Text text="{Status}"/>
 						</cells>
 					</ColumnListItem>

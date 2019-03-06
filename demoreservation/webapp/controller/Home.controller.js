@@ -14,27 +14,15 @@ sap.ui.define([
 		},
 		initialFilter: function () {
 			this.getView().byId("zoneFilter").setSelectedKey("3000");
-/*			var ZZZONE = new sap.ui.model.Filter("ZZZONE", sap.ui.model.FilterOperator.EQ, "3000");
-			var finalFilter = new sap.ui.model.Filter({
-				filters: ZZZONE,
-				and: false
-			});
-			// // update list binding
-			var list = this.getView().byId("idMyReservationsTable");
-			var binding = list.getBinding("items");
-			binding.filter(finalFilter, "Application");
-*/		},
+		},
 		onRouteMatched: function (oEvent) {
-			// var idMyReservationsTable = this.byId("idMyReservationsTable");
-			// var idAllReservationsTable = this.byId("idAllReservationsTable");
-			// idMyReservationsTable.setVisible(true);
-			// idAllReservationsTable.setVisible(false);
 		},
 
 		onListItemPress: function (oEvent) {
 			var listItemContext = oEvent.getSource().getBindingContext();
-			var selectedvguid = listItemContext.getProperty("VHVIN");
-			this.doRoute("VehicleDetails",selectedvguid);
+			var selectedvin = listItemContext.getProperty("VHVIN");
+			this.getView().getModel("localDataModel").setProperty("/Screen1",{"VHVIN":selectedvin});
+			this.doRoute("VehicleDetails",selectedvin);
 		},
 		
 		onReservationPress: function (oEvent){
@@ -69,6 +57,10 @@ sap.ui.define([
 			var yearFilter = this.getView().byId("yearFilter").getValue();
 			var vinFilter = this.getView().byId("vinFilter").getValue();
 			var inpStatus = this.getView().byId("inpStatus").getValue();
+			
+			if(inpStatus ==="All"){ // If Status selected All, send blank value in filter
+				inpStatus="";
+			}
 
 			var aFilters = [];
 			var ZZZONE = new sap.ui.model.Filter("ZZZONE", sap.ui.model.FilterOperator.EQ, zoneFilter);
@@ -76,7 +68,7 @@ sap.ui.define([
 			var MATNR = new sap.ui.model.Filter("MATNR", sap.ui.model.FilterOperator.EQ, modelFilter);
 			var ZZMOYR = new sap.ui.model.Filter("ZZMOYR", sap.ui.model.FilterOperator.EQ, yearFilter);
 			var VHVIN = new sap.ui.model.Filter("VHVIN", sap.ui.model.FilterOperator.Contains, vinFilter);
-			var Status = new sap.ui.model.Filter("Status", sap.ui.model.FilterOperator.Contains, inpStatus);
+			var Status = new sap.ui.model.Filter("Status", sap.ui.model.FilterOperator.EQ, inpStatus);
 			aFilters = [
 				ZZZONE,
 				ZZSERIES,
@@ -178,8 +170,6 @@ sap.ui.define([
 			}
 			// open value help dialog filtered by the input value
 			this._sortDialog.open();
-			
-	//		this.createViewSettingsDialog("ca.toyota.demoreservation.demoreservation.fragments.SortDialog").open();
 		},
 		handleSortDialogConfirm: function (oEvent) {
 			var oTable = this.byId("idMyReservationsTable"),
@@ -195,6 +185,14 @@ sap.ui.define([
 
 			// apply the selected sort and group settings
 			oBinding.sort(aSorters);
+		},
+		formatRepair: function (value) {
+			if (value ==="N") {
+				value = "No";
+			}else{
+				value="Yes";
+			}
+			return value;
 		}
 
 	});

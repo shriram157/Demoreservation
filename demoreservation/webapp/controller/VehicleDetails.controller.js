@@ -5,29 +5,23 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 			this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
 		},
 		onRouteMatched: function (oEvent) {
-			var oArgs, oView, sPath;
+			var oArgs;
 			oArgs = oEvent.getParameter("arguments");
-			oView = this.getView();
-			//	sPath = "/vehicleListSet('2T3DFREV7JW698726')";
-			sPath = "VehicleDetailSet(VHVIN='" + oArgs.vguid + "')?$expand=NAVFACOPTION,NAVDEALEROPTION";
-			oView.bindElement({
-				path: sPath,
-				events: {
-					dataRequested: function () {
-						oView.setBusy(true);
-					},
-					dataReceived: function () {
-						oView.setBusy(false);
-					}
-				}
-			});
 			this.getVehicleData(oArgs.vguid);
 		},
 		onNavButtonPress: function (oEvent) {
 			this.doRoute("Home");
 		},
-		_onButtonPress: function (oEvent) {
-			this.doRoute("RequestDetail");
+		_onEditPress: function (oEvent) {
+			//	this.doRoute("RequestDetail");
+			var vhvin = this.getView().getModel().getData().VehicleDetailSet.VHVIN;
+			var Zresreq = this.getView().getModel().getData().VehicleDetailSet.ZRESREQ;
+			if(Zresreq===""){
+				// msg
+			}else{
+			this.doReqRoute("RequestDetail",vhvin,Zresreq);
+			}
+
 		},
 		getVehicleData: function (VHVIN) {
 			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
@@ -59,8 +53,14 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 		/**
 		 *@memberOf ca.toyota.demoreservation.demoreservation.controller.VehicleDetails
 		 */
-		action: function (oEvent) {
-			this.doRoute("RequestDetail");
+		_onCreatePress: function (oEvent) {
+			var vhvin = this.getView().getModel().getData().VehicleDetailSet.VHVIN;
+			this.doReqRoute("RequestDetail",vhvin,"C");
+			// this.getOwnerComponent().getRouter().navTo("RequestDetail", {
+			// 	vhvin: vhvin,
+			// 	action: "C"
+			// });
 		}
+
 	});
 });

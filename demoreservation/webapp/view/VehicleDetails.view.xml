@@ -1,5 +1,5 @@
 <mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns:uxap="sap.uxap" xmlns="sap.m" xmlns:layout="sap.ui.layout" xmlns:form="sap.ui.layout.form" controllerName="ca.toyota.demoreservation.demoreservation.controller.VehicleDetails">
-    <uxap:ObjectPageLayout  showTitleInHeaderContent="false" showHeaderContent="true" showEditHeaderButton="false" showFooter="true" class="sapUiSizeCompact">
+    <uxap:ObjectPageLayout showTitleInHeaderContent="false" showHeaderContent="true" showEditHeaderButton="false" showFooter="true" class="sapUiSizeCompact">
         <uxap:headerTitle class="toyota-header-backgroud-color">
             <uxap:ObjectPageHeader objectTitle="Vehicle Info" objectSubtitle="" isObjectIconAlwaysVisible="false" isObjectTitleAlwaysVisible="true" isObjectSubtitleAlwaysVisible="true" showPlaceholder="false">
                 <uxap:navigationBar>
@@ -78,13 +78,6 @@
                     </HBox>
                     <HBox>
                         <items>
-                            <Label text="APX"/>
-                            <Label text=":" class="sapUiTinyMarginEnd"/>
-                            <Label design="Bold" text="{/VehicleDetailSet/ZZAPX}"/>
-                        </items>
-                    </HBox>
-                    <HBox>
-                        <items>
                             <Label text="Zone"/>
                             <Label text=":" class="sapUiTinyMarginEnd"/>
                             <Label design="Bold" text="{/VehicleDetailSet/ZZZONE}"/>
@@ -92,7 +85,7 @@
                     </HBox>
                 </items>
             </VBox>
-            <VBox  width="30%">
+            <VBox width="30%">
                 <items>
                     <HBox>
                         <items>
@@ -105,7 +98,7 @@
                         <items>
                             <Label text="VIN"/>
                             <Label text=":" class="sapUiTinyMarginEnd"/>
-                            <Label design="Bold" text="{/VehicleDetailSet/VHVIN}"/>
+                            <Label id="idVhvin" design="Bold" text="{/VehicleDetailSet/VHVIN}"/>
                         </items>
                     </HBox>
                     <HBox>
@@ -136,13 +129,13 @@
                             <Label design="Bold" text="{/VehicleDetailSet/NonAssPrice}"/>
                         </items>
                     </HBox>
-                    <HBox>
-                        <items>
-                            <Label text="Type"/>
-                            <Label text=":" class="sapUiTinyMarginEnd"/>
-                            <Label design="Bold" text="Demo"/>
-                        </items>
-                    </HBox>
+                    <!--<HBox>-->
+                    <!--    <items>-->
+                    <!--        <Label text="Type"/>-->
+                    <!--        <Label text=":" class="sapUiTinyMarginEnd"/>-->
+                    <!--        <Label design="Bold" text="Demo"/>-->
+                    <!--    </items>-->
+                    <!--</HBox>-->
                     <HBox>
                         <items>
                             <Label text="SFX Options"/>
@@ -152,18 +145,26 @@
                     </HBox>
                     <HBox>
                         <items>
-                            <Label text="APX Options"/>
+                            <Label text="APX"/>
                             <Label text=":" class="sapUiTinyMarginEnd"/>
-                            <Label design="Bold" text="{/VehicleDetailSet/ZPPO_CODE}"/>
+                            <Label design="Bold" text="{/VehicleDetailSet/ZZAPX}"/>
                         </items>
                     </HBox>
-                    <HBox>
-                        <items>
-                            <Label text="Last Updated"/>
-                            <Label text=":" class="sapUiTinyMarginEnd"/>
-                            <Label design="Bold" text="{/VehicleDetailSet/LastUpdated}"/>
-                        </items>
-                    </HBox>
+
+                    <!--<HBox>-->
+                    <!--    <items>-->
+                    <!--        <Label text="APX Options"/>-->
+                    <!--        <Label text=":" class="sapUiTinyMarginEnd"/>-->
+                    <!--        <Label design="Bold" text="{/VehicleDetailSet/ZPPO_CODE}"/>-->
+                    <!--    </items>-->
+                    <!--</HBox>-->
+                    <!--<HBox>-->
+                    <!--    <items>-->
+                    <!--        <Label text="Last Updated"/>-->
+                    <!--        <Label text=":" class="sapUiTinyMarginEnd"/>-->
+                    <!--        <Label design="Bold" text="{/VehicleDetailSet/LastUpdated}"/>-->
+                    <!--    </items>-->
+                    <!--</HBox>-->
                 </items>
             </VBox>
             <Link href="http://tcipb2eiis1a.tci.internal.toyota.ca/DemoVehicleFeederWeb/mvc/init/5TFDY5F10JX754791" text="PAYMENT CALCULATOR" textAlign="Begin" width="165.625px" target="_blank" wrapping="true" enabled="true" visible="true" emphasized="true" subtle="false" class="sapUiMediumMargin"/>
@@ -290,7 +291,7 @@
                                     </form:Form>
                                 </layout:content>
                             </layout:Grid>
-                            <Button text="Edit Reservation" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onButtonPress"/>
+                            <Button text="Edit Reservation" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onEditPress"/>
                         </uxap:blocks>
                     </uxap:ObjectPageSubSection>
                 </uxap:subSections>
@@ -300,8 +301,8 @@
            <OverflowToolbar>
                 <content>
                     <ToolbarSpacer/>
-                    <Button text="Reserve" type="Emphasized" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="action"/>
-                    <Button text="Return" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onNavButtonPress"/>
+                    <Button text="Reserve" type="Emphasized" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onCreatePress"/>
+                    <Button text="Return" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
                 </content>
             </OverflowToolbar>
         </uxap:footer>

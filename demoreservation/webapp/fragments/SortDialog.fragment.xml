@@ -9,6 +9,7 @@
 			<ViewSettingsItem text="Zone" key="ZoneDesc" />
 			<ViewSettingsItem text="Est.Assoc.Price" key="Price" />
 			<ViewSettingsItem text="Est.End Date" key="EndDate"/>
+			<ViewSettingsItem text="Repaired" key="Repair"/>
 		</sortItems>
 	</ViewSettingsDialog>
 </core:FragmentDefinition>

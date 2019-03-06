@@ -167,60 +167,38 @@
 		"status": "Available"
 	}],
 	"FilterData":{
-		"Zone": [{
-			"key": "Zone1",
-			"name": "Zone 1"
-		},{
-			"key": "Zone2",
-			"name": "Zone 2"
-		},{
-			"key": "Zone3",
-			"name": "Zone 3"
-		},{
-			"key": "Zone4",
-			"name": "Zone 4"
-		}],
-		"Series": [{
-			"key": "Series1",
-			"name": "Series 1"
-		},{
-			"key": "Series2",
-			"name": "Series 2"
-		},{
-			"key": "Series3",
-			"name": "Series 3"
-		},{
-			"key": "Series4",
-			"name": "Series 4"
-		}],
-		"Model": [{
-			"key": "Model1",
-			"name": "Model 1"
-		},{
-			"key": "Model2",
-			"name": "Model 2"
-		},{
-			"key": "Model3",
-			"name": "Model 3"
-		},{
-			"key": "Model4",
-			"name": "Model 4"
-		}],
 		"ReservationStatus": [{
-			"key": "PA",
-			"name": "Pending Approval"
+			"key": "Available",
+			"name": "Available"
 		},{
-			"key": "AP",
-			"name": "Approved"
+			"key": "Reserved",
+			"name": "Reserved"
 		},{
-			"key": "DL",
-			"name": "Declined"
-		},{
-			"key": "WL",
-			"name": "Waitlist"
+			"key": "All",
+			"name": "All"
 		}],
-		"Year": [{
-
-		}]
+		"RequestorType": [{
+			"key": "E",
+			"name": "Employee"
+			},{
+			"key": "D",
+			"name": "Department"
+		}],
+		"PurchaserType": [{
+			"key": "S",
+			"name": "TCI Employee Spouse/Child"
+			},{
+			"key": "E",
+			"name": "TCI/TFS Employee"
+			},{
+			"key": "R",
+			"name": "TCI/TFS Retiree"
+			},{
+			"key": "C",
+			"name": "TCI Contractor Spouse"
+			},{
+			"key": "O",
+			"name": "Other"
+			}]
 	}
 }

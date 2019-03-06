@@ -38,10 +38,7 @@
 			"tablet": true,
 			"phone": true
 		},
-		"supportedThemes": [
-			"sap_hcb",
-			"sap_belize"
-		]
+		"supportedThemes": ["sap_hcb", "sap_belize"]
 	},
 	"sap.ui5": {
 		"rootView": {
@@ -73,6 +70,12 @@
 				"uri": "model/demoData.json",
 				"preload": false
 			},
+			"localDataModel": {
+				"type": "sap.ui.model.json.JSONModel",
+				"settings": {},
+				"uri": "",
+				"preload": false
+			},
 			"": {
 				"type": "sap.ui.model.odata.v2.ODataModel",
 				"settings": {
@@ -85,11 +88,9 @@
 			}
 		},
 		"resources": {
-			"css": [
-				{
-					"uri": "css/style.css"
-				}
-			]
+			"css": [{
+				"uri": "css/style.css"
+			}]
 		},
 		"routing": {
 			"config": {
@@ -101,43 +102,27 @@
 				"controlId": "idAppControl",
 				"clearControlAggregation": false
 			},
-			"routes": [
-				{
-					"name": "TargetApp",
-					"pattern": "RouteApp",
-					"target": [
-						"TargetApp"
-					]
-				},
-				{
-					"name": "Home",
-					"pattern": "",
-					"target": [
-						"Home"
-					]
-				},
-				{
-					"name": "VehicleDetails",
-					"pattern": "VehicleDetails/{vguid}",
-					"target": [
-						"VehicleDetails"
-					]
-				},
-				{
-					"name": "RequestDetail",
-					"pattern": "RequestDetail",
-					"target": [
-						"RequestDetail"
-					]
-				},
-				{
-					"name": "Reservation",
-					"pattern": "Reservation",
-					"target": [
-						"Reservation"
-					]
-				}
-			],
+			"routes": [{
+				"name": "TargetApp",
+				"pattern": "RouteApp",
+				"target": ["TargetApp"]
+			}, {
+				"name": "Home",
+				"pattern": "",
+				"target": ["Home"]
+			}, {
+				"name": "VehicleDetails",
+				"pattern": "VehicleDetails/{vguid}",
+				"target": ["VehicleDetails"]
+			}, {
+				"name": "RequestDetail",
+				"pattern": "RequestDetail/{vhvin},{Zresreq}",
+				"target": ["RequestDetail"]
+			}, {
+				"name": "Reservation",
+				"pattern": "Reservation",
+				"target": ["Reservation"]
+			}],
 			"targets": {
 				"TargetApp": {
 					"viewType": "XML",

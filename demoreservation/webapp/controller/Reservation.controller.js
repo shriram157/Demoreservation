@@ -9,8 +9,36 @@ sap.ui.define([
 			this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
 		},
 
-		onRouteMatched: function (oEvent) {},
-
+		onRouteMatched: function (oEvent) {
+			
+		},
+		getReservationData: function () {
+			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
+				sPath = "reservationList",
+				oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
+				that = this;
+			var oBusyDialog = new sap.m.BusyDialog();
+			oBusyDialog.open();
+			// read OData model data into local JSON model 
+			oDetailModel.read(sPath, {
+				method: "GET",
+				success: function (oData, oResponse) {
+					var oJSONModel = new sap.ui.model.json.JSONModel();
+					oJSONModel.setData({
+						ReservationListSet: oData
+					});
+					that.getView().setModel(oJSONModel);
+					that.getView().byId("tabRservation").setModel(oJSONModel);
+					// release busy indicator
+					oBusyDialog.close();
+				},
+				error: function (oError) {
+					//alert("Error!");
+					// release busy indicator
+					oBusyDialog.close();
+				}
+			});
+		},
 		onReservationInfoPress: function (oEvent) {
 			if (!this.dlgSGroup) {
 				this.dlgSGroup = sap.ui.xmlfragment("reservationInfoFragment",
