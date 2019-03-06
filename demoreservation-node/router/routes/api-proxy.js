@@ -3,13 +3,13 @@
 
 "use strict";
 
-module.exports = function () {
+module.exports = function (appContext) {
 	var express = require("express");
-	var log = require("cf-nodejs-logging-support");
 	var request = require("request");
 	var xsenv = require("@sap/xsenv");
 
 	var router = express.Router();
+	var routerTracer = appContext.createLogContext().getTracer(__filename);
 
 	// TODO: provide service name via environment variable instead
 	var apimServiceName = "DEMO_RESERVATION_APIM_CUPS";
@@ -19,7 +19,7 @@ module.exports = function () {
 			name: apimServiceName
 		}
 	}));
-	log.logMessage("debug", "Properties of APIM user-provided service '%s' : %s", apimServiceName, JSON.stringify(options));
+	routerTracer.debug("Properties of APIM user-provided service '%s' : %s", apimServiceName, JSON.stringify(options));
 
 	var url = options.apim.host;
 	if (url.endsWith("/")) {
@@ -31,6 +31,8 @@ module.exports = function () {
 	var s4Password = options.apim.password;
 
 	router.all("/*", function (req, res, next) {
+		var logger = req.loggingContext.getLogger("/Application/Route/APIProxy");
+		var tracer = req.loggingContext.getTracer(__filename);
 		var proxiedMethod = req.method;
 		var proxiedReqHeaders = {
 			"APIKey": APIKey,
@@ -47,9 +49,9 @@ module.exports = function () {
 		var csrfTokenHeaderValue = req.get("X-Csrf-Token");
 		proxiedReqHeaders["X-Csrf-Token"] = csrfTokenHeaderValue;
 
-		req.logMessage("debug", "Proxied Method: %s", proxiedMethod);
-		req.logMessage("debug", "Proxied request headers: %s", JSON.stringify(proxiedReqHeaders));
-		req.logMessage("debug", "Proxied URL: %s", proxiedUrl);
+		tracer.debug("Proxied Method: %s", proxiedMethod);
+		tracer.debug("Proxied request headers: %s", JSON.stringify(proxiedReqHeaders));
+		tracer.debug("Proxied URL: %s", proxiedUrl);
 
 		let proxiedReq = request({
 			headers: proxiedReqHeaders,
@@ -58,12 +60,12 @@ module.exports = function () {
 		});
 		req.pipe(proxiedReq);
 		proxiedReq.on("response", proxiedRes => {
-			req.logMessage("verbose", "Proxied call %s %s successful.", proxiedMethod, proxiedUrl);
+			logger.info("Proxied call %s %s successful.", proxiedMethod, proxiedUrl);
 			delete proxiedRes.headers.cookie;
 
 			proxiedReq.pipe(res);
 		}).on("error", error => {
-			req.logMessage("error", "Proxied call %s %s FAILED: %s", proxiedMethod, proxiedUrl, error);
+			logger.error("Proxied call %s %s FAILED: %s", proxiedMethod, proxiedUrl, error);
 			next(error);
 		});
 	});

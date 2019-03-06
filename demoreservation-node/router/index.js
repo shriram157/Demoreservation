@@ -5,6 +5,6 @@
 
 var apiProxy = require("./routes/api-proxy");
 
-module.exports = (app, server) => {
-	app.use("/node", apiProxy());	
+module.exports = (app, appContext) => {
+	app.use("/node", apiProxy(appContext));
 };
