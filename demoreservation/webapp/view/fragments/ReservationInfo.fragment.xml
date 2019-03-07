@@ -10,73 +10,63 @@
 							<items>
 								<Label text="Description"/>
 								<Label text=":" class="sapUiTinyMarginEnd"/>
-								<ObjectStatus text="4x4 Tundra Crewmax SR5 5.7L"/>
+								<Text text="{VehicleInfo>/MATNR}"/>
 							</items>
 						</HBox>
 						<HBox class="sapUiTinyMargin">
 							<items>
 								<Label text="Model year"/>
 								<Label text=":" class="sapUiTinyMarginEnd"/>
-								<Text text="Description" class="sapUiTinyMarginEnd"/>
-								<Text text="("/>
-								<Text text="2018"/>
-								<Text text=")"/>
+								<Text text="{VehicleInfo>/ZZMOYR}"/>
 							</items>
 						</HBox>
 						<HBox class="sapUiTinyMargin">
 							<items>
 								<Label text="Colour"/>
 								<Label text=":" class="sapUiTinyMarginEnd"/>
-								<ObjectStatus text="Magnetic Grey Metallic"/>
+								<Text text="{VehicleInfo>/Colour}"/>
 							</items>
 						</HBox>
 						<HBox class="sapUiTinyMargin">
 							<items>
 								<Label text="Driver"/>
 								<Label text=":" class="sapUiTinyMarginEnd"/>
-								<ObjectStatus text="Ram Mohabir"/>
+								<Text text="{VehicleInfo>/Driver}"/>
 							</items>
 						</HBox>
 						<HBox class="sapUiTinyMargin">
 							<items>
 								<Label text="Start Date"/>
 								<Label text=":" class="sapUiTinyMarginEnd"/>
-								<ObjectStatus text="2018-05-31"/>
+								<Text text="{VehicleInfo>/EstStartDt}"/>
 							</items>
 						</HBox>
 						<HBox class="sapUiTinyMargin">
 							<items>
 								<Label text="Est. Assoc Price"/>
 								<Label text=":" class="sapUiTinyMarginEnd"/>
-								<ObjectStatus text="$32,000"/>
+							<Text text="{VehicleInfo>/EstAssPrice}"/>
 							</items>
 						</HBox>
 						<HBox class="sapUiTinyMargin">
 							<items>
 								<Label text="Status"/>
 								<Label text=":" class="sapUiTinyMarginEnd"/>
-								<ObjectStatus text="Inventory"/>
+								<Text text="{VehicleInfo>/Status}"/>
 							</items>
 						</HBox>
 						<HBox class="sapUiTinyMargin">
 							<items>
 								<Label text="SFX"/>
 								<Label text=":" class="sapUiTinyMarginEnd"/>
-								<ObjectStatus text="EM"/>
-							</items>
-						</HBox>
-						<HBox class="sapUiTinyMargin">
-							<items>
-								<Label text="APX"/>
-								<Label text=":" class="sapUiTinyMarginEnd"/>
-								<ObjectStatus text="00"/>
+								<Text text="{VehicleInfo>/ZZSUFFIX}"/>
 							</items>
 						</HBox>
 						<HBox class="sapUiTinyMargin">
 							<items>
 								<Label text="Zone"/>
 								<Label text=":" class="sapUiTinyMarginEnd"/>
-								<ObjectStatus text="Atlantic"/>
+								<Text text="{VehicleInfo>/ZZZONE}"/>
 							</items>
 						</HBox>
 					</items>
@@ -87,72 +77,59 @@
 							<items>
 								<Label text="Series"/>
 								<Label text=":" class="sapUiTinyMarginEnd"/>
-								<ObjectStatus text="TP4"/>
+								<Text text="{VehicleInfo>/ZZSERIES}"/>
 							</items>
 						</HBox>
 						<HBox class="sapUiTinyMargin">
 							<items>
 								<Label text="VIN"/>
 								<Label text=":" class="sapUiTinyMarginEnd"/>
-								<ObjectStatus text="5TFDY5F10JX754791"/>
+								<Text text="{VehicleInfo>/VHVIN}"/>
 							</items>
 						</HBox>
 						<HBox class="sapUiTinyMargin">
 							<items>
 								<Label text="Colour Code"/>
 								<Label text=":" class="sapUiTinyMarginEnd"/>
-								<ObjectStatus text="01G3-Grey"/>
+								<Text text="{VehicleInfo>/ZZEXTCOL}"/>
 							</items>
 						</HBox>
 						<HBox class="sapUiTinyMargin">
 							<items>
 								<Label text="Driver Dept"/>
 								<Label text=":" class="sapUiTinyMarginEnd"/>
-								<ObjectStatus text="Atlantic Zone Office"/>
+								<Text text="{VehicleInfo>/QAUSP}"/>
 							</items>
 						</HBox>
 						<HBox class="sapUiTinyMargin">
 							<items>
 								<Label text="Est. End Date"/>
 								<Label text=":" class="sapUiTinyMarginEnd"/>
-								<ObjectStatus text="2018-10-25"/>
+								<Text text="{VehicleInfo>/EndDate}"/>
 							</items>
 						</HBox>
 						<HBox class="sapUiTinyMargin">
 							<items>
 								<Label text="Est. Non Assoc. Price"/>
 								<Label text=":" class="sapUiTinyMarginEnd"/>
-								<ObjectStatus text="$48,535"/>
-							</items>
-						</HBox>
-						<HBox class="sapUiTinyMargin">
-							<items>
-								<Label text="Type"/>
-								<Label text=":" class="sapUiTinyMarginEnd"/>
-								<ObjectStatus text="Demo"/>
+								<Text text="{VehicleInfo>/NonAssPrice}"/>
 							</items>
 						</HBox>
 						<HBox class="sapUiTinyMargin">
 							<items>
 								<Label text="SFX Options"/>
 								<Label text=":" class="sapUiTinyMarginEnd"/>
-								<ObjectStatus text="8514"/>
+								<Text text="{VehicleInfo>/Option}"/>
 							</items>
 						</HBox>
 						<HBox class="sapUiTinyMargin">
 							<items>
-								<Label text="APX Options"/>
+								<Label text="APX"/>
 								<Label text=":" class="sapUiTinyMarginEnd"/>
-								<ObjectStatus text="5300,5301,5307,5309,5310,5312,5313,5314"/>
+								<Text text="{VehicleInfo>/ZZAPX}"/>
 							</items>
 						</HBox>
-						<HBox class="sapUiTinyMargin">
-							<items>
-								<Label text="Last Updated"/>
-								<Label text=":" class="sapUiTinyMarginEnd"/>
-								<ObjectStatus text="09/25/2018 2:05:45 PM"/>
-							</items>
-						</HBox>
+
 					</items>
 				</VBox>
 			</HBox>
@@ -164,35 +141,35 @@
 						<items>
 							<Label text="Requestor Type"/>
 							<Label text=":" class="sapUiTinyMarginEnd"/>
-							<ObjectStatus text="Employee"/>
+							<Text text="{VehicleInfo>/ZZREQTYP}"/>
 						</items>
 					</HBox>
 					<HBox class="sapUiTinyMargin">
 						<items>
 							<Label text="Requestor Name"/>
 							<Label text=":" class="sapUiTinyMarginEnd"/>
-							<ObjectStatus text="Maria D'Souza"/>
+							<Text text="{VehicleInfo>/RequestorName}"/>
 						</items>
 					</HBox>
 					<HBox class="sapUiTinyMargin">
 						<items>
 							<Label text="Request Date"/>
 							<Label text=":" class="sapUiTinyMarginEnd"/>
-							<ObjectStatus text="26/09/2018"/>
+							<Text text="{VehicleInfo>/zzcretms}"/>
 						</items>
 					</HBox>
 					<HBox class="sapUiTinyMargin">
 						<items>
 							<Label text="Requests Approved"/>
 							<Label text=":" class="sapUiTinyMarginEnd"/>
-							<ObjectStatus text="1"/>
+							<Text text="{VehicleInfo>/ReqAppr}"/>
 						</items>
 					</HBox>
 					<HBox class="sapUiTinyMargin">
 						<items>
 							<Label text="Requests Pending Approval"/>
 							<Label text=":" class="sapUiTinyMarginEnd"/>
-							<ObjectStatus text="1"/>
+							<Text text="{VehicleInfo>/ReqPend}"/>
 						</items>
 					</HBox>
 				</VBox>
@@ -202,14 +179,14 @@
 						<items>
 							<Label text="Reserved for Type"/>
 							<Label text=":" class="sapUiTinyMarginEnd"/>
-							<ObjectStatus text="TCI Spouse/child"/>
+							<Text text="{VehicleInfo>/ZZPURTYP}"/>
 						</items>
 					</HBox>
 					<HBox class="sapUiTinyMargin">
 						<items>
 							<Label text="Reserved For Name"/>
 							<Label text=":" class="sapUiTinyMarginEnd"/>
-							<ObjectStatus text="Brian D'Souza"/>
+							<Text text="{VehicleInfo>/ZZPURNAME}"/>
 						</items>
 					</HBox>
 				</VBox>

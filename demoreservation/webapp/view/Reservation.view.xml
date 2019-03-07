@@ -1,6 +1,6 @@
 <mvc:View xmlns:mvc="sap.ui.core.mvc" controllerName="ca.toyota.demoreservation.demoreservation.controller.Reservation" xmlns:f="sap.f" xmlns:variants="sap.ui.comp.variants" xmlns="sap.m" xmlns:filterbar="sap.ui.comp.filterbar" xmlns:core="sap.ui.core">
     <f:DynamicPage headerExpanded="true" showFooter="false" class="sapUiSizeCompact">
-        <!--<f:title>-->
+          <!--<f:title>-->
         <!--    <f:DynamicPageTitle>-->
         <!--        <f:heading>-->
         <!--            <variants:VariantManagement/>-->
@@ -13,7 +13,18 @@
         <!--</f:title>-->
         <f:header>
             <f:DynamicPageHeader pinnable="false">
-                <f:content>
+                 <f:content>
+                     <Button icon="sap-icon://home" type="Transparent" press="onNavButtonPress"/>
+                    <!--<Bar>-->
+                    <!--    <contentLeft>-->
+                    <!--        <Button type="Back" press="onNavButtonPress"/>-->
+                    <!--    </contentLeft>-->
+                    <!--    <contentMiddle>-->
+                    <!--        <Title text="Vehicle Details"/>-->
+                    <!--    </contentMiddle>-->
+                    <!--    <contentRight/>-->
+                    <!--</Bar>-->
+                	
                     <filterbar:FilterBar id="ListReportFilterBar" useToolbar="false" showGoOnFB="true" searchEnabled="true">
                         <filterbar:filterItems>
                             <filterbar:FilterItem label="Request Status" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1537538709735---0">
@@ -57,12 +68,12 @@
         <f:content>
             <VBox fitContainer="true">
                 <items>
-                    <Table id="tabRservation" width="100%" growing="true" growingScrollToLoad="true" growingThreshold="25" mode="None" itemPress="_onFioriListReportTableItemPress" updateFinished="_onFioriListReportTableUpdateFinished">
+                    <Table id="tabRservation" width="100%" growing="true" growingScrollToLoad="true" growingThreshold="25" mode="None" items="{ path: '/reservationListSet'}" itemPress="_onFioriListReportTableItemPress" updateFinished="_onFioriListReportTableUpdateFinished">
                         <headerToolbar>
                             <OverflowToolbar design="Transparent">
                                 <content>
-                                    <Title textAlign="Begin" text="Objects"/>
-                                    <Title text="(1)"/>
+                                    <Title textAlign="Begin" text="Reservation List"/>
+                                    <!--<Title text="(1)"/>-->
                                     <ToolbarSpacer/>
                                     <Button icon="sap-icon://action-settings" type="Transparent">
                                         <layoutData>
@@ -139,17 +150,17 @@
                         <items>
                             <ColumnListItem>
                                 <cells>
-                                    <ObjectStatus text="Approved" width="auto"/>
-                                    <ObjectStatus text="RX450HL" width="auto"/>
-                                    <ObjectStatus text="2018" width="auto"/>
-                                    <ObjectStatus text="01-G3-Magnetic Grey" width="auto"/>
-                                    <ObjectStatus text="09/15/2018" width="auto"/>
-                                    <ObjectStatus text="Maria D'Souza" width="auto"/>
-                                    <ObjectStatus text="JT2xxxxxxxxxxxxxx" width="auto"/>
-                                    <ObjectStatus text="Maria D'Souza" width="auto"/>
-                                    <ObjectStatus text="Ram Mohabir" width="auto"/>
-                                    <ObjectStatus text="$32,000" width="auto"/>
-                                    <ObjectStatus text="26/09/2019" width="auto"/>
+                                    <Text text="{Status}" width="auto"/>
+                                    <Text text="{ModelDesc}" width="auto"/>
+                                    <Text text="{ZZMOYR}" width="auto"/>
+                                    <Text text="{ColorDesc}" width="auto"/>
+                                    <Text text="{RequestDate}" width="auto"/>
+                                    <Text text="{Reserver}" width="auto"/>
+                                    <Text text="{VHVIN}" width="auto"/>
+                                    <Text text="{Purchaser}" width="auto"/>
+                                    <Text text="{Driver}" width="auto"/>
+                                    <Text text="{Price}" width="auto"/>
+                                    <Text text="{EndDate}" width="auto"/>
                                     <Button icon="sap-icon://hint" press="onReservationInfoPress"/>
                                     <Button text="Approve" press="onApprovePress"/>
                                     <Button text="Reject"/>

@@ -37,8 +37,8 @@
 							</fb:FilterItem>
 							<fb:FilterItem name="B" label="Series">
 								<fb:control>
-									<ComboBox id="seriesFilter" change="onSelectChange" items="{/zc_mmfields}" placeholder="Select Series">
-										<core:Item key="{ModelSeriesNo}" text="{ModelSeriesNo}"/>
+									<ComboBox id="seriesFilter" change="onSelectChange" items="{/zc_mmfields}" placeholder="Select Series" showSecondaryValues= "true" filterSecondaryValues= "true">
+										<core:ListItem key="{ModelSeriesNo}" text="{TCISeriesDescriptionEN}" additionalText="{ModelSeriesNo}"/>
 									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
@@ -121,9 +121,6 @@
 					<Column minScreenWidth="Tablet" demandPopin="true">
 						<Text text="Driver"/>
 					</Column>
-					<!--<Column minScreenWidth="Tablet" demandPopin="true">-->
-					<!--	<Text text="VIN"/>-->
-					<!--</Column>-->
 					<Column width="6rem" minScreenWidth="Tablet" demandPopin="true">
 						<Text text="Repaired"/>
 					</Column>
@@ -142,7 +139,6 @@
 							<Text width="5rem" text="{ZZMOYR}"/>
 							<Text text="{ColorDesc}"/>
 							<Text text="{Driver}"/>
-							<!--<Text text="{VHVIN}"/>-->
 							<Text width="6rem" text="{path: 'Repair' ,formatter: '.formatRepair'}"/>
 							<Text text="{Status}"/>
 						</cells>

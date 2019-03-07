@@ -290,15 +290,15 @@ sap.ui.define([
 					// "Zresreq": "",
 					"Zresreq" : "",
 					  "ZSERIES" : "SIE",
-					  "ZREQTYP" : "1",
-					  "ZREQ_NAME" : "Aure",
-					  "ZREQ_LNAME" : "Joseph",
-					  "ZDEPT" : "00000002",
-					  "ZEMAIL" : "JOSEPH_AURE@TOYOTA.CA",
+					  "ZREQTYP" : "E",
+					  "ZREQ_NAME" : "ANUBHA",
+					  "ZREQ_LNAME" : "PANDEY",
+					  "ZDEPT" : "00000072",
+					  "ZEMAIL" : "ANUBHA_PANDEY@TOYOTA.CA",
 					  "ZOTHERS" : "",
 					  "ZPURTYP" : "",
 					  "ZPUR_NAME" : "",
-					  "ZPURDT" : "",
+					  "ZPURDT" : "20190505",
 					  "ZUDEL" : "",
 					  "ZANOTES" : "",
 					  "ZCHERQ" : "",
@@ -307,8 +307,8 @@ sap.ui.define([
 					  "ZCREATED_BY" : "",
 					  "ZCREATED_ON" : "",
 					  "Vehicleaction" : "",
-					  "Vehiclenumber" : "0000000624",
-					  "Vehicleidentnumb" : "VNKKTUD83JA090890"
+					  "Vehiclenumber" : "0000017031",
+					  "Vehicleidentnumb" : "VIN00000000561894"
 				};
 
 			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",

@@ -59,7 +59,7 @@
 						<!--<ComboBox id="idPriority" width="90%" items="{localDataModel>/Employee/results}" selectedKey="" selectionChange="onSelectPriorityChange">-->
 						<!--	<core:Item key="{localDataModel>usrid}" text="{localDataModel>usrid_long}"/>-->
 						<!--</ComboBox>-->
-						<Input id="onBehalf" type="Text" width="20rem" showSuggestion="true" showTableSuggestionValueHelp="true" suggestionRows="{localDataModel>/Employee}" suggest="handleInputSuggest" suggestionItemSelected="suggestionItemSelected">
+						<Input id="onBehalf" type="Text" width="20rem" showSuggestion="true" showTableSuggestionValueHelp="true" suggestionRows="{localDataModel>/Employee}" suggest="handleInputSuggest" suggestionItemSelected="suggestionItemSelected" placeholder="Enter User ...">
 							<suggestionColumns>
 								<Column hAlign="Begin" popinDisplay="Inline" demandPopin="true" minScreenWidth="Tablet">
 									<Label text="User ID"/>

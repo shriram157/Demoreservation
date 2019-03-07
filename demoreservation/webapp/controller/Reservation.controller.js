@@ -12,9 +12,9 @@ sap.ui.define([
 		onRouteMatched: function (oEvent) {
 			
 		},
-		getReservationData: function () {
+			getVehicleData: function (VHVIN) {
 			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-				sPath = "reservationList",
+				sPath = "VehicleDetailSet(VHVIN='" + VHVIN + "')?$expand=NAVFACOPTION,NAVDEALEROPTION",
 				oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
 				that = this;
 			var oBusyDialog = new sap.m.BusyDialog();
@@ -24,11 +24,8 @@ sap.ui.define([
 				method: "GET",
 				success: function (oData, oResponse) {
 					var oJSONModel = new sap.ui.model.json.JSONModel();
-					oJSONModel.setData({
-						ReservationListSet: oData
-					});
-					that.getView().setModel(oJSONModel);
-					that.getView().byId("tabRservation").setModel(oJSONModel);
+					oJSONModel.setData(oData);
+					that.getView().setModel(oJSONModel,"VehicleInfo");
 					// release busy indicator
 					oBusyDialog.close();
 				},
@@ -40,14 +37,18 @@ sap.ui.define([
 			});
 		},
 		onReservationInfoPress: function (oEvent) {
+			var path = oEvent.getSource().getParent().getBindingContextPath(),
+				vhvin = path.substr(21,17);
 			if (!this.dlgSGroup) {
 				this.dlgSGroup = sap.ui.xmlfragment("reservationInfoFragment",
 					"ca.toyota.demoreservation.demoreservation.view.fragments.ReservationInfo",
 					this
 				);
 				this.getView().addDependent(this.dlgSGroup);
+				this.getVehicleData(vhvin);
 			}
 			this.dlgSGroup.open();
+			
 		},
 		
 		onApprovePress: function (oEvent) {
@@ -64,6 +65,9 @@ sap.ui.define([
 
 		onCloseDialog: function (oEvent) {
 			oEvent.getSource().getParent().close();
+		},
+		onNavButtonPress: function (oEvent) {
+			this.doRoute("Home");
 		}
 
 	});
