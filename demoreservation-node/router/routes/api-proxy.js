@@ -60,7 +60,7 @@ module.exports = function (appContext) {
 		});
 		req.pipe(proxiedReq);
 		proxiedReq.on("response", proxiedRes => {
-			logger.info("Proxied call %s %s successful.", proxiedMethod, proxiedUrl);
+			tracer.info("Proxied call %s %s successful.", proxiedMethod, proxiedUrl);
 			delete proxiedRes.headers.cookie;
 
 			proxiedReq.pipe(res);

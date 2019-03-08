@@ -3,14 +3,59 @@
 	"tenant-mode": "dedicated",
 	"description": "Security profile of called application",
 	"scopes": [{
-		"name": "uaa.user",
-		"description": "UAA"
+		"name": "$XSAPPNAME.Approve_Reservations",
+		"description": "Approve reservations"
+	}, {
+		"name": "$XSAPPNAME.Manage_Reservations",
+		"description": "Manage reservations"
+	}],
+	"attributes": [{
+		"name": "Email",
+		"description": "E-mail",
+		"valueType": "s"
+	}, {
+		"name": "FirstName",
+		"description": "First name",
+		"valueType": "s"
+	}, {
+		"name": "Language",
+		"description": "Language",
+		"valueType": "s"
+	}, {
+		"name": "LastName",
+		"description": "Last name",
+		"valueType": "s"
+	}, {
+		"name": "UserType",
+		"description": "UserType, identifies dealer or not",
+		"valueType": "s"
 	}],
 	"role-templates": [{
-		"name": "Token_Exchange",
-		"description": "UAA",
+		"name": "TCI_Admin",
+		"description": "TCI admin",
 		"scope-references": [
-			"uaa.user"
+			"$XSAPPNAME.Approve_Reservations",
+			"$XSAPPNAME.Manage_Reservations"
+		],
+		"attribute-references": [
+			"Email",
+			"FirstName",
+			"Language",
+			"LastName",
+			"UserType"
+		]
+	}, {
+		"name": "TCI_User",
+		"description": "TCI user",
+		"scope-references": [
+			"$XSAPPNAME.Manage_Reservations"
+		],
+		"attribute-references": [
+			"Email",
+			"FirstName",
+			"Language",
+			"LastName",
+			"UserType"
 		]
 	}]
 }

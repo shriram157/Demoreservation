@@ -31,13 +31,10 @@ passport.use("JWT", new xssec.JWTStrategy(xsenv.getServices({
 		tag: "xsuaa"
 	}
 }).uaa));
-// TODO: enable when security is implemented in UI
-/*
 app.use(passport.initialize());
 app.use(passport.authenticate("JWT", {
 	session: false
 }));
-*/
 
 // CORS
 app.use(cors());

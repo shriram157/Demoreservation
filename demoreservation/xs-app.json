@@ -8,14 +8,21 @@
     {
       "source": "^/demoreservation-node/(.*)$",
       "target": "$1",
-      "authenticationType": "none",
       "destination": "demoreservation-node",
-      "csrfProtection": false
+      "csrfProtection": false,
+	  "scope": [
+		"$XSAPPNAME.Approve_Reservations",
+		"$XSAPPNAME.Manage_Reservations"
+	  ]
     },
     {
       "source": "^/demoreservation/(.*)$",
       "target": "$1",
-      "localDir": "webapp"
+      "localDir": "webapp",
+	  "scope": [
+		"$XSAPPNAME.Approve_Reservations",
+		"$XSAPPNAME.Manage_Reservations"
+	  ]
     }
   ]
 }
