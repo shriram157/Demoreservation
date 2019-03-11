@@ -1,7 +1,7 @@
 sap.ui.define([
 	"ca/toyota/demoreservation/demoreservation/controller/BaseController",
 	"sap/ui/model/Filter",
-	"sap/ui/model/Sorter",
+	"sap/ui/model/Sorter"
 ], function (BaseController, Filter, Sorter) {
 	"use strict";
 

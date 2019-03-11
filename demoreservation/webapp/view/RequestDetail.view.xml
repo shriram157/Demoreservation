@@ -5,14 +5,6 @@
 			<html:hr />
 			<HBox class="sapMHBox_padding">
 				<VBox width="50%" class="sapUiLargeMarginBegin">
-					<!--<HBox>-->
-					<!--	<Text text="VIN : "/>-->
-					<!--	<Text text="Text"/>-->
-					<!--</HBox>-->
-					<!--<HBox>-->
-					<!--	<Text text="Model Year : "/>-->
-					<!--	<Text text="2018"/>-->
-					<!--</HBox>-->
 					<HBox width="80%">
 						<Label width="12rem" text="VIN : " text-align="left"/>
 						<Text width="12rem" text="{Header>/VehicleDetailSet/VHVIN}"/>
@@ -23,14 +15,6 @@
 					</HBox>
 				</VBox>
 				<VBox width="50%">
-					<!--<HBox>-->
-					<!--	<Text text="Model Description : "/>-->
-					<!--	<Text text="Text"/>-->
-					<!--</HBox>-->
-					<!--<HBox>-->
-					<!--	<Text text="Colour : "/>-->
-					<!--	<Text text="Text"/>-->
-					<!--</HBox>-->
 					<HBox width="80%">
 						<Label width="12rem" text="Model Description : " text-align="left"/>
 						<Text width="12rem" text="{Header>/VehicleDetailSet/MATNR}"/>
@@ -47,19 +31,13 @@
 				<VBox width="100%" class="sapUiLargeMarginBegin">
 					<HBox width="80%">
 						<Label width="12rem" class="sapUiSmallMarginTop" text="Requestor Type : " text-align="left" required="true"/>
-						<!--<ComboBox id="reqtype" selectionChange="onSelectReqTypeChange" width="90%" items="{path: 'vehicles>/FilterData/RequestorType'}">-->
-						<!--	<core:Item key="{vehicles>key}" text="{vehicles>key}" enabled="{= ${vehicles>status} === 'ACTIVE'}"/>-->
-						<!--</ComboBox>-->
-							<ComboBox id="reqtype" change="onSelectReqTypeChange" items="{path: 'vehicles>/FilterData/RequestorType'}" placeholder="Select Requestor Type">
+							<ComboBox id="reqtype" change="onSelectReqTypeChange" items="{path: 'vehicles>/FilterData/RequestorType'}" placeholder="Select Requestor Type" width="20rem" selectedKey="{Reservation>/ZREQTYP}">
 								<core:Item key="{vehicles>key}" text="{vehicles>name}"/>
 							</ComboBox>
 					</HBox>
 					<HBox id="h_onbehalf" width="100%">
 						<Label width="12rem" class="sapUiSmallMarginTop" text="On behalf of : " text-align="left" editable="false" visible="true"/>
-						<!--<ComboBox id="idPriority" width="90%" items="{localDataModel>/Employee/results}" selectedKey="" selectionChange="onSelectPriorityChange">-->
-						<!--	<core:Item key="{localDataModel>usrid}" text="{localDataModel>usrid_long}"/>-->
-						<!--</ComboBox>-->
-						<Input id="onBehalf" type="Text" width="20rem" showSuggestion="true" showTableSuggestionValueHelp="true" suggestionRows="{localDataModel>/Employee}" suggest="handleInputSuggest" suggestionItemSelected="suggestionItemSelected" placeholder="Enter User ...">
+						<Input id="onBehalf" type="Text" width="20rem" showSuggestion="true" showTableSuggestionValueHelp="true" suggestionRows="{localDataModel>/Employee}" suggest="handleInputSuggest" suggestionItemSelected="suggestionItemSelected" placeholder="Enter User ..." change="onBehalfValueChange" liveChange="onBehalfValueChange" value="{Reservation>/ZINFO_ID}">
 							<suggestionColumns>
 								<Column hAlign="Begin" popinDisplay="Inline" demandPopin="true" minScreenWidth="Tablet">
 									<Label text="User ID"/>
@@ -84,314 +62,77 @@
 					</HBox>
 					<HBox width="80%">
 						<Label width="12rem" class="sapUiSmallMarginTop" text="First Name : " text-align="left" required="true"/>
-						<Input width="12rem" placeholder="Enter Text ..." showTableSuggestionValueHelp="false" id="idFirstName" editable="false"/>
+						<Input width="20rem" placeholder="Enter Text ..." showTableSuggestionValueHelp="false" id="idFirstName" editable="false" value="{Reservation>/ZREQ_NAME} "/>
 					</HBox>
 					<HBox width="80%">
 						<Label width="12rem" class="sapUiSmallMarginTop" text="Last Name : " text-align="left" required="true"/>
-						<Input width="12rem" placeholder="Enter Text ..." id="idLastName" editable="false"/>
+						<Input width="20rem" placeholder="Enter Text ..." id="idLastName" editable="false" value="{Reservation>/ZREQ_LNAME} "/>
 					</HBox>
 					<HBox width="80%">
 						<Label width="12rem" class="sapUiSmallMarginTop" text="Email Address : " text-align="left" required="true"/>
-						<Input width="12rem" placeholder="Enter Text ..." id="idEmail" editable="false"/>
+						<Input width="20rem" placeholder="Enter Text ..." id="idEmail" editable="false" value="{Reservation>/ZEMAIL} "/>
 					</HBox>
 					<HBox width="80%">
-						<Label width="12rem" class="sapUiSmallMarginTop" text="Phone Number : " text-align="left" required="true"/>
-						<Input width="12rem" placeholder="Enter Text ..." id="idPhone"/>
+						<Label width="12rem" class="sapUiSmallMarginTop" text="Phone Number : " text-align="left" required="true" visible="false"/>
+						<Input width="20rem" placeholder="Enter Text ..." id="idPhone" value="{Reservation>/ZEMAIL} " visible="false"/>
 					</HBox>
 					<HBox id="h_purchtype" width="80%">
 						<Label width="12rem" class="sapUiSmallMarginTop" text="Purchaser Type : " text-align="left" editable="false" visible="true"/>
-						<ComboBox id="purtype" change="onSelectPurTypeChange" items="{path: 'vehicles>/FilterData/PurchaserType'}" placeholder="Select Purchaser Type">
+						<ComboBox id="purtype" change="onSelectPurTypeChange" items="{path: 'vehicles>/FilterData/PurchaserType'}" placeholder="Select Purchaser Type" width="20rem" selectedKey="{Reservation>/ZPURTYP}">
 							<core:Item key="{vehicles>key}" text="{vehicles>name}"/>
 						</ComboBox>
 					</HBox>
 					<HBox width="80%">
 						<Label width="12rem" class="sapUiSmallMarginTop" text="Purchaser Name : " text-align="left" required="true"/>
-						<Input width="12rem" placeholder="Enter Text ..."/>
+						<Input width="20rem" placeholder="Enter Text ..." id="idPurName" value="{Reservation>/ZPUR_NAME} "/>
 					</HBox>
 					<HBox width="80%">
 						<Label width="12rem" class="sapUiSmallMarginTop" text="Ideal Purchase Date : " text-align="left" required="true"/>
-						<DatePicker xmlns="sap.m" id="idPurchDate" placeholder="MM/DD/YYYY" change="onSelectDate" width="12rem" valueFormat="MM/dd/yyyy" displayFormat="MM/dd/yyyy"/>
+						<DatePicker xmlns="sap.m" id="idPurchDate" placeholder="YYYY/MM/DD" change="onSelectDate" width="20rem" valueFormat="yyyyMMdd" displayFormat="yyyy/MM/dd" value="{Reservation>/ZPURDT} "/>
 					</HBox>
 
 				</VBox>
 				<VBox width="100%">
 					<HBox id="h_department" width="80%">
 						<Label width="12rem" text="Department : " text-align="left" required="true" class="statusLabel nes-label-font-white"/>
-						<ComboBox selectionChange="onSelectTopicChange" width="90%" items="{localDataModel>/Department}">
+						<ComboBox id="idDeptName" selectionChange="onSelectDepartment" width="20rem" items="{localDataModel>/Department}" selectedKey="{Reservation>/ZDEPT}">
 							<core:Item key="{localDataModel>orgeh}" text="{localDataModel>orgtx}" enabled="{= ${LocalDataModel>status} === 'ACTIVE'}"/>
 						</ComboBox>
 					</HBox>
 				</VBox>
 			</HBox> 
-				<Text text="Administrator Section" class="font_size_larger sapUiMediumMarginTop sapUiTinyMargin"/>
-				<html:hr />
-			<HBox class="sapMHBox_padding">
+				<Text text="Administrator Section" class="font_size_larger sapUiMediumMarginTop sapUiTinyMargin" visible="false"/>
+				<html:hr visible="false"/>
+			<HBox class="sapMHBox_padding" visible="false">
 				<VBox width="100%" class="sapUiLargeMarginBegin">
 					<HBox width="80%">
 						<Label width="12rem" class="sapUiSmallMarginTop" text="Notes for requestor : " text-align="left" required="true"/>
-						<Input width="25rem" placeholder="Enter Text ..."/>
+						<Input id="idNotes" width="40rem" placeholder="Enter Text ..." value="{Reservation>/ZANOTES} "/>
 					</HBox>
 					<HBox width="80%">
 						<Label width="12rem" class="sapUiSmallMarginTop" text="Cheque Required? : " text-align="left" required="true"/>
-						<CheckBox/>
+						<CheckBox id="idCheckReq"/>
 					</HBox>
 					<HBox width="80%">
 						<Label width="12rem" class="sapUiSmallMarginTop" text="Date Cheque Due : " text-align="left" required="true"/>
-						<DatePicker xmlns="sap.m" id="idDueDate" placeholder="MM/DD/YYYY" change="onSelectDate" width="12rem" valueFormat="MM/dd/yyyy" displayFormat="MM/dd/yyyy"/>
+						<DatePicker xmlns="sap.m" id="idDueDate" placeholder="YYYY/MM/DD" change="onSelectDate" width="12rem" valueFormat="yyyyMMdd" displayFormat="yyyy/MM/dd" value="{Reservation>/ZCSUDT} "/>
 					</HBox>
 					<HBox width="80%">
 						<Label width="12rem" class="sapUiSmallMarginTop" text="Date Cheque Received : " text-align="left" required="true"/>
-						<DatePicker xmlns="sap.m" id="idCheqDate" placeholder="MM/DD/YYYY" change="onSelectDate" width="12rem" valueFormat="MM/dd/yyyy" displayFormat="MM/dd/yyyy"/>
+						<DatePicker xmlns="sap.m" id="idCheqDate" placeholder="YYYY/MM/DD" change="onSelectDate" width="12rem" valueFormat="yyyyMMdd" displayFormat="yyyy/MM/dd" value="{Reservation>/ZCREDT} "/>
 					</HBox>
 				</VBox>
 			</HBox>	
-			<!--			<layout1:AbsoluteLayout horizontalScrolling="Hidden" verticalScrolling="Auto">
-				<layout1:positions>
-					<layout1:PositionContainer left="24px" top="723px">
-						<layout1:control>
-							<form:Form width="100%" editable="true" visible="true">
-								<form:title>
-									<core:Title text="Administrator Section" level="Auto"/>
-								</form:title>
-								<form:formContainers>
-									<form:FormContainer visible="true">
-										<form:formElements>
-											<form:FormElement visible="true">
-												<form:label>
-													<Label text="Notes for requestor" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</form:label>
-												<form:fields>
-													<Input type="Text" showValueHelp="false" enabled="true" visible="true" width="880.0499877929688px" valueHelpOnly="false" maxLength="0"/>
-												</form:fields>
-											</form:FormElement>
-											<form:FormElement visible="true">
-												<form:label>
-													<Label text="Cheque Required?" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</form:label>
-												<form:fields>
-													<CheckBox text="" selected="true" editable="true" enabled="true" visible="true" width="auto" textDirection="Inherit" wrapping="false"
-														useEntireWidth="true"/>
-												</form:fields>
-											</form:FormElement>
-											<form:FormElement visible="true">
-												<form:label>
-													<Label text="Date Cheque Due" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</form:label>
-												<form:fields>
-													<DatePicker value="20180920" width="128.6750030517578px" displayFormat="short" enabled="true" visible="true" valueFormat="yyyyMMdd"/>
-												</form:fields>
-											</form:FormElement>
-											<form:FormElement visible="true">
-												<form:label>
-													<Label text="Date Cheque Received" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</form:label>
-												<form:fields>
-													<DatePicker width="128.3125px" displayFormat="medium" enabled="true" visible="true" valueFormat="yyyyMMdd"/>
-												</form:fields>
-											</form:FormElement>
-										</form:formElements>
-										<form:title/>
-									</form:FormContainer>
-								</form:formContainers>
-								<form:layout>
-									<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
-								</form:layout>
-							</form:Form>
-						</layout1:control>
-					</layout1:PositionContainer>
-					<layout1:PositionContainer left="31px" top="136px">
-						<layout1:control>
-							<form:Form width="100%" editable="true" visible="true">
-								<form:title>
-									<core:Title text="Requestor Information" level="Auto"/>
-								</form:title>
-								<form:formContainers>
-									<form:FormContainer visible="true">
-										<form:formElements>
-											<form:FormElement visible="true">
-												<form:label>
-													<Label text="Requestor Type" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</form:label>
-												<form:fields>
-													<ComboBox editable="true" enabled="true" visible="true" width="292.00000000px" valueState="None" maxWidth="100%">
-														<items>
-															<core:Item text="TCI Employee" enabled="true" key="TCI Employee"/>
-															<core:Item text="Contractor" enabled="true" key="Contractor"/>
-															<core:Item text="Department" enabled="true" key="Department"/>
-														</items>
-													</ComboBox>
-												</form:fields>
-											</form:FormElement>
-											<form:FormElement visible="true">
-												<form:label>
-													<Label text="First Name" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</form:label>
-												<form:fields>
-													<Input type="Text" showValueHelp="false" enabled="true" visible="true" width="293.3500061035156px" valueHelpOnly="false" maxLength="20"/>
-												</form:fields>
-											</form:FormElement>
-											<form:FormElement visible="true">
-												<form:label>
-													<Label text="Last Name" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</form:label>
-												<form:fields>
-													<Input type="Text" showValueHelp="false" enabled="true" visible="true" width="395.63751220703125px" valueHelpOnly="false" maxLength="20"/>
-												</form:fields>
-											</form:FormElement>
-											<form:FormElement visible="true">
-												<form:label>
-													<Label text="Department" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</form:label>
-												<form:fields>
-													<Input type="Text" showValueHelp="false" enabled="true" visible="true" width="391.7124938964844px" valueHelpOnly="false" maxLength="20"/>
-												</form:fields>
-											</form:FormElement>
-											<form:FormElement visible="true">
-												<form:label>
-													<Label text="Phone Number" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</form:label>
-												<form:fields>
-													<Input type="Text" showValueHelp="false" enabled="true" visible="true" width="290.625px" valueHelpOnly="false" maxLength="0"/>
-												</form:fields>
-											</form:FormElement>
-											<form:FormElement visible="true">
-												<form:label>
-													<Label text="Email Address" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</form:label>
-												<form:fields>
-													<Input type="Text" showValueHelp="false" enabled="true" visible="true" width="391.3125px" valueHelpOnly="false" maxLength="50"/>
-												</form:fields>
-											</form:FormElement>
-											<form:FormElement visible="true">
-												<form:label>
-													<Label text="Is this request on behalf of someone else?" design="Standard" width="100%" required="false" textAlign="Begin"
-														textDirection="Inherit" visible="true"/>
-												</form:label>
-												<form:fields>
-													<CheckBox text="" selected="true" editable="true" enabled="true" visible="true" width="auto" textDirection="Inherit" wrapping="false"
-														useEntireWidth="true"/>
-												</form:fields>
-											</form:FormElement>
-											<form:FormElement visible="true">
-												<form:label>
-													<Label text="Purchaser Type" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</form:label>
-												<form:fields>
-													<ComboBox editable="true" enabled="true" visible="true" width="401.95001220703125px" valueState="None" maxWidth="100%">
-														<items>
-															<core:Item text="TCI Employee Spouse/Child" enabled="true" key="TCI Employee Spouse/Child"/>
-															<core:Item text="TCI/TFS Employee" enabled="true" key="TCI/TFS Employee"/>
-															<core:Item text="TCI/TFS Retiree" enabled="true" key="TCI/TFS Retiree"/>
-															<core:Item text="TCI Contractor Spouse" enabled="true" key="TCI Contractor Spouse"/>
-															<core:Item text="Other" enabled="true" key="Other"/>
-														</items>
-													</ComboBox>
-												</form:fields>
-											</form:FormElement>
-											<form:FormElement visible="true">
-												<form:label>
-													<Label text="Purchaser Name" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</form:label>
-												<form:fields>
-													<Input type="Text" showValueHelp="false" enabled="true" visible="true" width="527.3624877929688px" valueHelpOnly="false" maxLength="0"/>
-												</form:fields>
-											</form:FormElement>
-											<form:FormElement visible="true">
-												<form:label>
-													<Label text="Ideal Purchase Date" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</form:label>
-												<form:fields>
-													<DatePicker width="130.3125px" displayFormat="medium" enabled="true" visible="true" valueFormat="yyyyMMdd"/>
-												</form:fields>
-											</form:FormElement>
-										</form:formElements>
-										<form:title/>
-									</form:FormContainer>
-								</form:formContainers>
-								<form:layout>
-									<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
-								</form:layout>
-							</form:Form>
-						</layout1:control>
-					</layout1:PositionContainer>
-					<layout1:PositionContainer left="2px" top="3px">
-						<layout1:control>
-							<form:Form width="100%" editable="false" visible="true">
-								<form:title>
-									<core:Title text="Vehicle Summary" level="Auto"/>
-								</form:title>
-								<form:formContainers>
-									<form:FormContainer visible="true">
-										<form:formElements>
-											<form:FormElement visible="true">
-												<form:label>
-													<Label text="VIN" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</form:label>
-												<form:fields>
-													<Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</form:fields>
-											</form:FormElement>
-											<form:FormElement visible="true">
-												<form:label>
-													<Label text="Model Year" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</form:label>
-												<form:fields>
-													<ObjectAttribute text="2018" active="false" visible="true"/>
-												</form:fields>
-											</form:FormElement>
-										</form:formElements>
-										<form:title/>
-									</form:FormContainer>
-									<form:FormContainer visible="true">
-										<form:formElements>
-											<form:FormElement visible="true">
-												<form:label>
-													<Label text="Model Description" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</form:label>
-												<form:fields>
-													<Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</form:fields>
-											</form:FormElement>
-											<form:FormElement visible="true">
-												<form:label>
-													<Label text="Colour" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</form:label>
-												<form:fields>
-													<Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</form:fields>
-											</form:FormElement>
-										</form:formElements>
-										<form:title/>
-									</form:FormContainer>
-								</form:formContainers>
-								<form:layout>
-									<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
-								</form:layout>
-							</form:Form>
-						</layout1:control>
-					</layout1:PositionContainer>
-				</layout1:positions>
-			</layout1:AbsoluteLayout>-->
 		</content>
 		<footer>
-			<!--<OverflowToolbar width="100%" height="auto" design="Auto" enabled="true" visible="true">-->
-			<!--	<content>-->
-			<!--		<ToolbarSpacer/>-->
-			<!--		<Button text="Submit" type="Emphasized" press="onSubmitPress"/>-->
-			<!--		<Button text="Cancel" press="onCancelPress"/>-->
-			<!--		<Button text="Delete" press="onDeletePress"/>-->
-			<!--		<Button text="Approve" press="onApprovePress"/>-->
-			<!--		<Button text="Decline" press="onDeclinePress"/>-->
-			<!--	</content>-->
-			<!--</OverflowToolbar>-->
 			<OverflowToolbar width="100%" height="auto" design="Auto" enabled="true" visible="true">
 				<content>
 					<ToolbarSpacer/>
 					<Button text="Submit" type="Emphasized" iconFirst="true" width="86.63750457763672px" enabled="true" visible="true" iconDensityAware="false" press="onSubmitPress"/>
 					<Button text="Cancel" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onCancelPress"/>
-					<Button text="Delete" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onDeletePress"/>
-					<Button text="Approve" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onApprovePress"/>
-					<Button text="Decline" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onDeclinePress"/>
+					<Button id="btnDelete" text="Delete" type="Default" iconFirst="true" width="auto" enabled="true" visible="false" iconDensityAware="false" press="onDeletePress"/>
+					<Button text="Approve" type="Default" iconFirst="true" width="auto" enabled="true" visible="false" iconDensityAware="false" press="onApprovePress"/>
+					<Button text="Decline" type="Default" iconFirst="true" width="auto" enabled="true" visible="false" iconDensityAware="false" press="onDeclinePress"/>
 				</content>
 			</OverflowToolbar>
 		</footer>

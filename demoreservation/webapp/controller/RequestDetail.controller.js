@@ -1,53 +1,37 @@
-sap.ui.define([
-	"ca/toyota/demoreservation/demoreservation/controller/BaseController"
-], function (BaseController) {
+sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseController","sap/m/MessageBox"], function (BaseController,MessageBox) {
 	"use strict";
-
 	return BaseController.extend("ca.toyota.demoreservation.demoreservation.controller.RequestDetail", {
-
-		
 		onInit: function () {
 			this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
-			this.action ="";
+			this.action = "";
 			this.Zresreq = "";
-			this.vhvin="";
+			this.vhvin = "";
 		},
-		
 		onRouteMatched: function (oEvent) {
 			this.initPage();
-			var oArgs,oView,sPath,that=this;
+			var oArgs, oView, sPath, that = this;
 			oArgs = oEvent.getParameter("arguments");
 			this.Zresreq = oArgs.Zresreq;
 			this.vhvin = oArgs.vhvin;
 			oView = this.getView();
 			this.vhvin = oArgs.vhvin;
-			if(oArgs.Zresreq ==="E"){
-			// 	sPath = "zc_demo_reservationSet('0000000001')";
-			// //	sPath = "zc_demo_reservationSet('" + oArgs.Zresreq + "')";
-			// 	oView.bindElement({
-			// 		path: sPath,
-			// 		events: {
-			// 			dataRequested: function () {
-			// 				oView.setBusy(true);
-			// 			},
-			// 			dataReceived: function () {
-			// 				oView.setBusy(false);
-			// 			}
-			// 		}
-			// 	});
+			if(oArgs.Zresreq === undefined){
+				that.action="";
+			}else if (oArgs.Zresreq !== "C") {		// Edit Reservation
 				that.getReservationData(oArgs.Zresreq);
+				that.action="U";
+				// Make Delete button visible
+				that.byId("btnDelete").setVisible(true);
 			}
 			this.getVehicleData(oArgs.vhvin);
 		},
-		
-		initPage: function(){
+		initPage: function () {
 			this.byId("h_onbehalf").setVisible(true);
 			this.byId("h_department").setVisible(true);
 		},
-		
 		getVehicleData: function (VHVIN) {
 			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-				sPath = "VehicleDetailSet(VHVIN='" + VHVIN + "')?$expand=NAVFACOPTION,NAVDEALEROPTION",
+			sPath = "VehicleDetailSet(VHVIN='" + VHVIN + "',Email='anubha_pandey@toyota.ca')?$expand=NAVFACOPTION,NAVDEALEROPTION",
 				oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
 				that = this;
 			var oBusyDialog = new sap.m.BusyDialog();
@@ -60,7 +44,7 @@ sap.ui.define([
 					oJSONModel.setData({
 						VehicleDetailSet: oData
 					});
-					that.getView().setModel(oJSONModel,"Header");
+					that.getView().setModel(oJSONModel, "Header");
 					// release busy indicator
 					oBusyDialog.close();
 				},
@@ -73,7 +57,7 @@ sap.ui.define([
 		},
 		getReservationData: function (resreq) {
 			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-				sPath = "zc_demo_reservationSet('0000000001')",
+				sPath = "zc_demo_reservationSet('"+ resreq +"')",
 				oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
 				that = this;
 			var oBusyDialog = new sap.m.BusyDialog();
@@ -84,7 +68,14 @@ sap.ui.define([
 				success: function (oData, oResponse) {
 					var oJSONModel = new sap.ui.model.json.JSONModel();
 					oJSONModel.setData(oData);
-					that.getView().setModel(oJSONModel,"Reservation");
+					that.getView().setModel(oJSONModel, "Reservation");
+						if (oData.ZREQTYP === "E" || oData.ZREQTYP === "C") {
+							that.byId("h_onbehalf").setVisible(true);
+							that.byId("h_department").setVisible(false);
+						} else {
+							that.byId("h_onbehalf").setVisible(false);
+							that.byId("h_department").setVisible(true);
+						}
 					// release busy indicator
 					oBusyDialog.close();
 				},
@@ -106,10 +97,12 @@ sap.ui.define([
 			oDetailModel.read(sPath, {
 				method: "GET",
 				success: function (oData, oResponse) {
-	//				var oJSONModel = new sap.ui.model.json.JSONModel();
+					//				var oJSONModel = new sap.ui.model.json.JSONModel();
 					var oJSONModel = that.getOwnerComponent().getModel("localDataModel");
-					oJSONModel.setData({Department: oData.results});
-		//			that.getView().setModel(oJSONModel,"LocalDataModel");
+					oJSONModel.setData({
+						Department: oData.results
+					});
+					//			that.getView().setModel(oJSONModel,"LocalDataModel");
 					// release busy indicator
 					oBusyDialog.close();
 				},
@@ -120,10 +113,16 @@ sap.ui.define([
 				}
 			});
 		},
-		getEmployeeData: function () {
+		getEmployeeData: function (reqtype) {
+			var persg;
+			if (reqtype === "E") {
+				persg = "1";
+			} else {
+				persg = "2";
+			}
 			var curr_datetime = this.getCurrentDate();
 			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-				sPath = "ZC_EMP_DETAILS(datetime'" + curr_datetime +"')/Set",
+				sPath = "ZC_EMP_DETAILS(datetime'" + curr_datetime + "')/Set",
 				oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
 				that = this;
 			var oBusyDialog = new sap.m.BusyDialog();
@@ -132,9 +131,19 @@ sap.ui.define([
 			oDetailModel.read(sPath, {
 				method: "GET",
 				success: function (oData, oResponse) {
+					var i, filterResult = [],
+						j = 0,
+						odata = oData.results;
+					for (i = 0; i < odata.length; i++) {
+						if (oData.results[i].persg === persg) {
+							filterResult[j] = oData.results[i];
+							j++;
+						}
+					}
 					var oJSONModel = that.getOwnerComponent().getModel("localDataModel");
-					oJSONModel.setData({Employee: oData.results});
-		//			that.getView().setModel(oJSONModel,"LocalDataModel");
+					oJSONModel.setData({
+						Employee: filterResult
+					});
 					// release busy indicator
 					oBusyDialog.close();
 				},
@@ -148,16 +157,17 @@ sap.ui.define([
 		suggestionItemSelected: function (evt) {
 			//Get Selected Row
 			var obj = evt.getParameter("selectedRow").getBindingContext("localDataModel").getObject();
-			var data = { 
-						"fstName" : obj.nchmc,
-						"lstName" : obj.vnamc,
-						"email" : obj.usrid_long,
-						"userid" : obj.usrid
-					};
-			this.InputModel = new sap.ui.model.json.JSONModel();		
-			this.InputModel.setData({InputSet : data});
-			this.getView().setModel(this.InputModel,"InpuModel");
-			
+			var data = {
+				"fstName": obj.nchmc,
+				"lstName": obj.vnamc,
+				"email": obj.usrid_long,
+				"userid": obj.usrid
+			};
+			this.InputModel = new sap.ui.model.json.JSONModel();
+			this.InputModel.setData({
+				InputSet: data
+			});
+			this.getView().setModel(this.InputModel, "InpuModel");
 			this.byId("idFirstName").setValue(obj.nchmc);
 			this.byId("idLastName").setValue(obj.vnamc);
 			this.byId("onBehalf").setValue(obj.usrid);
@@ -166,172 +176,99 @@ sap.ui.define([
 		handleInputSuggest: function (oEvent) {
 			var sValue = oEvent.getParameter("suggestValue");
 			var filters = new sap.ui.model.Filter([
-				new sap.ui.model.Filter("usrid",
-					sap.ui.model.FilterOperator.StartsWith,
-					sValue),
-				new sap.ui.model.Filter("nchmc",
-					sap.ui.model.FilterOperator.StartsWith,
-					sValue),
-				new sap.ui.model.Filter("vnamc",
-					sap.ui.model.FilterOperator.StartsWith,
-					sValue)
+				new sap.ui.model.Filter("usrid", sap.ui.model.FilterOperator.StartsWith, sValue),
+				new sap.ui.model.Filter("nchmc", sap.ui.model.FilterOperator.StartsWith, sValue),
+				new sap.ui.model.Filter("vnamc", sap.ui.model.FilterOperator.StartsWith, sValue)
 			], false);
-
-			oEvent.getSource().getBinding("suggestionRows").filter(
-				[filters]);
+			oEvent.getSource().getBinding("suggestionRows").filter([filters]);
 			oEvent.getSource().setFilterSuggests(false);
 		},
-		onSelectReqTypeChange: function(oEvent){
+		onSelectReqTypeChange: function (oEvent) {
 			var that = this;
-			var reqtype = this.byId("reqtype").getSelectedKey();     
-			if(reqtype ==="E"){
+			var reqtype = this.byId("reqtype").getSelectedKey();
+			if (reqtype === "E" || reqtype === "C") {
 				this.byId("h_onbehalf").setVisible(true);
 				this.byId("h_department").setVisible(false);
-				that.getEmployeeData();
-			}else{
+				that.byId("idDeptName").setSelectedKey("");
+				that.getEmployeeData(reqtype);
+			} else {
 				this.byId("h_onbehalf").setVisible(false);
 				this.byId("h_department").setVisible(true);
 				that.getDepartmentData();
-				//reset employee selection values
+			}
+			//reset employee selection values
 			this.byId("idFirstName").setValue("");
 			this.byId("idLastName").setValue("");
 			this.byId("onBehalf").setValue("");
 			this.byId("idEmail").setValue("");
-
-			}
 		},
-		
 		onSubmitPress: function (oEvent) {
 			var that = this;
-			if(this.action ==="U"){
+			if (this.action === "U") {
 				that._saveData("U");
-			}else{
+			} else {
 				that._createData();
 			}
 		},
-		_saveData: function(action){
+		_saveData: function (action) {
 			var that = this;
-		//	this.evt = revertEvent;
-			var data = this.getView().getModel().getData();
+			var headerModel = this.getView().getModel("Header");
+			var localModel = this.getView().getModel("localDataModel");
+			var delIndictator ="";
+			if(action === "D"){
+				delIndictator = "X";
+			}else{
+				delIndictator = "";
+			}
+			//	this.evt = revertEvent;
+			var data = {
+				// sample data
+				"Zresreq": headerModel.getProperty("/VehicleDetailSet/ZRESREQ"),
+				"ZSERIES": headerModel.getProperty("/VehicleDetailSet/ZZSERIES"),
+				"ZREQTYP": that.byId("reqtype").getSelectedKey(),
+				"ZINFO_ID": that.byId("onBehalf").getValue(),
+				"ZREQ_NAME": that.byId("idFirstName").getValue(),
+				"ZREQ_LNAME": that.byId("idLastName").getValue(),
+				"ZDEPT": that.byId("idDeptName").getSelectedKey(),
+				"ZEMAIL": that.byId("idEmail").getValue(),
+				"ZOTHERS": "",
+				"ZPURTYP": that.byId("purtype").getSelectedKey(),
+				"ZPUR_NAME": that.byId("idPurName").getValue(),
+				"ZPURDT": that.byId("idPurchDate").getValue(),
+				"ZUDEL": delIndictator, // X in case of delete
+				"ZANOTES": that.byId("idNotes").getValue(),
+				//	  "ZCHERQ" : that.byId("idCheckReq").getValue(),
+				"ZCHERQ": "",
+				// x in case selected
+				"ZCSUDT": that.byId("idDueDate").getValue(),
+				"ZCREDT": that.byId("idCheqDate").getValue(),
+				"ZCREATED_BY": "",
+				"ZCREATED_ON": "",
+				"Vehicleaction": "",
+				"Vehiclenumber": headerModel.getProperty("/VehicleDetailSet/Vehiclenumber"),
+				"Vehicleidentnumb": headerModel.getProperty("/VehicleDetailSet/VHVIN")
+			};
 			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
 				sPath = "zc_demo_reservationSet",
 				oModifyModel = new sap.ui.model.odata.ODataModel(uri, true);
-				oModifyModel.modify(sPath, data, {
-					method: "POST",
-					async: false,
-					success: function (oData, oResponse) {
-					var result = oData.ReturnFlag;
-					var msg,icon,title;
-					if(result==="E"){
-						msg = oData.Message;
-						icon = sap.m.MessageBox.Icon.ERROR;
-						title = "Error";
-					}else if(result==="W"){
-						msg = oData.Message;
-						icon = sap.m.MessageBox.Icon.WARNING;
-						title = "Warning";
-					}else{
-						msg = oData.Message;
-						icon = sap.m.MessageBox.Icon.SUCCESS;
-						title = "Success";
-					}
-					sap.m.MessageBox.show(msg, {
-						icon: icon,
-						title: title,
-						actions: [sap.m.MessageBox.Action.OK],
-						onClose: function (oAction) {
-							//	method to be called 
-						}
-						});
-					},
-					error: function (e) {
-						sap.m.MessageBox.show("Reservation request update failed", {
-							icon: sap.m.MessageBox.Icon.ERROR,
-							title: "Error",
-							actions: [sap.m.MessageBox.Action.OK],
-							details: e.response.body,
-							onClose: function (oAction) {  }				
-						});
-					}
-				});
-		},
-		_createData: function(){
-			var that = this;
-		//	this.evt = revertEvent;
-	//		var data = this.getView().getModel().getData();
-				var data = {								// sample data
-					// "Confirmation": "",
-					// "Endcustomer": "2400085006",
-					// "MATNR": "SIENNA XLE V6 7-PASS 8XXX",
-					// "Vehicle_id_type": "",
-					// "Vehicleaction": "ZRRA",
-					// "Vehicleidentnumb": "VIN00000000601815",
-					// "Vehiclenumber": "",
-					// "Vehicleusage": "IA",
-					// "ZANOTES": "",
-					// "ZCHERQ": "",
-					// "ZCREATED_BY": "",
-					// "ZCREATED_ON": "",
-					// "ZCREDT": "",
-					// "ZCSUDT": "",
-					// "ZDEPT": "",
-					// "ZEMAIL": "xxxxxx@yahoo.com",
-					// "ZINFO_ID": "",
-					// "ZOTHERS": "",
-					// "ZPURDT": "",
-					// "ZPURTYP": "",
-					// "ZPUR_NAME": "",
-					// "ZREQTYP": "",
-					// "ZREQ_LNAME": "Battey",
-					// "ZREQ_NAME": "John",
-					// "ZRSTAT": "",
-					// "ZSERIES": "SIE",
-					// "ZUDEL": "",
-					// "Zresreq": "",
-					"Zresreq" : "",
-					  "ZSERIES" : "SIE",
-					  "ZREQTYP" : "E",
-					  "ZREQ_NAME" : "ANUBHA",
-					  "ZREQ_LNAME" : "PANDEY",
-					  "ZDEPT" : "00000072",
-					  "ZEMAIL" : "ANUBHA_PANDEY@TOYOTA.CA",
-					  "ZOTHERS" : "",
-					  "ZPURTYP" : "",
-					  "ZPUR_NAME" : "",
-					  "ZPURDT" : "20190505",
-					  "ZUDEL" : "",
-					  "ZANOTES" : "",
-					  "ZCHERQ" : "",
-					  "ZCSUDT" : "",
-					  "ZCREDT" : "",
-					  "ZCREATED_BY" : "",
-					  "ZCREATED_ON" : "",
-					  "Vehicleaction" : "",
-					  "Vehiclenumber" : "0000017031",
-					  "Vehicleidentnumb" : "VIN00000000561894"
-				};
+				
+				var oBusyDialog = new sap.m.BusyDialog();
+				oBusyDialog.open();  // Set busy indicator
 
-			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-				sPath = "zc_demo_reservationSet",
-				oModifyModel = new sap.ui.model.odata.ODataModel(uri, true);
-				oModifyModel.create(sPath, data, {
-					method: "POST",
-					async: false,
-					success: function (oData, oResponse) {
-					var result = oData.ReturnFlag;
-					var msg,icon,title;
-					if(result==="E"){
+				oModifyModel.update(sPath, data, {
+				method: "PATCH",
+				async: false,
+				success: function (oData, oResponse) {
+					var result = oData.MessageType;
+					var msg, icon, title;
+					if (result === "S") {
+						msg = oData.Message +" : "+ oData.Zresreq;
+						icon = sap.m.MessageBox.Icon.SUCCESS;
+						title = "Success";
+					} else {
 						msg = oData.Message;
 						icon = sap.m.MessageBox.Icon.ERROR;
 						title = "Error";
-					}else if(result==="W"){
-						msg = oData.Message;
-						icon = sap.m.MessageBox.Icon.WARNING;
-						title = "Warning";
-					}else{
-						msg = oData.Message;
-						icon = sap.m.MessageBox.Icon.SUCCESS;
-						title = "Success";
 					}
 					sap.m.MessageBox.show(msg, {
 						icon: icon,
@@ -340,24 +277,102 @@ sap.ui.define([
 						onClose: function (oAction) {
 							//	method to be called 
 						}
-						});
-					},
-					error: function (e) {
-						sap.m.MessageBox.show("Reservation request creation failed", {
-							icon: sap.m.MessageBox.Icon.ERROR,
-							title: "Error",
-							actions: [sap.m.MessageBox.Action.OK],
-							details: e.response.body,
-							onClose: function (oAction) {  }				
-						});
+					});
+					// release busy indicator
+					oBusyDialog.close();
+				},
+				error: function (e) {
+					sap.m.MessageBox.show("Reservation request update failed", {
+						icon: sap.m.MessageBox.Icon.ERROR,
+						title: "Error",
+						actions: [sap.m.MessageBox.Action.OK],
+						details: e.response.body,
+						onClose: function (oAction) {}
+					});
+					// release busy indicator
+					oBusyDialog.close();
+				}
+			});
+		},
+		_createData: function () {
+			var that = this;
+			var headerModel = this.getView().getModel("Header");
+			var localModel = this.getView().getModel("localDataModel");
+			var data = {
+				// sample data
+				"Zresreq": "",
+				"ZSERIES": headerModel.getProperty("/VehicleDetailSet/ZZSERIES"),
+				"ZREQTYP": that.byId("reqtype").getSelectedKey(),
+				"ZINFO_ID": that.byId("onBehalf").getValue(),
+				"ZREQ_NAME": that.byId("idFirstName").getValue(),
+				"ZREQ_LNAME": that.byId("idLastName").getValue(),
+				"ZDEPT": that.byId("idDeptName").getSelectedKey(),
+				"ZEMAIL": that.byId("idEmail").getValue(),
+				"ZOTHERS": "",
+				"ZPURTYP": that.byId("purtype").getSelectedKey(),
+				"ZPUR_NAME": that.byId("idPurName").getValue(),
+				"ZPURDT": that.byId("idPurchDate").getValue(),
+				"ZCREATED_BY": "",
+				"ZCREATED_ON": "",
+				"Vehicleaction": "",
+				"Vehiclenumber": headerModel.getProperty("/VehicleDetailSet/Vehiclenumber"),
+				"Vehicleidentnumb": headerModel.getProperty("/VehicleDetailSet/VHVIN")
+			};
+			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
+				sPath = "zc_demo_reservationSet",
+				oModifyModel = new sap.ui.model.odata.ODataModel(uri, true);
+								
+				var oBusyDialog = new sap.m.BusyDialog();
+				oBusyDialog.open();  // Set busy indicator
+
+				oModifyModel.create(sPath, data, {
+				method: "POST",
+				async: false,
+				success: function (oData, oResponse) {
+					var result = oData.MessageType;
+					var msg, icon, title;
+					if (result === "S") {
+						msg = oData.Message +" : "+ oData.Zresreq;
+						icon = sap.m.MessageBox.Icon.SUCCESS;
+						title = "Success";
+					} else {
+						msg = oData.Message;
+						icon = sap.m.MessageBox.Icon.ERROR;
+						title = "Error";
 					}
-				});	
+					sap.m.MessageBox.show(msg, {
+						icon: icon,
+						title: title,
+						actions: [sap.m.MessageBox.Action.OK],
+						onClose: function (oAction) {
+							//	method to be called 
+						}
+					});
+					// release busy indicator
+					oBusyDialog.close();
+				},
+				error: function (e) {
+					sap.m.MessageBox.show("Reservation request creation failed", {
+						icon: sap.m.MessageBox.Icon.ERROR,
+						title: "Error",
+						actions: [sap.m.MessageBox.Action.OK],
+						details: e.response.body,
+						onClose: function (oAction) {}
+					});
+					// release busy indicator
+					oBusyDialog.close();
+				}
+			});
 		},
 		onDeletePress: function (oEvent) {
 			this._saveData("D");
 		},
 		onNavButtonPress: function (oEvent) {
 			this.doRoute("Home");
+		},
+		onCancelPress: function (oEvent) {
+			var headerModel = this.getView().getModel("Header");
+			this.doRoute("VehicleDetails",headerModel.getProperty("/VehicleDetailSet/VHVIN"));
 		},
 		getCurrentDate: function () {
 			var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
@@ -367,7 +382,23 @@ sap.ui.define([
 			var date = todaydate + "T00:00:00";
 			return date;
 		},
-
+		/**
+		 *@memberOf ca.toyota.demoreservation.demoreservation.controller.RequestDetail
+		 */
+		onBehalfValueChange: function (oEvent) {
+			//This code was generated by the layout editor.
+			//reset employee selection values
+			if (this.byId("onBehalf").getValue() === "") {
+				this.byId("idFirstName").setValue("");
+				this.byId("idLastName").setValue("");
+				this.byId("idEmail").setValue("");
+			}
+		},
+		/**
+		 *@memberOf ca.toyota.demoreservation.demoreservation.controller.RequestDetail
+		 */
+		onSelectDepartment: function (oEvent) {
+			//This code was generated by the layout editor.
+		}
 	});
-
 });

@@ -214,7 +214,7 @@
             </uxap:ObjectPageSection>
             <uxap:ObjectPageSection title="Reservation Details">
                 <uxap:subSections>
-                    <uxap:ObjectPageSubSection title="Reservation Details">
+                    <uxap:ObjectPageSubSection title="Reservation Details" id="pageReservation">
                         <uxap:blocks>
                             <layout:Grid defaultSpan="XL12 L12 M12 S12">
                                 <layout:content>
@@ -291,7 +291,7 @@
                                     </form:Form>
                                 </layout:content>
                             </layout:Grid>
-                            <Button text="Edit Reservation" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onEditPress"/>
+                            <Button text="Edit Reservation" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onEditPress" id="btnEdit"/>
                         </uxap:blocks>
                     </uxap:ObjectPageSubSection>
                 </uxap:subSections>
@@ -301,7 +301,7 @@
            <OverflowToolbar>
                 <content>
                     <ToolbarSpacer/>
-                    <Button text="Reserve" type="Emphasized" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onCreatePress"/>
+                    <Button text="Reserve" type="Emphasized" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onCreatePress" id="btnReserve"/>
                     <Button text="Return" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
                 </content>
             </OverflowToolbar>

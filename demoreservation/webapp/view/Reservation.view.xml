@@ -29,36 +29,32 @@
                         <filterbar:filterItems>
                             <filterbar:FilterItem label="Request Status" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1537538709735---0">
                                 <filterbar:control>
-                                    <ComboBox editable="true" enabled="true" visible="true" width="auto" valueState="None" maxWidth="100%">
-                                        <items>
-                                            <core:Item text="Pending Approval" enabled="true" key="Pending Approval"/>
-                                            <core:Item text="Approved" enabled="true" key="Approved"/>
-                                            <core:Item text="Declined" enabled="true" key="Declined"/>
-                                            <core:Item text="Waitlist" enabled="true" key="Waitlist"/>
-                                        </items>
-                                    </ComboBox>
+  									<ComboBox id="inpStatus" change="onSelectChange" items="{path: 'vehicles>/FilterData/RequestStatus'}" placeholder="Select Status">
+										<core:Item key="{vehicles>key}" text="{vehicles>name}"/>
+									</ComboBox>
                                 </filterbar:control>
                             </filterbar:FilterItem>
                             <filterbar:FilterItem label="VIN" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1538428831201---0">
                                 <filterbar:control>
-                                    <Input type="Text" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" maxLength="0"/>
+                                    <Input id="vinFilter" placeholder="Enter VIN ..."/>
                                 </filterbar:control>
                             </filterbar:FilterItem>
                             <filterbar:FilterItem label="Model" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1538428832851---0">
                                 <filterbar:control>
-                                    <ComboBox editable="true" enabled="true" visible="true" width="auto" valueState="None" maxWidth="100%">
-                                        <items>
-                                            <core:Item text="Item" enabled="true" key="Item"/>
-                                            <core:Item text="Item" enabled="true" key="Item"/>
-                                            <core:Item text="Item" enabled="true" key="Item"/>
-                                        </items>
-                                    </ComboBox>
+               						<Input id="modelFilter" type="Text" textFormatMode="KeyValue" placeholder="Enter Model ..." showSuggestion="true" showValueHelp="true"
+										valueHelpRequest="handleModelValueHelp" suggestionItems="{/zc_model}" suggestionItemSelected="suggestionItemSelected">
+										<suggestionItems>
+											<core:ListItem key="{Model}" text="{ModelDescriptionEN}"/>
+										</suggestionItems>
+									</Input>
                                 </filterbar:control>
                             </filterbar:FilterItem>
                             <filterbar:FilterItem label="Model Year" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1538428836358---0">
                                 <filterbar:control>
-                                    <Input type="Text" showValueHelp="false" enabled="true" visible="true" width="auto" valueHelpOnly="false" maxLength="0"/>
-                                </filterbar:control>
+               						<ComboBox id="yearFilter" change="onSelectChange" items="{YearModel>/}" placeholder="Select Year">
+										<core:Item key="{YearModel>dkey}" text="{YearModel>dtext}"/>
+									</ComboBox>
+                				</filterbar:control>
                             </filterbar:FilterItem>
                         </filterbar:filterItems>
                     </filterbar:FilterBar>
@@ -162,8 +158,8 @@
                                     <Text text="{Price}" width="auto"/>
                                     <Text text="{EndDate}" width="auto"/>
                                     <Button icon="sap-icon://hint" press="onReservationInfoPress"/>
-                                    <Button text="Approve" press="onApprovePress"/>
-                                    <Button text="Reject"/>
+                                    <Button text="Approve" press="onApprovePress" visible="{= ${StatusCode} === 'PA' || ${StatusCode} === 'WL'}"/>
+                                    <Button text="Reject" visible="{= ${StatusCode} === 'AP' || ${StatusCode} === 'PA' || ${StatusCode} === 'WL'}"/>
                                 </cells>
                             </ColumnListItem>
                         </items>

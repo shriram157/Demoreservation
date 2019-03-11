@@ -52,7 +52,7 @@
 			</form:Form>
 		</content>
 		<beginButton>
-			<Button press="onApprovePress" text="Approve"/>
+			<Button press="onAppRejPress" text="Submit"/>
 		</beginButton>
 		<endButton>
 			<Button press="onCloseDialog" text="Cancel"/>

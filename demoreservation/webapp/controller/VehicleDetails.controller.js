@@ -25,7 +25,7 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 		},
 		getVehicleData: function (VHVIN) {
 			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-				sPath = "VehicleDetailSet(VHVIN='" + VHVIN + "')?$expand=NAVFACOPTION,NAVDEALEROPTION",
+			sPath = "VehicleDetailSet(VHVIN='" + VHVIN + "',Email='anubha_pandey@toyota.ca')?$expand=NAVFACOPTION,NAVDEALEROPTION",
 				oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
 				that = this;
 			var oBusyDialog = new sap.m.BusyDialog();
@@ -38,6 +38,20 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 					oJSONModel.setData({
 						VehicleDetailSet: oData
 					});
+					if(oData.ZRESREQ ===""){
+						// Reservation request not exists for this vehicle, so enable "Reserve" button
+						that.byId("btnReserve").setVisible(true);
+						that.byId("btnEdit").setVisible(false);
+						// no reservation exists
+						that.byId("pageReservation").setVisible(false);
+						that.byId("pageReservation").setTitle("No reservation exists");
+					}else{
+						// Reservation request exists for this vehicle, so enable "Edit" button
+						that.byId("btnReserve").setVisible(false);
+						that.byId("btnEdit").setVisible(true);
+						that.byId("pageReservation").setVisible(true);
+						that.byId("pageReservation").setTitle("Reservation Details");
+					}
 					that.getView().setModel(oJSONModel);
 					that.getView().byId("listFacOption").setModel(oJSONModel);
 					// release busy indicator
