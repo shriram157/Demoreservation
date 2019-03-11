@@ -45,9 +45,10 @@
 							<fb:FilterItem name="C" label="Model">
 								<fb:control>
 									<Input id="modelFilter" type="Text" textFormatMode="KeyValue" placeholder="Enter Model ..." showSuggestion="true" showValueHelp="true"
-										valueHelpRequest="handleModelValueHelp" suggestionItems="{/zc_model}" suggestionItemSelected="suggestionItemSelected">
+										valueHelpRequest="handleModelValueHelp" suggestionItemSelected="suggestionItemSelected"
+										suggestionItems="{/ZC_MODEL_YEAR}">
 										<suggestionItems>
-											<core:ListItem key="{Model}" text="{ModelDescriptionEN}"/>
+											<core:ListItem key="{model}" text="{model_desc_en}"/>
 										</suggestionItems>
 									</Input>
 								</fb:control>

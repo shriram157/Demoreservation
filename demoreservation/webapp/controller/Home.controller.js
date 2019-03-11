@@ -119,11 +119,25 @@ sap.ui.define([
 				this.getView().addDependent(this._valueHelpDialog);
 			}
 
+
 			// create a filter for the binding
-			this._valueHelpDialog.getBinding("items").filter([new Filter(
-				"Model",
-				sap.ui.model.FilterOperator.Contains, sInputValue
-			)]);
+			var aFilters = [];
+			var series = new sap.ui.model.Filter("tci_series", sap.ui.model.FilterOperator.EQ, this.getView().byId("seriesFilter").getSelectedKey());
+			var year = new sap.ui.model.Filter("model_year", sap.ui.model.FilterOperator.EQ, this.getView().byId("yearFilter").getValue());
+				aFilters = [
+				series,
+				year
+			];
+			var finalFilter = new sap.ui.model.Filter({
+				filters: aFilters,
+				and: true
+			});
+			// // update list binding
+			// var list = this.getView().byId("idMyReservationsTable");
+			// var binding = list.getBinding("items");
+			// binding.filter(finalFilter, "Application");
+			
+			this._valueHelpDialog.getBinding("items").filter(finalFilter, "Application");
 
 			// open value help dialog filtered by the input value
 			this._valueHelpDialog.open(sInputValue);
@@ -132,7 +146,7 @@ sap.ui.define([
 		_handleValueHelpSearch : function (evt) {
 			var sValue = evt.getParameter("value");
 			var oFilter = new Filter(
-				"Model",
+				"model",
 				sap.ui.model.FilterOperator.Contains, sValue
 			);
 			evt.getSource().getBinding("items").filter([oFilter]);

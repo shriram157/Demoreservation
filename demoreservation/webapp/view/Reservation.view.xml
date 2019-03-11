@@ -1,35 +1,15 @@
-<mvc:View xmlns:mvc="sap.ui.core.mvc" controllerName="ca.toyota.demoreservation.demoreservation.controller.Reservation" xmlns:f="sap.f" xmlns:variants="sap.ui.comp.variants" xmlns="sap.m" xmlns:filterbar="sap.ui.comp.filterbar" xmlns:core="sap.ui.core">
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.f" xmlns:variants="sap.ui.comp.variants" xmlns="sap.m" xmlns:filterbar="sap.ui.comp.filterbar" xmlns:core="sap.ui.core" controllerName="ca.toyota.demoreservation.demoreservation.controller.Reservation">
     <f:DynamicPage headerExpanded="true" showFooter="false" class="sapUiSizeCompact">
-          <!--<f:title>-->
-        <!--    <f:DynamicPageTitle>-->
-        <!--        <f:heading>-->
-        <!--            <variants:VariantManagement/>-->
-        <!--        </f:heading>-->
-        <!--        <f:actions>-->
-        <!--            <ToolbarSpacer/>-->
-        <!--            <Button icon="sap-icon://action" type="Transparent"/>-->
-        <!--        </f:actions>-->
-        <!--    </f:DynamicPageTitle>-->
-        <!--</f:title>-->
         <f:header>
             <f:DynamicPageHeader pinnable="false">
                  <f:content>
                      <Button icon="sap-icon://home" type="Transparent" press="onNavButtonPress"/>
-                    <!--<Bar>-->
-                    <!--    <contentLeft>-->
-                    <!--        <Button type="Back" press="onNavButtonPress"/>-->
-                    <!--    </contentLeft>-->
-                    <!--    <contentMiddle>-->
-                    <!--        <Title text="Vehicle Details"/>-->
-                    <!--    </contentMiddle>-->
-                    <!--    <contentRight/>-->
-                    <!--</Bar>-->
-                	
-                    <filterbar:FilterBar id="ListReportFilterBar" useToolbar="false" showGoOnFB="true" searchEnabled="true">
+                 	
+                    <filterbar:FilterBar id="ListReportFilterBar" useToolbar="false" showGoOnFB="true" searchEnabled="true" search="onSearch">
                         <filterbar:filterItems>
                             <filterbar:FilterItem label="Request Status" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1537538709735---0">
                                 <filterbar:control>
-  									<ComboBox id="inpStatus" change="onSelectChange" items="{path: 'vehicles>/FilterData/RequestStatus'}" placeholder="Select Status">
+  									<ComboBox id="inpStatus" change="onSelectChange" items="{path: 'vehicles>/FilterData/RequestStatus'}" selectedKey="{vehicles>key}" placeholder="Select Status">
 										<core:Item key="{vehicles>key}" text="{vehicles>name}"/>
 									</ComboBox>
                                 </filterbar:control>
@@ -41,10 +21,9 @@
                             </filterbar:FilterItem>
                             <filterbar:FilterItem label="Model" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1538428832851---0">
                                 <filterbar:control>
-               						<Input id="modelFilter" type="Text" textFormatMode="KeyValue" placeholder="Enter Model ..." showSuggestion="true" showValueHelp="true"
-										valueHelpRequest="handleModelValueHelp" suggestionItems="{/zc_model}" suggestionItemSelected="suggestionItemSelected">
+               						<Input id="modelFilter" type="Text" textFormatMode="KeyValue" placeholder="Enter Model ..." showSuggestion="true" showValueHelp="true" valueHelpRequest="handleModelValueHelp" suggestionItems="{/ZC_MODEL_YEAR}" suggestionItemSelected="suggestionItemSelected">
 										<suggestionItems>
-											<core:ListItem key="{Model}" text="{ModelDescriptionEN}"/>
+											<core:ListItem key="{model}" text="{model_desc_en}"/>
 										</suggestionItems>
 									</Input>
                                 </filterbar:control>
@@ -64,14 +43,14 @@
         <f:content>
             <VBox fitContainer="true">
                 <items>
-                    <Table id="tabRservation" width="100%" growing="true" growingScrollToLoad="true" growingThreshold="25" mode="None" items="{ path: '/reservationListSet'}" itemPress="_onFioriListReportTableItemPress" updateFinished="_onFioriListReportTableUpdateFinished">
+                    <Table id="tabRservation" width="100%" growing="true" growingScrollToLoad="true" growingThreshold="25" mode="None" items="{ path: '/reservationListSet'}" itemPress="_onFioriListReportTableItemPress" updateFinished="_onFioriListReportTableUpdateFinished" includeItemInSelection="true">
                         <headerToolbar>
                             <OverflowToolbar design="Transparent">
                                 <content>
                                     <Title textAlign="Begin" text="Reservation List"/>
                                     <!--<Title text="(1)"/>-->
                                     <ToolbarSpacer/>
-                                    <Button icon="sap-icon://action-settings" type="Transparent">
+                                    <Button icon="sap-icon://excel-attachment" type="Emphasized" press="handleExcelPressed">
                                         <layoutData>
                                             <OverflowToolbarLayoutData moveToOverflow="true"/>
                                         </layoutData>
@@ -144,7 +123,7 @@
                             <Column width="5%"/>
                         </columns>
                         <items>
-                            <ColumnListItem>
+                            <ColumnListItem selected="true" type="Active">
                                 <cells>
                                     <Text text="{Status}" width="auto"/>
                                     <Text text="{ModelDesc}" width="auto"/>
@@ -159,7 +138,7 @@
                                     <Text text="{EndDate}" width="auto"/>
                                     <Button icon="sap-icon://hint" press="onReservationInfoPress"/>
                                     <Button text="Approve" press="onApprovePress" visible="{= ${StatusCode} === 'PA' || ${StatusCode} === 'WL'}"/>
-                                    <Button text="Reject" visible="{= ${StatusCode} === 'AP' || ${StatusCode} === 'PA' || ${StatusCode} === 'WL'}"/>
+                                    <Button text="Reject" press="onRejectPress" visible="{= ${StatusCode} === 'AP' || ${StatusCode} === 'PA' || ${StatusCode} === 'WL'}"/>
                                 </cells>
                             </ColumnListItem>
                         </items>
@@ -168,7 +147,7 @@
             </VBox>
         </f:content>
         <f:footer>
-            <OverflowToolbar design="auto">
+            <OverflowToolbar>
                 <content>
                     <ToolbarSpacer/>
                     <Button text="Save" type="Emphasized" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>

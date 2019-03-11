@@ -14,7 +14,7 @@
 									<Label text="Notes for requestor" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:label>
 								<form:fields>
-									<Input type="Text" showValueHelp="false" enabled="true" visible="true" width="100%" valueHelpOnly="false" maxLength="0"/>
+									<Input id="ipNotes" type="Text" showValueHelp="false" enabled="true" visible="true" width="100%" valueHelpOnly="false" maxLength="0"/>
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement visible="true">
@@ -22,7 +22,7 @@
 									<Label text="Cheque Required?" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:label>
 								<form:fields>
-									<CheckBox text="" selected="true" editable="true" enabled="true" visible="true" width="auto" textDirection="Inherit" wrapping="false"
+									<CheckBox id="ipCheck" text="" selected="true" editable="true" enabled="true" visible="true" width="auto" textDirection="Inherit" wrapping="false"
 										useEntireWidth="true"/>
 								</form:fields>
 							</form:FormElement>
@@ -31,7 +31,7 @@
 									<Label text="Date Cheque Due" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:label>
 								<form:fields>
-									<DatePicker value="20180920" width="128.6750030517578px" displayFormat="short" enabled="true" visible="true" valueFormat="yyyyMMdd"/>
+									<DatePicker id="ipDateDue" value="20180920" width="128.6750030517578px" displayFormat="short" enabled="true" visible="true" valueFormat="yyyyMMdd"/>
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement visible="true">
@@ -39,7 +39,7 @@
 									<Label text="Date Cheque Received" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:label>
 								<form:fields>
-									<DatePicker width="128.3125px" displayFormat="medium" enabled="true" visible="true" valueFormat="yyyyMMdd"/>
+									<DatePicker id="ipDateRec" width="128.3125px" displayFormat="medium" enabled="true" visible="true" valueFormat="yyyyMMdd"/>
 								</form:fields>
 							</form:FormElement>
 						</form:formElements>
@@ -55,7 +55,7 @@
 			<Button press="onAppRejPress" text="Submit"/>
 		</beginButton>
 		<endButton>
-			<Button press="onCloseDialog" text="Cancel"/>
+			<Button press="onCloseAdmin" text="Cancel"/>
 		</endButton>
 	</Dialog>
 </core:FragmentDefinition>
