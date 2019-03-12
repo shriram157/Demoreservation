@@ -192,8 +192,8 @@
 			</HBox>
 		</content>
 	<buttons>
-	    <Button xmlns="sap.m" text="Approve" id="btnAppr" press="onApprovePress"/>
-	    <Button xmlns="sap.m" text="Reject" id="btnRej"  press="onRejectPress"/>
+	    <!--<Button xmlns="sap.m" text="Approve" id="btnAppr" press="onApprovePress"/>-->
+	    <!--<Button xmlns="sap.m" text="Reject" id="btnRej"  press="onRejectPress"/>-->
 	    <Button xmlns="sap.m" text="Cancel" id="btnCan" press="onCloseDialog"/>
 	</buttons>
 	</Dialog>

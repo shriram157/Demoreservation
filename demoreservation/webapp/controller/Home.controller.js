@@ -275,7 +275,7 @@ sap.ui.define([
 		// 			}else{
 		// 				that.UserData.setProperty("/AdminVisible",false);
 		// 			}	
-		// }
+		}
 
 	});
 

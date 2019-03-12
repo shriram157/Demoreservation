@@ -134,28 +134,28 @@ sap.ui.define([
 				vhvin = path.substr(21,17);
 			this._selectedPath = oEvent.getSource().getParent().getBindingContextPath();
 			this._selectedObject = this.byId("tabRservation").getModel().getProperty(this._selectedPath);
-			if (!this.dlgSGroup) {
-				this.dlgSGroup = sap.ui.xmlfragment("reservationInfoFragment",
+			if (!this.dlgReservation) {
+				this.dlgReservation = sap.ui.xmlfragment("reservationInfoFragment",
 					"ca.toyota.demoreservation.demoreservation.view.fragments.ReservationInfo",
 					this
 				);
-				this.getView().addDependent(this.dlgSGroup);
-			//	this.getVehicleData(vhvin);
-			}
+				this.getView().addDependent(this.dlgReservation);
 				this.getVehicleData(vhvin);
-		//	this.dlgSGroup.open();
+			}
+		//	this.getVehicleData(vhvin);
+			this.dlgReservation.open();
 			
 		},
 		
 		onApprovePress: function (oEvent) {
-			if (!this.dlgSGroup2) {
-				this.dlgSGroup2 = sap.ui.xmlfragment("adminSectionFragment",
+			if (!this.dlgAppRej) {
+				this.dlgAppRej = sap.ui.xmlfragment("adminSectionFragment",
 					"ca.toyota.demoreservation.demoreservation.view.fragments.AdminSection",
 					this
 				);
-				this.getView().addDependent(this.dlgSGroup2);
+				this.getView().addDependent(this.dlgAppRej);
 			}
-			this.dlgSGroup2.open();
+			this.dlgAppRej.open();
 			this.APP_REJ="ZRRA";
 			this._selectedPath = oEvent.getSource().getParent().getBindingContextPath();
 			this._selectedObject = this.byId("tabRservation").getModel().getProperty(this._selectedPath);
@@ -164,14 +164,14 @@ sap.ui.define([
 		},
 
 		onRejectPress: function (oEvent) {
-			if (!this.dlgSGroup2) {
-				this.dlgSGroup2 = sap.ui.xmlfragment("adminSectionFragment",
+			if (!this.dlgAppRej) {
+				this.dlgAppRej = sap.ui.xmlfragment("adminSectionFragment",
 					"ca.toyota.demoreservation.demoreservation.view.fragments.AdminSection",
 					this
 				);
-				this.getView().addDependent(this.dlgSGroup2);
+				this.getView().addDependent(this.dlgAppRej);
 			}
-			this.dlgSGroup2.open();
+			this.dlgAppRej.open();
 			this.APP_REJ="ZRRD";
 			this._selectedPath = oEvent.getSource().getParent().getBindingContextPath();
 			this._selectedObject = this.byId("tabRservation").getModel().getProperty(this._selectedPath);
@@ -180,12 +180,12 @@ sap.ui.define([
 		},
 		
 		onCloseDialog: function (oEvent) {
-			oEvent.getSource().getParent().close();
-		//	this.dlgSGroup.destroy();
+		//	oEvent.getSource().getParent().close();
+			this.dlgReservation.close();
 		},
 		onCloseAdmin: function (oEvent) {
-			oEvent.getSource().getParent().close();
-		//	this.dlgSGroup2.destroy();
+		//	oEvent.getSource().getParent().close();
+			this.dlgAppRej.close();
 		},
 		onNavButtonPress: function (oEvent) {
 			this.doRoute("Home");
