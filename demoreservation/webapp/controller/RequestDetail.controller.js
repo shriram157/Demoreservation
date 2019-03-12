@@ -24,14 +24,24 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 				that.byId("btnDelete").setVisible(true);
 			}
 			this.getVehicleData(oArgs.vhvin);
+			
+			// On employee login, fill details
+			var type = sap.ui.getCore().getModel("UserDataModel").getData().Type;
+			
+			if(type ==="TCI_User"){
+				that.byId("idFirstName").setValue(sap.ui.getCore().getModel("UserDataModel").getData().FirstName),
+				that.byId("idLastName").setValue(sap.ui.getCore().getModel("UserDataModel").getData().LastName),
+				that.byId("idEmail").setValue(sap.ui.getCore().getModel("UserDataModel").getData().Email),
+			}
 		},
 		initPage: function () {
 			this.byId("h_onbehalf").setVisible(true);
 			this.byId("h_department").setVisible(true);
 		},
 		getVehicleData: function (VHVIN) {
+			var email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
 			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-			sPath = "VehicleDetailSet(VHVIN='" + VHVIN + "',Email='anubha_pandey@toyota.ca')?$expand=NAVFACOPTION,NAVDEALEROPTION",
+			sPath = "VehicleDetailSet(VHVIN='" + VHVIN + "',Email='" + email + "')?$expand=NAVFACOPTION,NAVDEALEROPTION",
 				oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
 				that = this;
 			var oBusyDialog = new sap.m.BusyDialog();

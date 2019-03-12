@@ -227,12 +227,9 @@ sap.ui.define([
 				success: function (userAttributes) {
 		//			sap.ui.core.BusyIndicator.hide();
 					console.log("User Attributes", userAttributes);
-					var data ={
-					"FirstName": userAttributes.samlAttributes.FirstName,
-					"LastName": userAttributes.samlAttributes.LastName,
-					"Email": userAttributes.samlAttributes.Email
-					};
-					that.UserData.setData(data);
+					that.UserData.setProperty("/FirstName",userAttributes.samlAttributes.FirstName);
+					that.UserData.setProperty("/LastName",userAttributes.samlAttributes.LastName);
+					that.UserData.setProperty("/Email",userAttributes.samlAttributes.Email);
 					sap.ui.core.BusyIndicator.hide();
 					that.UserData.updateBindings(true);
 					that.UserData.refresh(true);
@@ -249,7 +246,7 @@ sap.ui.define([
 				type: "GET",
 				success: function (scopesData) {
 					console.log("currentScopesForUser", scopesData);
-					var type = scopesData.loggedUserType;
+					var type = scopesData.loggedUserType[0];
 					that.UserData.setProperty("/Type",type);
 					
 					if(type === "TCI_Admin"){
