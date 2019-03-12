@@ -11,6 +11,7 @@ sap.ui.define([
 			this.populateYear();
 			this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
 			this.initialFilter();
+			this.initSecurity();
 		},
 		initialFilter: function () {
 			this.getView().byId("zoneFilter").setSelectedKey("3000");
@@ -25,8 +26,11 @@ sap.ui.define([
 			this.doRoute("VehicleDetails",selectedvin);
 		},
 		
-		onReservationPress: function (oEvent){
-			this.doRoute("Reservation");
+		onMyReservationPress: function (oEvent){
+			this.doReserveRoute("Reservation",false);
+		},
+		onAllReservationPress: function (oEvent){
+			this.doReserveRoute("Reservation",true);
 		},
 
 		onSegmentedButtonPress: function (oEvent) {
@@ -207,7 +211,71 @@ sap.ui.define([
 				value="Yes";
 			}
 			return value;
-		}
+		},
+		
+		initSecurity:function(){
+			this.UserData = new sap.ui.model.json.JSONModel();
+			this.getView().setModel(this.UserData, "UserDataModel");
+			sap.ui.getCore().setModel(this.UserData, "UserDataModel");
+			var that = this;
+
+			//	sap.ui.core.BusyIndicator.show();
+				$.ajax({
+				dataType: "json",
+				url: "/demoreservation-node/userDetails/attributes",
+				type: "GET",
+				success: function (userAttributes) {
+		//			sap.ui.core.BusyIndicator.hide();
+					console.log("User Attributes", userAttributes);
+					var data ={
+					"FirstName": userAttributes.samlAttributes.FirstName,
+					"LastName": userAttributes.samlAttributes.LastName,
+					"Email": userAttributes.samlAttributes.Email
+					};
+					that.UserData.setData(data);
+					sap.ui.core.BusyIndicator.hide();
+					that.UserData.updateBindings(true);
+					that.UserData.refresh(true);
+				},
+				error: function (oError) {
+		//			sap.ui.core.BusyIndicator.hide();
+				}
+			});
+			
+			// Current user scope
+				$.ajax({
+				dataType: "json",
+				url: "/demoreservation-node/userDetails/currentScopesForUser",
+				type: "GET",
+				success: function (scopesData) {
+					console.log("currentScopesForUser", scopesData);
+					var type = scopesData.loggedUserType;
+					that.UserData.setProperty("/Type",type);
+					
+					if(type === "TCI_Admin"){
+						that.UserData.setProperty("/AdminVisible",true);
+					}else{
+						that.UserData.setProperty("/AdminVisible",false);
+					}
+				},
+				error: function (oError) {}
+			});
+			
+		// 	// for local testing
+		// 		var data ={
+		// 			"FirstName": "Anubha",
+		// 			"LastName": "Pandey",
+		// 			"Email": "anubha_pandey@toyota.ca"
+		// 			};
+		// 			that.UserData.setData(data);
+		// 		var type = 	"TCI_Admin";         // TCI_User ; TCI_Admin
+		// 		that.UserData.setProperty("/Type",type);
+		// 			if(type === "TCI_Admin"){
+		// 				that.UserData.setProperty("/AdminVisible",true);
+		// 			}else{
+		// 				that.UserData.setProperty("/AdminVisible",false);
+		// 			}	
+		// }
 
 	});
 

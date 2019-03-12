@@ -15,7 +15,21 @@ sap.ui.define([
 		},
 
 		onRouteMatched: function (oEvent) {
+			var	oArgs = oEvent.getParameter("arguments");
+			var admin = oArgs.admin;
+			var a = false;
+			if(admin ==="false"){
+				a = false;
+			}else{
+				a = true;
+			}
 			
+			var userModel = new sap.ui.model.json.JSONModel();
+			var data ={
+				"admin": a
+			};
+			userModel.setData(data);
+			this.getView().setModel(userModel,"UserModel");
 		},
 		populateYear: function(){
 			var yearFilter = new sap.ui.model.json.JSONModel();
@@ -285,7 +299,16 @@ sap.ui.define([
 		  var sUrl = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/reservationListSet?$format=xlsx";
           var encodeUrl = encodeURI(sUrl);
           window.open(encodeUrl);
-	    }
+	    },
+	    
+	    onUpdateFinished: function(oEvent) {
+			// count and display number of nominations in Table Header title
+			var sTitle, oTable = this.getView().byId("tabRservation");
+			var title = this.getView().byId("tabTitle");
+			sTitle = "Reservation List";
+			var lengthTotal = oTable.getBinding("items").getLength();
+			title.setText(sTitle + " ("+lengthTotal+")");
+		}
 
 	});
 

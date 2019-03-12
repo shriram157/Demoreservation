@@ -120,7 +120,7 @@
 				"target": ["RequestDetail"]
 			}, {
 				"name": "Reservation",
-				"pattern": "Reservation",
+				"pattern": "Reservation/{admin}",
 				"target": ["Reservation"]
 			}],
 			"targets": {

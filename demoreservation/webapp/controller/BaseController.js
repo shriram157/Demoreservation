@@ -44,6 +44,11 @@ sap.ui.define([
 		doReqRoute: function (routerName,param1,param2) {
 			this._oRouter = this.getRouter();
 			this._oRouter.navTo(routerName,{vhvin:param1, Zresreq:param2});
-		}
+		},
+		doReserveRoute: function (routerName,param) {
+			this._oRouter = this.getRouter();
+			this._oRouter.navTo(routerName,{admin:param});
+		//	this._oRouter.navTo(routerName,param);
+		},
 	});
 });

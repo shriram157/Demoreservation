@@ -43,11 +43,11 @@
         <f:content>
             <VBox fitContainer="true">
                 <items>
-                    <Table id="tabRservation" width="100%" growing="true" growingScrollToLoad="true" growingThreshold="25" mode="None" items="{ path: '/reservationListSet'}" itemPress="_onFioriListReportTableItemPress" updateFinished="_onFioriListReportTableUpdateFinished" includeItemInSelection="true">
+                    <Table id="tabRservation" width="100%" growing="true" growingScrollToLoad="true" growingThreshold="25" mode="None" items="{ path: '/reservationListSet'}" itemPress="_onFioriListReportTableItemPress" updateFinished="onUpdateFinished" includeItemInSelection="true">
                         <headerToolbar>
                             <OverflowToolbar design="Transparent">
                                 <content>
-                                    <Title textAlign="Begin" text="Reservation List"/>
+                                    <Title textAlign="Begin" id="tabTitle"/>
                                     <!--<Title text="(1)"/>-->
                                     <ToolbarSpacer/>
                                     <Button icon="sap-icon://excel-attachment" type="Emphasized" press="handleExcelPressed">
@@ -114,13 +114,13 @@
                                     <Text text="Est.End Date" width="auto"/>
                                 </header>
                             </Column>
-                            <Column minScreenWidth="Phone">
+                            <Column minScreenWidth="Phone" visible="{UserModel>/admin}">
                                 <header>
                                     <Text text=""/>
                                 </header>
                             </Column>
-                            <Column width="5%"/>
-                            <Column width="5%"/>
+                            <Column width="5%" visible="{UserModel>/admin}"/>
+                            <Column width="5%" visible="{UserModel>/admin}"/>
                         </columns>
                         <items>
                             <ColumnListItem selected="true" type="Active">
