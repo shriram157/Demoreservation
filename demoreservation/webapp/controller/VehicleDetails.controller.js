@@ -26,6 +26,8 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 		},
 		getVehicleData: function (VHVIN) {
 			var email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
+			//testing
+		//	email = "anubha_pandey@toyota.ca";
 			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
 			sPath = "VehicleDetailSet(VHVIN='" + VHVIN + "',Email='" + email + "')?$expand=NAVFACOPTION,NAVDEALEROPTION",
 				oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
@@ -124,6 +126,6 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 				},
 				error: function (oError) {}
 			});
-
+		}
 	});
 });

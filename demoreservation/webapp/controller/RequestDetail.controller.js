@@ -29,9 +29,9 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 			var type = sap.ui.getCore().getModel("UserDataModel").getData().Type;
 			
 			if(type ==="TCI_User"){
-				that.byId("idFirstName").setValue(sap.ui.getCore().getModel("UserDataModel").getData().FirstName),
-				that.byId("idLastName").setValue(sap.ui.getCore().getModel("UserDataModel").getData().LastName),
-				that.byId("idEmail").setValue(sap.ui.getCore().getModel("UserDataModel").getData().Email),
+				that.byId("idFirstName").setValue(sap.ui.getCore().getModel("UserDataModel").getData().FirstName);
+				that.byId("idLastName").setValue(sap.ui.getCore().getModel("UserDataModel").getData().LastName);
+				that.byId("idEmail").setValue(sap.ui.getCore().getModel("UserDataModel").getData().Email);
 			}
 		},
 		initPage: function () {
@@ -40,6 +40,9 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 		},
 		getVehicleData: function (VHVIN) {
 			var email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
+						//testing
+		//	email = "anubha_pandey@toyota.ca";
+
 			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
 			sPath = "VehicleDetailSet(VHVIN='" + VHVIN + "',Email='" + email + "')?$expand=NAVFACOPTION,NAVDEALEROPTION",
 				oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
@@ -266,7 +269,7 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 				oBusyDialog.open();  // Set busy indicator
 
 				oModifyModel.update(sPath, data, {
-				method: "PUT",
+				method: "PATCH",
 				async: false,
 				success: function (oData, oResponse) {
 					var result = oData.MessageType;
