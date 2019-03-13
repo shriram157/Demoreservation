@@ -18,11 +18,17 @@ sap.ui.define([
 		onRouteMatched: function (oEvent) {
 			var	oArgs = oEvent.getParameter("arguments");
 			var admin = oArgs.admin;
+			var email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
+			//testing
+			//	email = "anubha_pandey@toyota.ca";
+
 			var a = false;
-			if(admin ==="false"){
+			if(admin ==="false"){   // Employee Login
 				a = false;
-			}else{
+				this.filterReservationListAdmin(a,email);
+			}else{					// Admin Login
 				a = true;
+				this.filterReservationListAdmin(a,"");
 			}
 			
 			var userModel = new sap.ui.model.json.JSONModel();
@@ -31,6 +37,7 @@ sap.ui.define([
 			};
 			userModel.setData(data);
 			this.getView().setModel(userModel,"UserModel");
+			
 		},
 		populateYear: function(){
 			var yearFilter = new sap.ui.model.json.JSONModel();
@@ -146,7 +153,8 @@ sap.ui.define([
 		},
 		onReservationInfoPress: function (oEvent) {
 			var path = oEvent.getSource().getParent().getBindingContextPath(),
-				vhvin = path.substr(21,17);
+			//	vhvin = path.substr(21,16);
+			vhvin = this.getView().byId("tabRservation").getModel().getData(path).VHVIN;
 			this._selectedPath = oEvent.getSource().getParent().getBindingContextPath();
 			this._selectedObject = this.byId("tabRservation").getModel().getProperty(this._selectedPath);
 			if (!this.dlgReservation) {
@@ -170,7 +178,7 @@ sap.ui.define([
 			this.APP_REJ="ZRRA";
 			this._selectedPath = oEvent.getSource().getParent().getBindingContextPath();
 			this._selectedObject = this.byId("tabRservation").getModel().getProperty(this._selectedPath);
-			var vhvin = this._selectedPath.substr(21,17);
+			var vhvin = this.getView().byId("tabRservation").getModel().getData(this._selectedPath).VHVIN;
 			this.getVehicleData(vhvin,"APRJ");
 		},
 
@@ -185,7 +193,7 @@ sap.ui.define([
 			this.APP_REJ="ZRRD";
 			this._selectedPath = oEvent.getSource().getParent().getBindingContextPath();
 			this._selectedObject = this.byId("tabRservation").getModel().getProperty(this._selectedPath);
-			var vhvin = this._selectedPath.substr(21,17);
+			var vhvin = this.getView().byId("tabRservation").getModel().getData(this._selectedPath).VHVIN;
 			this.getVehicleData(vhvin,"APRJ");
 		},
 		
@@ -196,6 +204,10 @@ sap.ui.define([
 		onCloseAdmin: function (oEvent) {
 		//	oEvent.getSource().getParent().close();
 			this.dlgAppRej.close();
+			Fragment.byId("adminSectionFragment", "ipDateDue").setValue("");
+			Fragment.byId("adminSectionFragment", "ipDateRec").setValue("");
+			Fragment.byId("adminSectionFragment", "ipNotes").setValue("");
+
 		},
 		onNavButtonPress: function (oEvent) {
 			this.doRoute("Home");
@@ -248,49 +260,38 @@ sap.ui.define([
 			if(this.isValidateTrue()){
 				var data = {
 					// sample data
-					"Zresreq": vehicleModel.getProperty("/ZRESREQ"),
-					"ZSERIES": vehicleModel.getProperty("/ZZSERIES"),
-					"ZREQTYP": vehicleModel.getProperty("/ZZREQTYP"),
 					"ZANOTES": Fragment.byId("adminSectionFragment", "ipNotes").getValue(),
 					"ZCHERQ": chk, 	// x in case selected
 					"ZCSUDT": ZCSUDT,
 					"ZCREDT": ZCREDT,
-					"ZCREATED_BY": "",
-					"ZCREATED_ON": "",
 					"Vehicleaction": this.APP_REJ,
 					"Vehiclenumber": vehicleModel.getProperty("/Vehiclenumber"),
-					"Vehicleidentnumb": vehicleModel.getProperty("/VHVIN")
+					"Vehicleidentnumb": vehicleModel.getProperty("/VHVIN"),
+					"Zresreq": vehicleModel.getProperty("/ZRESREQ")
 				};
 				var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-					sPath = "zc_demo_reservationSet('"+ vehicleModel.getProperty("/ZRESREQ") +"')",
+					sPath = "/zc_demo_reservationSet('"+ vehicleModel.getProperty("/ZRESREQ") +"')",
 					oModifyModel = new sap.ui.model.odata.ODataModel(uri, true);
 					
 					var oBusyDialog = new sap.m.BusyDialog();
 					oBusyDialog.open();  // Set busy indicator
 	
-					oModifyModel.update(sPath, data, {
-					method: "PATCH",
-					async: false,
+					this.getView().getModel().update(sPath, data, {
+				
+					// method: "PATCH",
+					// async: false,
 					success: function (oData, oResponse) {
-						var result = oData.MessageType;
-						var msg, icon, title;
-						if (result === "S") {
-							msg = oData.Message +" : "+ oData.Zresreq;
-							icon = sap.m.MessageBox.Icon.SUCCESS;
-							title = "Success";
-						} else {
-							msg = oData.Message;
-							icon = sap.m.MessageBox.Icon.ERROR;
-							title = "Error";
+						sap.m.MessageBox.show("Reservation request updated", {
+						icon: sap.m.MessageBox.Icon.SUCCESS,
+						title: "Success",
+						actions: [sap.m.MessageBox.Action.OK],
+						onClose: function (oAction) {
+							that.dlgAppRej.close();
+							Fragment.byId("adminSectionFragment", "ipDateDue").setValue("");
+							Fragment.byId("adminSectionFragment", "ipDateRec").setValue("");
+							Fragment.byId("adminSectionFragment", "ipNotes").setValue("");
 						}
-						sap.m.MessageBox.show(msg, {
-							icon: icon,
-							title: title,
-							actions: [sap.m.MessageBox.Action.OK],
-							onClose: function (oAction) {
-								//	method to be called 
-							}
-						});
+					});
 						// release busy indicator
 						oBusyDialog.close();
 					},
@@ -299,8 +300,13 @@ sap.ui.define([
 							icon: sap.m.MessageBox.Icon.ERROR,
 							title: "Error",
 							actions: [sap.m.MessageBox.Action.OK],
-							details: e.response.body,
-							onClose: function (oAction) {}
+							onClose: function (oAction) {
+								that.dlgAppRej.close();
+								Fragment.byId("adminSectionFragment", "ipDateDue").setValue("");
+								Fragment.byId("adminSectionFragment", "ipDateRec").setValue("");
+								Fragment.byId("adminSectionFragment", "ipNotes").setValue("");
+
+							}
 						});
 						// release busy indicator
 						oBusyDialog.close();
@@ -310,20 +316,32 @@ sap.ui.define([
 		},
 		
 		onSearch: function (oEvent){
+			var email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
+						//testing
+		//	email = "anubha_pandey@toyota.ca";
+
+			var admin = sap.ui.getCore().getModel("UserDataModel").getData().AdminVisible;                         ;
+			
 			var modelFilter = this.getView().byId("modelFilter").getSelectedKey();
 			var yearFilter = this.getView().byId("yearFilter").getValue();
 			var vinFilter = this.getView().byId("vinFilter").getValue();
-			var inpStatus = this.getView().byId("inpStatus").getValue();
+			var inpStatus = this.getView().byId("inpStatus").getSelectedKey();
+			
 			var aFilters = [];
 			var MATNR = new sap.ui.model.Filter("MATNR", sap.ui.model.FilterOperator.EQ, modelFilter);
 			var ZZMOYR = new sap.ui.model.Filter("ZZMOYR", sap.ui.model.FilterOperator.EQ, yearFilter);
 			var VHVIN = new sap.ui.model.Filter("VHVIN", sap.ui.model.FilterOperator.Contains, vinFilter);
 			var StatusCode = new sap.ui.model.Filter("StatusCode", sap.ui.model.FilterOperator.EQ, inpStatus);
+			var Admin = new sap.ui.model.Filter("Admin", sap.ui.model.FilterOperator.EQ, admin);
+			var Email = new sap.ui.model.Filter("Email", sap.ui.model.FilterOperator.EQ, email);
+
 			aFilters = [
 				MATNR,
 				ZZMOYR,
 				VHVIN,
-				StatusCode
+				StatusCode,
+				Admin,
+				Email
 			];
 			var finalFilter = new sap.ui.model.Filter({
 				filters: aFilters,
@@ -347,6 +365,22 @@ sap.ui.define([
 			sTitle = "Reservation List";
 			var lengthTotal = oTable.getBinding("items").getLength();
 			title.setText(sTitle + " ("+lengthTotal+")");
+		 },
+		 
+		 filterReservationListAdmin: function(admin,email){
+		  	var aFilters = [];
+			var Admin = new sap.ui.model.Filter("Admin", sap.ui.model.FilterOperator.EQ, admin);
+			var Email = new sap.ui.model.Filter("Email", sap.ui.model.FilterOperator.EQ, email);
+				aFilters = [
+				Admin,
+				Email
+			];
+			var finalFilter = new sap.ui.model.Filter({
+				filters: aFilters,
+				and: true
+			});
+			this.getView().byId("tabRservation").getBinding("items").filter(finalFilter, "Application");
+
 		 }
 	});
 

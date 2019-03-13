@@ -9,7 +9,7 @@
                         <filterbar:filterItems>
                             <filterbar:FilterItem label="Request Status" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1537538709735---0">
                                 <filterbar:control>
-  									<ComboBox id="inpStatus" change="onSelectChange" items="{path: 'vehicles>/FilterData/RequestStatus'}" selectedKey="{vehicles>key}" placeholder="Select Status">
+  									<ComboBox id="inpStatus" change="onSelectChange" items="{path: 'vehicles>/FilterData/RequestStatus'}" placeholder="Select Status">
 										<core:Item key="{vehicles>key}" text="{vehicles>name}"/>
 									</ComboBox>
                                 </filterbar:control>

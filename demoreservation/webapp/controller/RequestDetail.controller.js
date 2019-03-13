@@ -30,9 +30,12 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 			
 			if(type ==="TCI_User"){
 				that.byId("reqtype").setSelectedKey("E");
+				that.byId("reqtype").setEnabled(false);
+				that.byId("onBehalf").setEnabled(false);
 				that.byId("idFirstName").setValue(sap.ui.getCore().getModel("UserDataModel").getData().FirstName);
 				that.byId("idLastName").setValue(sap.ui.getCore().getModel("UserDataModel").getData().LastName);
 				that.byId("idEmail").setValue(sap.ui.getCore().getModel("UserDataModel").getData().Email);
+				that.byId("h_department").setVisible(false);
 			}
 		},
 		initPage: function () {
@@ -42,7 +45,7 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 		getVehicleData: function (VHVIN) {
 			var email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
 						//testing
-		//	email = "anubha_pandey@toyota.ca";
+	//		email = "anubha_pandey@toyota.ca";
 
 			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
 			sPath = "VehicleDetailSet(VHVIN='" + VHVIN + "',Email='" + email + "')?$expand=NAVFACOPTION,NAVDEALEROPTION",
@@ -239,6 +242,7 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 				// sample data
 				"Zresreq": headerModel.getProperty("/VehicleDetailSet/ZRESREQ"),
 				"ZSERIES": headerModel.getProperty("/VehicleDetailSet/ZZSERIES"),
+				"MATNR": headerModel.getProperty("/VehicleDetailSet/MATNR"),
 				"ZREQTYP": that.byId("reqtype").getSelectedKey(),
 				"ZINFO_ID": that.byId("onBehalf").getValue(),
 				"ZREQ_NAME": that.byId("idFirstName").getValue(),
@@ -263,37 +267,46 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 				"Vehicleidentnumb": headerModel.getProperty("/VehicleDetailSet/VHVIN")
 			};
 			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-				sPath = "zc_demo_reservationSet('"+ headerModel.getProperty("/VehicleDetailSet/ZRESREQ") +"')",
+				sPath = "/zc_demo_reservationSet('"+ headerModel.getProperty("/VehicleDetailSet/ZRESREQ") +"')",
 				oModifyModel = new sap.ui.model.odata.ODataModel(uri, true);
 				
 				var oBusyDialog = new sap.m.BusyDialog();
 				oBusyDialog.open();  // Set busy indicator
 
-				oModifyModel.update(sPath, data, {
-				method: "PATCH",
-				async: false,
+//				oModifyModel.update(sPath, data, {
+				this.getView().getModel().update(sPath, data, {
+				// method: "PATCH",
+				// async: false,
 				success: function (oData, oResponse) {
-					var result = oData.MessageType;
-					var msg, icon, title;
-					if (result === "S") {
-						msg = oData.Message +" : "+ oData.Zresreq;
-						icon = sap.m.MessageBox.Icon.SUCCESS;
-						title = "Success";
-					} else {
-						msg = oData.Message;
-						icon = sap.m.MessageBox.Icon.ERROR;
-						title = "Error";
-					}
-					sap.m.MessageBox.show(msg, {
-						icon: icon,
-						title: title,
+					// var result = oData.MessageType;
+					// var msg, icon, title;
+					// if (result === "S") {
+					// 	msg = oData.Message +" : "+ oData.Zresreq;
+					// 	icon = sap.m.MessageBox.Icon.SUCCESS;
+					// 	title = "Success";
+					// } else {
+					// 	msg = oData.Message;
+					// 	icon = sap.m.MessageBox.Icon.ERROR;
+					// 	title = "Error";
+					// }
+					// sap.m.MessageBox.show(msg, {
+					// 	icon: icon,
+					// 	title: title,
+					// 	actions: [sap.m.MessageBox.Action.OK],
+					// 	onClose: function (oAction) {
+					// 		//	method to be called 
+					// 		that.navigateBack();
+					// 	}
+					// });
+					// release busy indicator
+					sap.m.MessageBox.show("Reservation request updated", {
+						icon: sap.m.MessageBox.Icon.SUCCESS,
+						title: "Success",
 						actions: [sap.m.MessageBox.Action.OK],
 						onClose: function (oAction) {
-							//	method to be called 
 							that.navigateBack();
 						}
 					});
-					// release busy indicator
 					oBusyDialog.close();
 				},
 				error: function (e) {
@@ -301,7 +314,6 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 						icon: sap.m.MessageBox.Icon.ERROR,
 						title: "Error",
 						actions: [sap.m.MessageBox.Action.OK],
-						details: e.response.body,
 						onClose: function (oAction) {
 							that.navigateBack();
 						}

@@ -122,8 +122,6 @@ sap.ui.define([
 				);
 				this.getView().addDependent(this._valueHelpDialog);
 			}
-
-
 			// create a filter for the binding
 			var aFilters = [];
 			var series = new sap.ui.model.Filter("tci_series", sap.ui.model.FilterOperator.EQ, this.getView().byId("seriesFilter").getSelectedKey());
@@ -258,20 +256,23 @@ sap.ui.define([
 				error: function (oError) {}
 			});
 			
-		// 	// for local testing
-		// 		var data ={
-		// 			"FirstName": "Anubha",
-		// 			"LastName": "Pandey",
-		// 			"Email": "anubha_pandey@toyota.ca"
-		// 			};
-		// 			that.UserData.setData(data);
-		// 		var type = 	"TCI_Admin";         // TCI_User ; TCI_Admin
-		// 		that.UserData.setProperty("/Type",type);
-		// 			if(type === "TCI_Admin"){
-		// 				that.UserData.setProperty("/AdminVisible",true);
-		// 			}else{
-		// 				that.UserData.setProperty("/AdminVisible",false);
-		// 			}	
+			// for local testing
+				// var data ={
+				// 	"FirstName": "Anubha",
+				// 	"LastName": "Pandey",
+				// 	"Email": "anubha_pandey@toyota.ca"
+				// 	};
+				// 	that.UserData.setData(data);
+				// var type = 	"TCI_Admin";         // TCI_User ; TCI_Admin
+				// that.UserData.setProperty("/Type",type);
+				// 	if(type === "TCI_Admin"){
+				// 		that.UserData.setProperty("/AdminVisible",true);
+				// 	}else{
+				// 		that.UserData.setProperty("/AdminVisible",false);
+				// 	}	
+		
+		
+		
 		}
 
 	});
