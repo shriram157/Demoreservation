@@ -3,8 +3,9 @@ sap.ui.define([
 	"sap/ui/model/Filter",
 	"sap/ui/model/Sorter",
 	"sap/ui/export/Spreadsheet",
-	"sap/ui/core/Fragment"
-], function (BaseController, Filter, Sorter,Spreadsheet,Fragment) {
+	"sap/ui/core/Fragment",
+	"sap/m/MessageBox"
+], function (BaseController, Filter, Sorter,Spreadsheet,Fragment,MessageBox) {
 	"use strict";
 
 	return BaseController.extend("ca.toyota.demoreservation.demoreservation.controller.Reservation", {
@@ -64,7 +65,7 @@ sap.ui.define([
 
 			// create a filter for the binding
 			this._valueHelpDialog.getBinding("items").filter([new Filter(
-				"Model",
+				"model",
 				sap.ui.model.FilterOperator.Contains, sInputValue
 			)]);
 
@@ -75,7 +76,7 @@ sap.ui.define([
 		_handleValueHelpSearch : function (evt) {
 			var sValue = evt.getParameter("value");
 			var oFilter = new Filter(
-				"Model",
+				"model",
 				sap.ui.model.FilterOperator.Contains, sValue
 			);
 			evt.getSource().getBinding("items").filter([oFilter]);
@@ -103,8 +104,10 @@ sap.ui.define([
 		//	oText.setText(sKey);
 		},
 
-		getVehicleData: function (VHVIN) {
+		getVehicleData: function (VHVIN,dialogType) {
 			var email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
+			//testing
+		//	email = "anubha_pandey@toyota.ca";
 
 			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
 			sPath = "VehicleDetailSet(VHVIN='" + VHVIN + "',Email='" + email + "')?$expand=NAVFACOPTION,NAVDEALEROPTION",
@@ -122,12 +125,22 @@ sap.ui.define([
 					that.getView().setModel(oJSONModel,"VehicleInfo");
 					// release busy indicator
 					oBusyDialog.close();
-					that.dlgSGroup.open();
+					if(dialogType ==="INFO"){
+						that.dlgReservation.open();
+					}else{
+						that.dlgAppRej.open();
+					}
 				},
 				error: function (oError) {
-					//alert("Error!");
 					// release busy indicator
 					oBusyDialog.close();
+					// Message - error in accessing vehicle data
+						sap.m.MessageBox.show("Error in accessing vehicle data", {
+						icon: sap.m.MessageBox.Icon.ERROR,
+						title: "Error",
+						actions: [sap.m.MessageBox.Action.OK],
+						details: oError.response.body
+					});
 				}
 			});
 		},
@@ -142,11 +155,8 @@ sap.ui.define([
 					this
 				);
 				this.getView().addDependent(this.dlgReservation);
-				this.getVehicleData(vhvin);
 			}
-		//	this.getVehicleData(vhvin);
-			this.dlgReservation.open();
-			
+			this.getVehicleData(vhvin,"INFO");
 		},
 		
 		onApprovePress: function (oEvent) {
@@ -157,12 +167,11 @@ sap.ui.define([
 				);
 				this.getView().addDependent(this.dlgAppRej);
 			}
-			this.dlgAppRej.open();
 			this.APP_REJ="ZRRA";
 			this._selectedPath = oEvent.getSource().getParent().getBindingContextPath();
 			this._selectedObject = this.byId("tabRservation").getModel().getProperty(this._selectedPath);
 			var vhvin = this._selectedPath.substr(21,17);
-			this.getVehicleData(vhvin);
+			this.getVehicleData(vhvin,"APRJ");
 		},
 
 		onRejectPress: function (oEvent) {
@@ -173,12 +182,11 @@ sap.ui.define([
 				);
 				this.getView().addDependent(this.dlgAppRej);
 			}
-			this.dlgAppRej.open();
 			this.APP_REJ="ZRRD";
 			this._selectedPath = oEvent.getSource().getParent().getBindingContextPath();
 			this._selectedObject = this.byId("tabRservation").getModel().getProperty(this._selectedPath);
 			var vhvin = this._selectedPath.substr(21,17);
-			this.getVehicleData(vhvin);
+			this.getVehicleData(vhvin,"APRJ");
 		},
 		
 		onCloseDialog: function (oEvent) {
@@ -192,84 +200,113 @@ sap.ui.define([
 		onNavButtonPress: function (oEvent) {
 			this.doRoute("Home");
 		},
+		isValidateTrue: function(){
+			var that = this;
+			var msg;
+			var oBundle = this.getView().getModel("i18n").getResourceBundle();
+			var ZCSUDT = Fragment.byId("adminSectionFragment", "ipDateDue").getValue();
+			var ZCREDT = Fragment.byId("adminSectionFragment", "ipDateRec").getValue();
+			var chk = Fragment.byId("adminSectionFragment", "ipCheck").getSelected();
+			
+			if(chk){
+				if(ZCSUDT ===""){
+					msg = oBundle.getText("errCheckDueValidation");
+					Fragment.byId("adminSectionFragment", "ipDateDue").setValueState(sap.ui.core.ValueState.Error);
+					Fragment.byId("adminSectionFragment", "ipDateDue").setValueStateText(msg);
+					return false;
+				}else{
+					Fragment.byId("adminSectionFragment", "ipDateDue").setValueState(sap.ui.core.ValueState.None);
+				}
+				
+				if(ZCREDT ===""){
+					msg = oBundle.getText("errCheckRecValidation");
+					Fragment.byId("adminSectionFragment", "ipDateRec").setValueState(sap.ui.core.ValueState.Error);
+					Fragment.byId("adminSectionFragment", "ipDateRec").setValueStateText(msg);
+					return false;
+				}else{
+					Fragment.byId("adminSectionFragment", "ipDateRec").setValueState(sap.ui.core.ValueState.None);
+				}
+				return true;
+			}else{
+				Fragment.byId("adminSectionFragment", "ipDateDue").setValueState(sap.ui.core.ValueState.None);
+				Fragment.byId("adminSectionFragment", "ipDateRec").setValueState(sap.ui.core.ValueState.None);
+				return true;
+			}
+		},
 		onAppRejPress: function (oEvent) {
 			var that = this;
 			var chk ="";
+			
 			var vehicleModel = this.getView().getModel("VehicleInfo");
+			var ZCSUDT = Fragment.byId("adminSectionFragment", "ipDateDue").getValue();
+			var ZCREDT = Fragment.byId("adminSectionFragment", "ipDateRec").getValue();
+			
 			if(Fragment.byId("adminSectionFragment", "ipCheck").getSelected()){
 				chk ="X";
 			}
-			var data = {
-				// sample data
-				"Zresreq": vehicleModel.getProperty("/ZRESREQ"),
-				"ZSERIES": vehicleModel.getProperty("/ZZSERIES"),
-				"ZREQTYP": vehicleModel.getProperty("/ZZREQTYP"),
-				// "ZINFO_ID": that.byId("onBehalf").getValue(),
-				// "ZREQ_NAME": vehicleModel.getProperty("/VHVIN"),
-				// "ZREQ_LNAME": vehicleModel.getProperty("/VHVIN"),
-				// "ZDEPT": vehicleModel.getProperty("/VHVIN"),
-				// "ZEMAIL": vehicleModel.getProperty("/VHVIN"),
-				// "ZOTHERS": "",
-				// "ZPURTYP": vehicleModel.getProperty("/VHVIN"),
-				// "ZPUR_NAME": vehicleModel.getProperty("/VHVIN"),
-				// "ZPURDT": vehicleModel.getProperty("/VHVIN"),
-				"ZANOTES": Fragment.byId("adminSectionFragment", "ipNotes").getValue(),
-				//	  "ZCHERQ" : that.byId("idCheckReq").getValue(),
-				"ZCHERQ": chk,
-				// x in case selected
-				"ZCSUDT": Fragment.byId("adminSectionFragment", "ipDateDue").getValue(),
-				"ZCREDT": Fragment.byId("adminSectionFragment", "ipDateRec").getValue(),
-				"ZCREATED_BY": "",
-				"ZCREATED_ON": "",
-				"Vehicleaction": this.APP_REJ,
-				"Vehiclenumber": vehicleModel.getProperty("/Vehiclenumber"),
-				"Vehicleidentnumb": vehicleModel.getProperty("/VHVIN")
-			};
-			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-				sPath = "zc_demo_reservationSet('"+ vehicleModel.getProperty("/ZRESREQ") +"')",
-				oModifyModel = new sap.ui.model.odata.ODataModel(uri, true);
-				
-				var oBusyDialog = new sap.m.BusyDialog();
-				oBusyDialog.open();  // Set busy indicator
-
-				oModifyModel.update(sPath, data, {
-				method: "PATCH",
-				async: false,
-				success: function (oData, oResponse) {
-					var result = oData.MessageType;
-					var msg, icon, title;
-					if (result === "S") {
-						msg = oData.Message +" : "+ oData.Zresreq;
-						icon = sap.m.MessageBox.Icon.SUCCESS;
-						title = "Success";
-					} else {
-						msg = oData.Message;
-						icon = sap.m.MessageBox.Icon.ERROR;
-						title = "Error";
-					}
-					sap.m.MessageBox.show(msg, {
-						icon: icon,
-						title: title,
-						actions: [sap.m.MessageBox.Action.OK],
-						onClose: function (oAction) {
-							//	method to be called 
+			
+			if(this.isValidateTrue()){
+				var data = {
+					// sample data
+					"Zresreq": vehicleModel.getProperty("/ZRESREQ"),
+					"ZSERIES": vehicleModel.getProperty("/ZZSERIES"),
+					"ZREQTYP": vehicleModel.getProperty("/ZZREQTYP"),
+					"ZANOTES": Fragment.byId("adminSectionFragment", "ipNotes").getValue(),
+					"ZCHERQ": chk, 	// x in case selected
+					"ZCSUDT": ZCSUDT,
+					"ZCREDT": ZCREDT,
+					"ZCREATED_BY": "",
+					"ZCREATED_ON": "",
+					"Vehicleaction": this.APP_REJ,
+					"Vehiclenumber": vehicleModel.getProperty("/Vehiclenumber"),
+					"Vehicleidentnumb": vehicleModel.getProperty("/VHVIN")
+				};
+				var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
+					sPath = "zc_demo_reservationSet('"+ vehicleModel.getProperty("/ZRESREQ") +"')",
+					oModifyModel = new sap.ui.model.odata.ODataModel(uri, true);
+					
+					var oBusyDialog = new sap.m.BusyDialog();
+					oBusyDialog.open();  // Set busy indicator
+	
+					oModifyModel.update(sPath, data, {
+					method: "PATCH",
+					async: false,
+					success: function (oData, oResponse) {
+						var result = oData.MessageType;
+						var msg, icon, title;
+						if (result === "S") {
+							msg = oData.Message +" : "+ oData.Zresreq;
+							icon = sap.m.MessageBox.Icon.SUCCESS;
+							title = "Success";
+						} else {
+							msg = oData.Message;
+							icon = sap.m.MessageBox.Icon.ERROR;
+							title = "Error";
 						}
-					});
-					// release busy indicator
-					oBusyDialog.close();
-				},
-				error: function (e) {
-					sap.m.MessageBox.show("Reservation request update failed", {
-						icon: sap.m.MessageBox.Icon.ERROR,
-						title: "Error",
-						actions: [sap.m.MessageBox.Action.OK],
-						details: e.response.body,
-						onClose: function (oAction) {}
-					});
-					// release busy indicator
-					oBusyDialog.close();
-				}
-			});
+						sap.m.MessageBox.show(msg, {
+							icon: icon,
+							title: title,
+							actions: [sap.m.MessageBox.Action.OK],
+							onClose: function (oAction) {
+								//	method to be called 
+							}
+						});
+						// release busy indicator
+						oBusyDialog.close();
+					},
+					error: function (e) {
+						sap.m.MessageBox.show("Reservation request update failed", {
+							icon: sap.m.MessageBox.Icon.ERROR,
+							title: "Error",
+							actions: [sap.m.MessageBox.Action.OK],
+							details: e.response.body,
+							onClose: function (oAction) {}
+						});
+						// release busy indicator
+						oBusyDialog.close();
+					}
+				});
+			}
 		},
 		
 		onSearch: function (oEvent){
@@ -310,8 +347,7 @@ sap.ui.define([
 			sTitle = "Reservation List";
 			var lengthTotal = oTable.getBinding("items").getLength();
 			title.setText(sTitle + " ("+lengthTotal+")");
-		}
-
+		 }
 	});
 
 });

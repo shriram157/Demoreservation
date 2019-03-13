@@ -302,7 +302,7 @@
                 <content>
                     <ToolbarSpacer/>
                     <Button text="Reserve" type="Emphasized" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onCreatePress" id="btnReserve"/>
-                    <Button text="Return" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+                    <Button text="Return" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onNavButtonPress"/>
                 </content>
             </OverflowToolbar>
         </uxap:footer>

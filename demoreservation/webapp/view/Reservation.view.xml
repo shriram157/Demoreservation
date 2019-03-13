@@ -43,7 +43,9 @@
         <f:content>
             <VBox fitContainer="true">
                 <items>
-                    <Table id="tabRservation" width="100%" growing="true" growingScrollToLoad="true" growingThreshold="25" mode="None" items="{ path: '/reservationListSet'}" itemPress="_onFioriListReportTableItemPress" updateFinished="onUpdateFinished" includeItemInSelection="true">
+                    <Table id="tabRservation" width="100%" growing="true" growingScrollToLoad="true" growingThreshold="25" mode="None" 
+                    items="{ path: '/reservationListSet' , sorter : { path : 'VHVIN',	group : true}}" 
+                     itemPress="_onFioriListReportTableItemPress" updateFinished="onUpdateFinished" includeItemInSelection="true">
                         <headerToolbar>
                             <OverflowToolbar design="Transparent">
                                 <content>

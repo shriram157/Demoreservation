@@ -29,6 +29,7 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 			var type = sap.ui.getCore().getModel("UserDataModel").getData().Type;
 			
 			if(type ==="TCI_User"){
+				that.byId("reqtype").setSelectedKey("E");
 				that.byId("idFirstName").setValue(sap.ui.getCore().getModel("UserDataModel").getData().FirstName);
 				that.byId("idLastName").setValue(sap.ui.getCore().getModel("UserDataModel").getData().LastName);
 				that.byId("idEmail").setValue(sap.ui.getCore().getModel("UserDataModel").getData().Email);
@@ -289,6 +290,7 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 						actions: [sap.m.MessageBox.Action.OK],
 						onClose: function (oAction) {
 							//	method to be called 
+							that.navigateBack();
 						}
 					});
 					// release busy indicator
@@ -300,7 +302,9 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 						title: "Error",
 						actions: [sap.m.MessageBox.Action.OK],
 						details: e.response.body,
-						onClose: function (oAction) {}
+						onClose: function (oAction) {
+							that.navigateBack();
+						}
 					});
 					// release busy indicator
 					oBusyDialog.close();
@@ -359,6 +363,7 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 						actions: [sap.m.MessageBox.Action.OK],
 						onClose: function (oAction) {
 							//	method to be called 
+							that.navigateBack();
 						}
 					});
 					// release busy indicator
@@ -370,7 +375,9 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 						title: "Error",
 						actions: [sap.m.MessageBox.Action.OK],
 						details: e.response.body,
-						onClose: function (oAction) {}
+						onClose: function (oAction) {
+							that.navigateBack();
+						}
 					});
 					// release busy indicator
 					oBusyDialog.close();
@@ -381,13 +388,15 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 			this._saveData("D");
 		},
 		onNavButtonPress: function (oEvent) {
-			this.doRoute("Home");
-			this.clearScreen();
+			// this.doRoute("Home");
+			// this.clearScreen();
+			this.navigateBack();
 		},
 		onCancelPress: function (oEvent) {
-			var headerModel = this.getView().getModel("Header");
-			this.doRoute("VehicleDetails",headerModel.getProperty("/VehicleDetailSet/VHVIN"));
-				this.clearScreen();
+			// var headerModel = this.getView().getModel("Header");
+			// this.doRoute("VehicleDetails",headerModel.getProperty("/VehicleDetailSet/VHVIN"));
+			// 	this.clearScreen();
+			this.navigateBack();
 		},
 		getCurrentDate: function () {
 			var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
@@ -426,6 +435,11 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 			that.byId("purtype").setSelectedKey("");
 			that.byId("idPurName").setValue("");
 			that.byId("idPurchDate").setValue("");
+		},
+		navigateBack: function(){
+			var headerModel = this.getView().getModel("Header");
+			this.doRoute("VehicleDetails",headerModel.getProperty("/VehicleDetailSet/VHVIN"));
+			this.clearScreen();
 		}
 	});
 });
