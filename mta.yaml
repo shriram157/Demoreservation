@@ -9,7 +9,7 @@ modules:
    path: demoreservation-node
    parameters:
       host: tci-dev-demoreservation-node
-      disk-quota: 256M
+      disk-quota: 512M
       memory: 256M
    properties:
       XS_APP_LOG_LEVEL: info
@@ -31,7 +31,7 @@ modules:
    path: demoreservation
    parameters:
       host: tci-dev-demoreservation
-      disk-quota: 256M
+      disk-quota: 512M
       memory: 256M
    properties:
       XS_APP_LOG_LEVEL: info
@@ -44,25 +44,25 @@ modules:
       group: destinations
       properties:
          name: demoreservation-node
+         url: ~{url}
          forwardAuthToken: true
          timeout: 60000
-         url: '~{url}'
 
 resources:
  - name: application-logs_demoreservation
+   type: org.cloudfoundry.managed-service
    parameters:
       service: application-logs
       service-plan: lite
-   type: org.cloudfoundry.managed-service
 
  - name: uaa_demoreservation
-   parameters:
-      path: ./xs-security.json
-      service-plan: application
-      service: xsuaa
    type: org.cloudfoundry.managed-service
+   parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
 
  - name: DEMO_RESERVATION_APIM_CUPS
+   type: org.cloudfoundry.existing-service
    parameters:
       service-name: DEMO_RESERVATION_APIM_CUPS
-   type: org.cloudfoundry.existing-service
