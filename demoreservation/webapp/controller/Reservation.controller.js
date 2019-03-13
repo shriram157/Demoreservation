@@ -322,6 +322,9 @@ sap.ui.define([
 
 			var admin = sap.ui.getCore().getModel("UserDataModel").getData().AdminVisible;                         ;
 			
+			if(admin){
+				email = "";
+			}    
 			var modelFilter = this.getView().byId("modelFilter").getSelectedKey();
 			var yearFilter = this.getView().byId("yearFilter").getValue();
 			var vinFilter = this.getView().byId("vinFilter").getValue();
@@ -332,7 +335,7 @@ sap.ui.define([
 			var ZZMOYR = new sap.ui.model.Filter("ZZMOYR", sap.ui.model.FilterOperator.EQ, yearFilter);
 			var VHVIN = new sap.ui.model.Filter("VHVIN", sap.ui.model.FilterOperator.Contains, vinFilter);
 			var StatusCode = new sap.ui.model.Filter("StatusCode", sap.ui.model.FilterOperator.EQ, inpStatus);
-			var Admin = new sap.ui.model.Filter("Admin", sap.ui.model.FilterOperator.EQ, admin);
+	//		var Admin = new sap.ui.model.Filter("Admin", sap.ui.model.FilterOperator.EQ, admin);
 			var Email = new sap.ui.model.Filter("Email", sap.ui.model.FilterOperator.EQ, email);
 
 			aFilters = [
@@ -340,7 +343,7 @@ sap.ui.define([
 				ZZMOYR,
 				VHVIN,
 				StatusCode,
-				Admin,
+		//		Admin,
 				Email
 			];
 			var finalFilter = new sap.ui.model.Filter({
@@ -368,11 +371,14 @@ sap.ui.define([
 		 },
 		 
 		 filterReservationListAdmin: function(admin,email){
+		 	if(admin){
+				email = "";
+			}  
 		  	var aFilters = [];
-			var Admin = new sap.ui.model.Filter("Admin", sap.ui.model.FilterOperator.EQ, admin);
+	//		var Admin = new sap.ui.model.Filter("Admin", sap.ui.model.FilterOperator.EQ, admin);
 			var Email = new sap.ui.model.Filter("Email", sap.ui.model.FilterOperator.EQ, email);
 				aFilters = [
-				Admin,
+		//		Admin,
 				Email
 			];
 			var finalFilter = new sap.ui.model.Filter({

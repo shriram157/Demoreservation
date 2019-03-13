@@ -242,7 +242,7 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 				// sample data
 				"Zresreq": headerModel.getProperty("/VehicleDetailSet/ZRESREQ"),
 				"ZSERIES": headerModel.getProperty("/VehicleDetailSet/ZZSERIES"),
-				"MATNR": headerModel.getProperty("/VehicleDetailSet/MATNR"),
+				"MATNR": headerModel.getProperty("/VehicleDetailSet/Model"),
 				"ZREQTYP": that.byId("reqtype").getSelectedKey(),
 				"ZINFO_ID": that.byId("onBehalf").getValue(),
 				"ZREQ_NAME": that.byId("idFirstName").getValue(),
@@ -331,6 +331,7 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 				// sample data
 				"Zresreq": "",
 				"ZSERIES": headerModel.getProperty("/VehicleDetailSet/ZZSERIES"),
+				"MATNR": headerModel.getProperty("/VehicleDetailSet/Model"),
 				"ZREQTYP": that.byId("reqtype").getSelectedKey(),
 				"ZINFO_ID": that.byId("onBehalf").getValue(),
 				"ZREQ_NAME": that.byId("idFirstName").getValue(),
