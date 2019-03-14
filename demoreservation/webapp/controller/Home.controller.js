@@ -228,6 +228,7 @@ sap.ui.define([
 					that.UserData.setProperty("/FirstName",userAttributes.samlAttributes.FirstName);
 					that.UserData.setProperty("/LastName",userAttributes.samlAttributes.LastName);
 					that.UserData.setProperty("/Email",userAttributes.samlAttributes.Email);
+					that.UserData.setProperty("/Userid",userAttributes.userProfile.id);
 					sap.ui.core.BusyIndicator.hide();
 					that.UserData.updateBindings(true);
 					that.UserData.refresh(true);

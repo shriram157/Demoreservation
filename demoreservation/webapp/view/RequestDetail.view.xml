@@ -73,16 +73,20 @@
 						<Input width="20rem" placeholder="Enter Text ..." id="idEmail" editable="false" value="{Reservation>/ZEMAIL} "/>
 					</HBox>
 					<HBox width="80%">
-						<Label width="12rem" class="sapUiSmallMarginTop" text="Phone Number : " text-align="left" required="true" visible="false"/>
-						<Input width="20rem" placeholder="Enter Text ..." id="idPhone" value="{Reservation>/ZEMAIL} " visible="false"/>
+						<Label width="12rem" class="sapUiSmallMarginTop" text="Department : " text-align="left" required="true" visible="true"/>
+						<Input width="20rem" placeholder="Enter Text ..." id="idDept" editable="false" value="{Reservation>/ZDEPT}" visible="true"/>
 					</HBox>
-					<HBox id="h_purchtype" width="80%">
+					<HBox width="80%">
+						<Label width="12rem" class="sapUiSmallMarginTop" text="Request for Others : " text-align="left" required="true" visible="true"/>
+						<CheckBox id="ipOthers" text="" selected="{Reservation>/ZOTHERS}" editable="true" enabled="true" visible="true" width="auto" textDirection="Inherit" wrapping="false" useEntireWidth="true" select="selectRequestOther"/>
+					</HBox>
+					<HBox id="h_purchtype" width="80%" visible="false">
 						<Label width="12rem" class="sapUiSmallMarginTop" text="Purchaser Type : " text-align="left" editable="false" visible="true"/>
 						<ComboBox id="purtype" change="onSelectPurTypeChange" items="{path: 'vehicles>/FilterData/PurchaserType'}" placeholder="Select Purchaser Type" width="20rem" selectedKey="{Reservation>/ZPURTYP}">
 							<core:Item key="{vehicles>key}" text="{vehicles>name}"/>
 						</ComboBox>
 					</HBox>
-					<HBox width="80%">
+					<HBox id="h_purchname" width="80%" visible="false">
 						<Label width="12rem" class="sapUiSmallMarginTop" text="Purchaser Name : " text-align="left" required="true"/>
 						<Input width="20rem" placeholder="Enter Text ..." id="idPurName" value="{Reservation>/ZPUR_NAME} "/>
 					</HBox>
@@ -102,7 +106,7 @@
 				</VBox>
 			</HBox> 
 				<Text text="Administrator Section" class="font_size_larger sapUiMediumMarginTop sapUiTinyMargin" visible="false"/>
-				<html:hr visible="false"/>
+				<html:hr visible="false" />
 			<HBox class="sapMHBox_padding" visible="false">
 				<VBox width="100%" class="sapUiLargeMarginBegin">
 					<HBox width="80%">

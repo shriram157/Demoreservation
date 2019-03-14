@@ -20,7 +20,7 @@ sap.ui.define([
 			var admin = oArgs.admin;
 			var email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
 			//testing
-			//	email = "anubha_pandey@toyota.ca";
+		//		email = "anubha_pandey@toyota.ca";
 
 			var a = false;
 			if(admin ==="false"){   // Employee Login
@@ -114,7 +114,7 @@ sap.ui.define([
 		getVehicleData: function (VHVIN,dialogType) {
 			var email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
 			//testing
-		//	email = "anubha_pandey@toyota.ca";
+	//		email = "anubha_pandey@toyota.ca";
 
 			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
 			sPath = "VehicleDetailSet(VHVIN='" + VHVIN + "',Email='" + email + "')?$expand=NAVFACOPTION,NAVDEALEROPTION",
@@ -318,7 +318,7 @@ sap.ui.define([
 		onSearch: function (oEvent){
 			var email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
 						//testing
-		//	email = "anubha_pandey@toyota.ca";
+	//		email = "anubha_pandey@toyota.ca";
 
 			var admin = sap.ui.getCore().getModel("UserDataModel").getData().AdminVisible;                         ;
 			
@@ -375,10 +375,8 @@ sap.ui.define([
 				email = "";
 			}  
 		  	var aFilters = [];
-	//		var Admin = new sap.ui.model.Filter("Admin", sap.ui.model.FilterOperator.EQ, admin);
 			var Email = new sap.ui.model.Filter("Email", sap.ui.model.FilterOperator.EQ, email);
 				aFilters = [
-		//		Admin,
 				Email
 			];
 			var finalFilter = new sap.ui.model.Filter({
@@ -386,7 +384,6 @@ sap.ui.define([
 				and: true
 			});
 			this.getView().byId("tabRservation").getBinding("items").filter(finalFilter, "Application");
-
 		 }
 	});
 

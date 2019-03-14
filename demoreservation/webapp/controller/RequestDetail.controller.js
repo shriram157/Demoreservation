@@ -1,4 +1,7 @@
-sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseController","sap/m/MessageBox"], function (BaseController,MessageBox) {
+sap.ui.define([
+	"ca/toyota/demoreservation/demoreservation/controller/BaseController",
+	"sap/m/MessageBox"
+], function (BaseController, MessageBox) {
 	"use strict";
 	return BaseController.extend("ca.toyota.demoreservation.demoreservation.controller.RequestDetail", {
 		onInit: function () {
@@ -15,27 +18,29 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 			this.vhvin = oArgs.vhvin;
 			oView = this.getView();
 			this.vhvin = oArgs.vhvin;
-			if(oArgs.Zresreq === undefined){
-				that.action="";
-			}else if (oArgs.Zresreq !== "C") {		// Edit Reservation
+			if (oArgs.Zresreq === undefined) {
+				that.action = "";
+			} else if (oArgs.Zresreq !== "C") {
+				// Edit Reservation
 				that.getReservationData(oArgs.Zresreq);
-				that.action="U";
+				that.action = "U";
 				// Make Delete button visible
 				that.byId("btnDelete").setVisible(true);
 			}
 			this.getVehicleData(oArgs.vhvin);
-			
 			// On employee login, fill details
 			var type = sap.ui.getCore().getModel("UserDataModel").getData().Type;
-			
-			if(type ==="TCI_User"){
-				that.byId("reqtype").setSelectedKey("E");
-				that.byId("reqtype").setEnabled(false);
+			var userid = sap.ui.getCore().getModel("UserDataModel").getData().Userid;
+			if (type === "TCI_User") {
+				that.getView().byId("reqtype").removeItem(2);
 				that.byId("onBehalf").setEnabled(false);
+				that.byId("onBehalf").setValue(userid);
 				that.byId("idFirstName").setValue(sap.ui.getCore().getModel("UserDataModel").getData().FirstName);
 				that.byId("idLastName").setValue(sap.ui.getCore().getModel("UserDataModel").getData().LastName);
 				that.byId("idEmail").setValue(sap.ui.getCore().getModel("UserDataModel").getData().Email);
 				that.byId("h_department").setVisible(false);
+				var dept = that.getEmployeeData("E");
+				that.byId("idDept").setValue(dept);
 			}
 		},
 		initPage: function () {
@@ -44,11 +49,10 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 		},
 		getVehicleData: function (VHVIN) {
 			var email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
-						//testing
-	//		email = "anubha_pandey@toyota.ca";
-
+			//testing
+		//	email = "anubha_pandey@toyota.ca";
 			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-			sPath = "VehicleDetailSet(VHVIN='" + VHVIN + "',Email='" + email + "')?$expand=NAVFACOPTION,NAVDEALEROPTION",
+				sPath = "VehicleDetailSet(VHVIN='" + VHVIN + "',Email='" + email + "')?$expand=NAVFACOPTION,NAVDEALEROPTION",
 				oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
 				that = this;
 			var oBusyDialog = new sap.m.BusyDialog();
@@ -74,7 +78,7 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 		},
 		getReservationData: function (resreq) {
 			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-				sPath = "zc_demo_reservationSet('"+ resreq +"')",
+				sPath = "zc_demo_reservationSet('" + resreq + "')",
 				oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
 				that = this;
 			var oBusyDialog = new sap.m.BusyDialog();
@@ -86,13 +90,21 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 					var oJSONModel = new sap.ui.model.json.JSONModel();
 					oJSONModel.setData(oData);
 					that.getView().setModel(oJSONModel, "Reservation");
-						if (oData.ZREQTYP === "E" || oData.ZREQTYP === "C") {
-							that.byId("h_onbehalf").setVisible(true);
-							that.byId("h_department").setVisible(false);
-						} else {
-							that.byId("h_onbehalf").setVisible(false);
-							that.byId("h_department").setVisible(true);
-						}
+					if (oData.ZREQTYP === "E" || oData.ZREQTYP === "C") {
+						that.byId("h_onbehalf").setVisible(true);
+						that.byId("h_department").setVisible(false);
+					} else {
+						that.byId("h_onbehalf").setVisible(false);
+						that.byId("h_department").setVisible(true);
+					}
+					// If requested for others, purchase type and name visible	
+					if (oData.ZOTHERS) {
+						that.byId("h_purchtype").setVisible(true);
+						that.byId("h_purchname").setVisible(true);
+					} else {
+						that.byId("h_purchtype").setVisible(false);
+						that.byId("h_purchname").setVisible(false);
+					}
 					// release busy indicator
 					oBusyDialog.close();
 				},
@@ -114,12 +126,10 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 			oDetailModel.read(sPath, {
 				method: "GET",
 				success: function (oData, oResponse) {
-					//				var oJSONModel = new sap.ui.model.json.JSONModel();
 					var oJSONModel = that.getOwnerComponent().getModel("localDataModel");
 					oJSONModel.setData({
 						Department: oData.results
 					});
-					//			that.getView().setModel(oJSONModel,"LocalDataModel");
 					// release busy indicator
 					oBusyDialog.close();
 				},
@@ -132,6 +142,10 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 		},
 		getEmployeeData: function (reqtype) {
 			var persg;
+			var that = this;
+			var email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
+			this.logiEmpDept = "";
+			this.logiEmpDeptText="";
 			if (reqtype === "E") {
 				persg = "1";
 			} else {
@@ -156,6 +170,10 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 							filterResult[j] = oData.results[i];
 							j++;
 						}
+						if (oData.results[i].usrid_long === email) {
+							that.logiEmpDept = oData.results[i].orgeh;
+							that.logiEmpDeptText = oData.results[i].orgtx;
+						}
 					}
 					var oJSONModel = that.getOwnerComponent().getModel("localDataModel");
 					oJSONModel.setData({
@@ -170,6 +188,7 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 					oBusyDialog.close();
 				}
 			});
+			return this.logiEmpDeptText;
 		},
 		suggestionItemSelected: function (evt) {
 			//Get Selected Row
@@ -178,6 +197,7 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 				"fstName": obj.nchmc,
 				"lstName": obj.vnamc,
 				"email": obj.usrid_long,
+				"dept": obj.orgeh,
 				"userid": obj.usrid
 			};
 			this.InputModel = new sap.ui.model.json.JSONModel();
@@ -189,6 +209,8 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 			this.byId("idLastName").setValue(obj.vnamc);
 			this.byId("onBehalf").setValue(obj.usrid);
 			this.byId("idEmail").setValue(obj.usrid_long);
+			this.byId("idDept").setValue(obj.orgtx);
+			this.logiEmpDept = obj.orgeh;
 		},
 		handleInputSuggest: function (oEvent) {
 			var sValue = oEvent.getParameter("suggestValue");
@@ -202,39 +224,50 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 		},
 		onSelectReqTypeChange: function (oEvent) {
 			var that = this;
-			var reqtype = this.byId("reqtype").getSelectedKey();
-			if (reqtype === "E" || reqtype === "C") {
-				this.byId("h_onbehalf").setVisible(true);
-				this.byId("h_department").setVisible(false);
-				that.byId("idDeptName").setSelectedKey("");
-				that.getEmployeeData(reqtype);
-			} else {
-				this.byId("h_onbehalf").setVisible(false);
-				this.byId("h_department").setVisible(true);
-				that.getDepartmentData();
+			var type = sap.ui.getCore().getModel("UserDataModel").getData().Type;
+			if (type !== "TCI_User") {
+				var reqtype = this.byId("reqtype").getSelectedKey();
+				if (reqtype === "E" || reqtype === "C") {
+					this.byId("h_onbehalf").setVisible(true);
+					this.byId("h_department").setVisible(false);
+					that.byId("idDeptName").setSelectedKey("");
+					that.getEmployeeData(reqtype);
+				} else {
+					this.byId("h_onbehalf").setVisible(false);
+					this.byId("h_department").setVisible(true);
+					that.getDepartmentData();
+				}
+				//reset employee selection values
+				this.byId("idFirstName").setValue("");
+				this.byId("idLastName").setValue("");
+				this.byId("onBehalf").setValue("");
+				this.byId("idEmail").setValue("");
 			}
-			//reset employee selection values
-			this.byId("idFirstName").setValue("");
-			this.byId("idLastName").setValue("");
-			this.byId("onBehalf").setValue("");
-			this.byId("idEmail").setValue("");
 		},
 		onSubmitPress: function (oEvent) {
 			var that = this;
-			if (this.action === "U") {
-				that._saveData("U");
-			} else {
-				that._createData();
+			if (this.isValidateTrue()) {
+				if (this.action === "U") {
+					that._saveData("U");
+				} else {
+					that._createData();
+				}
 			}
 		},
 		_saveData: function (action) {
 			var that = this;
 			var headerModel = this.getView().getModel("Header");
 			var localModel = this.getView().getModel("localDataModel");
-			var delIndictator ="";
-			if(action === "D"){
+			var delIndictator = "";
+			var dept = "";
+			if (that.byId("reqtype").getSelectedKey() === "D") {
+				dept = that.byId("idDeptName").getSelectedKey();
+			} else {
+				dept = that.logiEmpDept;
+			}
+			if (action === "D") {
 				delIndictator = "X";
-			}else{
+			} else {
 				delIndictator = "";
 			}
 			//	this.evt = revertEvent;
@@ -247,13 +280,14 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 				"ZINFO_ID": that.byId("onBehalf").getValue(),
 				"ZREQ_NAME": that.byId("idFirstName").getValue(),
 				"ZREQ_LNAME": that.byId("idLastName").getValue(),
-				"ZDEPT": that.byId("idDeptName").getSelectedKey(),
+				"ZDEPT": dept,
 				"ZEMAIL": that.byId("idEmail").getValue(),
-				"ZOTHERS": "",
+				"ZOTHERS": that.byId("ipOthers").getSelected(),
 				"ZPURTYP": that.byId("purtype").getSelectedKey(),
 				"ZPUR_NAME": that.byId("idPurName").getValue(),
 				"ZPURDT": that.byId("idPurchDate").getValue(),
-				"ZUDEL": delIndictator, // X in case of delete
+				"ZUDEL": delIndictator,
+				// X in case of delete
 				"ZANOTES": that.byId("idNotes").getValue(),
 				//	  "ZCHERQ" : that.byId("idCheckReq").getValue(),
 				"ZCHERQ": "",
@@ -267,37 +301,16 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 				"Vehicleidentnumb": headerModel.getProperty("/VehicleDetailSet/VHVIN")
 			};
 			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-				sPath = "/zc_demo_reservationSet('"+ headerModel.getProperty("/VehicleDetailSet/ZRESREQ") +"')",
+				sPath = "/zc_demo_reservationSet('" + headerModel.getProperty("/VehicleDetailSet/ZRESREQ") + "')",
 				oModifyModel = new sap.ui.model.odata.ODataModel(uri, true);
-				
-				var oBusyDialog = new sap.m.BusyDialog();
-				oBusyDialog.open();  // Set busy indicator
-
-//				oModifyModel.update(sPath, data, {
-				this.getView().getModel().update(sPath, data, {
+			var oBusyDialog = new sap.m.BusyDialog();
+			oBusyDialog.open();
+			// Set busy indicator
+			//				oModifyModel.update(sPath, data, {
+			this.getView().getModel().update(sPath, data, {
 				// method: "PATCH",
 				// async: false,
 				success: function (oData, oResponse) {
-					// var result = oData.MessageType;
-					// var msg, icon, title;
-					// if (result === "S") {
-					// 	msg = oData.Message +" : "+ oData.Zresreq;
-					// 	icon = sap.m.MessageBox.Icon.SUCCESS;
-					// 	title = "Success";
-					// } else {
-					// 	msg = oData.Message;
-					// 	icon = sap.m.MessageBox.Icon.ERROR;
-					// 	title = "Error";
-					// }
-					// sap.m.MessageBox.show(msg, {
-					// 	icon: icon,
-					// 	title: title,
-					// 	actions: [sap.m.MessageBox.Action.OK],
-					// 	onClose: function (oAction) {
-					// 		//	method to be called 
-					// 		that.navigateBack();
-					// 	}
-					// });
 					// release busy indicator
 					sap.m.MessageBox.show("Reservation request updated", {
 						icon: sap.m.MessageBox.Icon.SUCCESS,
@@ -327,6 +340,12 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 			var that = this;
 			var headerModel = this.getView().getModel("Header");
 			var localModel = this.getView().getModel("localDataModel");
+			var dept = "";
+			if (that.byId("reqtype").getSelectedKey() === "D") {
+				dept = that.byId("idDeptName").getSelectedKey();
+			} else {
+				dept = that.logiEmpDept;
+			}
 			var data = {
 				// sample data
 				"Zresreq": "",
@@ -336,9 +355,9 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 				"ZINFO_ID": that.byId("onBehalf").getValue(),
 				"ZREQ_NAME": that.byId("idFirstName").getValue(),
 				"ZREQ_LNAME": that.byId("idLastName").getValue(),
-				"ZDEPT": that.byId("idDeptName").getSelectedKey(),
+				"ZDEPT": dept,
 				"ZEMAIL": that.byId("idEmail").getValue(),
-				"ZOTHERS": "",
+				"ZOTHERS": that.byId("ipOthers").getSelected(),
 				"ZPURTYP": that.byId("purtype").getSelectedKey(),
 				"ZPUR_NAME": that.byId("idPurName").getValue(),
 				"ZPURDT": that.byId("idPurchDate").getValue(),
@@ -351,18 +370,17 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
 				sPath = "zc_demo_reservationSet",
 				oModifyModel = new sap.ui.model.odata.ODataModel(uri, true);
-								
-				var oBusyDialog = new sap.m.BusyDialog();
-				oBusyDialog.open();  // Set busy indicator
-
-				oModifyModel.create(sPath, data, {
+			var oBusyDialog = new sap.m.BusyDialog();
+			oBusyDialog.open();
+			// Set busy indicator
+			oModifyModel.create(sPath, data, {
 				method: "POST",
 				async: false,
 				success: function (oData, oResponse) {
 					var result = oData.MessageType;
 					var msg, icon, title;
 					if (result === "S") {
-						msg = oData.Message +" : "+ oData.Zresreq;
+						msg = oData.Message + " : " + oData.Zresreq;
 						icon = sap.m.MessageBox.Icon.SUCCESS;
 						title = "Success";
 					} else {
@@ -401,14 +419,9 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 			this._saveData("D");
 		},
 		onNavButtonPress: function (oEvent) {
-			// this.doRoute("Home");
-			// this.clearScreen();
 			this.navigateBack();
 		},
 		onCancelPress: function (oEvent) {
-			// var headerModel = this.getView().getModel("Header");
-			// this.doRoute("VehicleDetails",headerModel.getProperty("/VehicleDetailSet/VHVIN"));
-			// 	this.clearScreen();
 			this.navigateBack();
 		},
 		getCurrentDate: function () {
@@ -437,22 +450,120 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 		onSelectDepartment: function (oEvent) {
 			//This code was generated by the layout editor.
 		},
-		clearScreen: function(){
+		clearScreen: function () {
 			var that = this;
 			that.byId("reqtype").setSelectedKey("");
 			that.byId("onBehalf").setValue("");
 			that.byId("idFirstName").setValue("");
 			that.byId("idLastName").setValue("");
 			that.byId("idDeptName").setSelectedKey("");
-			 that.byId("idEmail").setValue("");
+			that.byId("idEmail").setValue("");
 			that.byId("purtype").setSelectedKey("");
 			that.byId("idPurName").setValue("");
 			that.byId("idPurchDate").setValue("");
+			this.byId("idDept").setValue("");
+			that.byId("ipOthers").setSelected(false);
 		},
-		navigateBack: function(){
+		navigateBack: function () {
 			var headerModel = this.getView().getModel("Header");
-			this.doRoute("VehicleDetails",headerModel.getProperty("/VehicleDetailSet/VHVIN"));
+			this.doRoute("VehicleDetails", headerModel.getProperty("/VehicleDetailSet/VHVIN"));
 			this.clearScreen();
+		},
+		isValidateTrue: function () {
+			var that = this;
+			var type = sap.ui.getCore().getModel("UserDataModel").getData().Type;
+			var msg;
+			var oBundle = this.getView().getModel("i18n").getResourceBundle();
+			var ZOTHERS = that.byId("ipOthers").getSelected();
+			var ZPURTYP = that.byId("purtype").getSelectedKey();
+			var ZPUR_NAME = that.byId("idPurName").getValue();
+			var ZPURDT = that.byId("idPurchDate").getValue();
+			if (that.byId("reqtype").getSelectedKey() === "") {
+				// Requestor type can not be blank
+				msg = oBundle.getText("errReqTypeBlankValidation");
+				that.byId("reqtype").setValueState(sap.ui.core.ValueState.Error);
+				that.byId("reqtype").setValueStateText(msg);
+				return false;
+			} else {
+				that.byId("reqtype").setValueState(sap.ui.core.ValueState.None);
+			}
+			if (type !== "TCI_User") {
+				// If Admin 
+				if (that.byId("reqtype").getSelectedKey() === "D") {
+					// select Department not blank validation
+					var dept = that.byId("idDeptName").getSelectedKey();
+					if (dept === "") {
+						msg = oBundle.getText("errDeptBlankValidation");
+						that.byId("idDeptName").setValueState(sap.ui.core.ValueState.Error);
+						that.byId("idDeptName").setValueStateText(msg);
+						return false;
+					} else {
+						that.byId("idDeptName").setValueState(sap.ui.core.ValueState.None);
+					}
+				} else {
+					var emp = that.byId("onBehalf").getValue();
+					// select Employee/Contractor not blank validation
+					if (emp === "") {
+						msg = oBundle.getText("errEmpBlankValidation");
+						that.byId("onBehalf").setValueState(sap.ui.core.ValueState.Error);
+						that.byId("onBehalf").setValueStateText(msg);
+						return false;
+					} else {
+						that.byId("onBehalf").setValueState(sap.ui.core.ValueState.None);
+					}
+				}
+			}
+			if (ZPURDT === "") {
+				// // Purchase date can't be blank
+				msg = oBundle.getText("errCheckPurDateValidation");
+				that.byId("idPurchDate").setValueState(sap.ui.core.ValueState.Error);
+				that.byId("idPurchDate").setValueStateText(msg);
+				return false;
+			} else {
+				that.byId("idPurchDate").setValueState(sap.ui.core.ValueState.None);
+			}
+			if (ZOTHERS) {
+				// If Request for Others checkbox is checked
+				if (ZPURTYP === "") {
+					// Purchase type can't be blank
+					msg = oBundle.getText("errCheckPurTypeValidation");
+					that.byId("purtype").setValueState(sap.ui.core.ValueState.Error);
+					that.byId("purtype").setValueStateText(msg);
+					return false;
+				} else {
+					that.byId("purtype").setValueState(sap.ui.core.ValueState.None);
+				}
+				if (ZPUR_NAME === "") {
+					// Purchase name can't be blank
+					msg = oBundle.getText("errCheckPurNameValidation");
+					that.byId("idPurName").setValueState(sap.ui.core.ValueState.Error);
+					that.byId("idPurName").setValueStateText(msg);
+					return false;
+				} else {
+					that.byId("idPurName").setValueState(sap.ui.core.ValueState.None);
+				}
+				return true;
+			} else {
+				that.byId("purtype").setValueState(sap.ui.core.ValueState.None);
+				that.byId("idPurName").setValueState(sap.ui.core.ValueState.None);
+				return true;
+			}
+		},
+		/**
+		 *@memberOf ca.toyota.demoreservation.demoreservation.controller.RequestDetail
+		 */
+		selectRequestOther: function (oEvent) {
+			var selected = oEvent.getParameter("selected");
+			// If requested for others, purchase type and name visible	
+			if(selected){
+				this.byId("h_purchtype").setVisible(true);
+				this.byId("h_purchname").setVisible(true);
+			}else{
+				this.byId("h_purchtype").setVisible(false);
+				this.byId("h_purchname").setVisible(false);
+				this.byId("purtype").setSelectedKey("");
+				this.byId("idPurName").setValue("");
+			}	
 		}
 	});
 });
