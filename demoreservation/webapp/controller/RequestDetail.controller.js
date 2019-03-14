@@ -242,6 +242,7 @@ sap.ui.define([
 				this.byId("idLastName").setValue("");
 				this.byId("onBehalf").setValue("");
 				this.byId("idEmail").setValue("");
+				this.byId("idDept").setValue("");
 			}
 		},
 		onSubmitPress: function (oEvent) {
@@ -442,6 +443,7 @@ sap.ui.define([
 				this.byId("idFirstName").setValue("");
 				this.byId("idLastName").setValue("");
 				this.byId("idEmail").setValue("");
+				this.byId("idDept").setValue("");
 			}
 		},
 		/**
@@ -462,7 +464,18 @@ sap.ui.define([
 			that.byId("idPurName").setValue("");
 			that.byId("idPurchDate").setValue("");
 			this.byId("idDept").setValue("");
+			
 			that.byId("ipOthers").setSelected(false);
+			that.byId("h_purchtype").setVisible(false);
+			that.byId("h_purchname").setVisible(false);
+			
+			that.byId("reqtype").setValueState(sap.ui.core.ValueState.None);
+			that.byId("idDeptName").setValueState(sap.ui.core.ValueState.None);
+			that.byId("onBehalf").setValueState(sap.ui.core.ValueState.None);
+			that.byId("idPurchDate").setValueState(sap.ui.core.ValueState.None);
+			that.byId("purtype").setValueState(sap.ui.core.ValueState.None);
+			that.byId("idPurName").setValueState(sap.ui.core.ValueState.None);
+
 		},
 		navigateBack: function () {
 			var headerModel = this.getView().getModel("Header");
