@@ -41,10 +41,9 @@ module.exports = function (appContext) {
 		tracer.debug("User profile from JWT: %s", JSON.stringify(userProfile));
 		tracer.debug("User attributes from JWT: %s", JSON.stringify(userAttributes));
 
-		// If there is no user type, it is most probably a call from Neo, in which case we can fake the data as a dealer with code 42120
+		// If there is no user type, it is most probably a call from Neo, in which case we can fake the data as TCI user
 		if (!userAttributes.UserType) {
 			userAttributes = {
-				DealerCode: ["42120"],
 				Language: ["English"],
 				UserType: ["National"]
 			};
@@ -89,7 +88,7 @@ module.exports = function (appContext) {
 				bpZone = "9000";
 			} else {
 				logger.warning("Unrecognized zone ID: %s", zone);
-				return res.type("plain/text").status(500).send("Unknown zone ID.");
+				return res.type("plain/text").status(400).send("Unknown zone ID.");
 			}
 
 			bpReqUrl = url + "/API_BUSINESS_PARTNER/A_BusinessPartner?sap-client=" + s4Client + "&$format=json" +
