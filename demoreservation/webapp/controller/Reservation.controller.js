@@ -111,13 +111,13 @@ sap.ui.define([
 		//	oText.setText(sKey);
 		},
 
-		getVehicleData: function (VHVIN,dialogType) {
+		getVehicleData: function (VHVIN,dialogType,requestorEmail) {
 			var email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
 			//testing
 	//		email = "anubha_pandey@toyota.ca";
 
 			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-			sPath = "VehicleDetailSet(VHVIN='" + VHVIN + "',Email='" + email + "')?$expand=NAVFACOPTION,NAVDEALEROPTION",
+			sPath = "VehicleDetailSet(VHVIN='" + VHVIN + "',Email='" + requestorEmail + "')?$expand=NAVFACOPTION,NAVDEALEROPTION",
 				oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
 				that = this;
 			var oBusyDialog = new sap.m.BusyDialog();
@@ -154,7 +154,8 @@ sap.ui.define([
 		onReservationInfoPress: function (oEvent) {
 			var path = oEvent.getSource().getParent().getBindingContextPath(),
 			//	vhvin = path.substr(21,16);
-			vhvin = this.getView().byId("tabRservation").getModel().getData(path).VHVIN;
+			vhvin = this.getView().byId("tabRservation").getModel().getData(path).VHVIN,
+			requestorEmail = this.getView().byId("tabRservation").getModel().getData(path).Email;
 			this._selectedPath = oEvent.getSource().getParent().getBindingContextPath();
 			this._selectedObject = this.byId("tabRservation").getModel().getProperty(this._selectedPath);
 			if (!this.dlgReservation) {
@@ -164,7 +165,7 @@ sap.ui.define([
 				);
 				this.getView().addDependent(this.dlgReservation);
 			}
-			this.getVehicleData(vhvin,"INFO");
+			this.getVehicleData(vhvin,"INFO",requestorEmail);
 		},
 		
 		onApprovePress: function (oEvent) {
@@ -178,8 +179,9 @@ sap.ui.define([
 			this.APP_REJ="ZRRA";
 			this._selectedPath = oEvent.getSource().getParent().getBindingContextPath();
 			this._selectedObject = this.byId("tabRservation").getModel().getProperty(this._selectedPath);
-			var vhvin = this.getView().byId("tabRservation").getModel().getData(this._selectedPath).VHVIN;
-			this.getVehicleData(vhvin,"APRJ");
+			var vhvin = this.getView().byId("tabRservation").getModel().getData(this._selectedPath).VHVIN,
+			requestorEmail = this.getView().byId("tabRservation").getModel().getData(this._selectedPath).Email;
+			this.getVehicleData(vhvin,"APRJ",requestorEmail);
 		},
 
 		onRejectPress: function (oEvent) {
@@ -193,8 +195,9 @@ sap.ui.define([
 			this.APP_REJ="ZRRD";
 			this._selectedPath = oEvent.getSource().getParent().getBindingContextPath();
 			this._selectedObject = this.byId("tabRservation").getModel().getProperty(this._selectedPath);
-			var vhvin = this.getView().byId("tabRservation").getModel().getData(this._selectedPath).VHVIN;
-			this.getVehicleData(vhvin,"APRJ");
+			var vhvin = this.getView().byId("tabRservation").getModel().getData(this._selectedPath).VHVIN,
+			requestorEmail = this.getView().byId("tabRservation").getModel().getData(this._selectedPath).Email;
+			this.getVehicleData(vhvin,"APRJ",requestorEmail);
 		},
 		
 		onCloseDialog: function (oEvent) {
