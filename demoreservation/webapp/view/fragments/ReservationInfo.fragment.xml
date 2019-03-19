@@ -154,7 +154,7 @@
 						<items>
 							<Label text="Request Date"/>
 							<Label text=":" class="sapUiTinyMarginEnd"/>
-							<Label text="{VehicleInfo>/zzcretms}" design="Bold"/>
+							<Label text="{VehicleInfo>/ZZCRETMS}" design="Bold"/>
 						</items>
 					</HBox>
 					<HBox class="sapUiTinyMargin">
