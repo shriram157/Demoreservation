@@ -293,6 +293,7 @@ sap.ui.define([
 							Fragment.byId("adminSectionFragment", "ipDateDue").setValue("");
 							Fragment.byId("adminSectionFragment", "ipDateRec").setValue("");
 							Fragment.byId("adminSectionFragment", "ipNotes").setValue("");
+							that.getView().getModel().refresh();
 						}
 					});
 						// release busy indicator
