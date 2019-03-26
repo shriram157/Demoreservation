@@ -388,7 +388,17 @@ sap.ui.define([
 				and: true
 			});
 			this.getView().byId("tabRservation").getBinding("items").filter(finalFilter, "Application");
-		 }
+		 },
+		 _onEditPress: function (oEvent) {
+			var vhvin = this.getView().byId("tabRservation").getModel().getData(this._selectedPath).VHVIN;
+			var Zresreq = this.getView().byId("tabRservation").getModel().getData(this._selectedPath).ZRESREQ;
+			if(Zresreq===""){
+				// msg
+			}else{
+				this.doReqRoute("RequestDetail",vhvin,Zresreq);
+			}
+
+		}
 	});
 
 });

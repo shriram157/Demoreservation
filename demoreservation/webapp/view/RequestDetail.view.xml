@@ -133,7 +133,7 @@
 				<content>
 					<ToolbarSpacer/>
 					<Button text="Submit" type="Emphasized" iconFirst="true" width="86.63750457763672px" enabled="true" visible="true" iconDensityAware="false" press="onSubmitPress"/>
-					<Button text="Cancel" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onCancelPress"/>
+					<Button text="Cancel" type="Default" iconFirst="true" width="auto" enabled="true" iconDensityAware="false" press="onCancelPress"/>
 					<Button id="btnDelete" text="Delete" type="Default" iconFirst="true" width="auto" enabled="true" visible="false" iconDensityAware="false" press="onDeletePress"/>
 					<Button text="Approve" type="Default" iconFirst="true" width="auto" enabled="true" visible="false" iconDensityAware="false" press="onApprovePress"/>
 					<Button text="Decline" type="Default" iconFirst="true" width="auto" enabled="true" visible="false" iconDensityAware="false" press="onDeclinePress"/>

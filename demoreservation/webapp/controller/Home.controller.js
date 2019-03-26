@@ -246,6 +246,10 @@ sap.ui.define([
 				success: function (scopesData) {
 					console.log("currentScopesForUser", scopesData);
 					var type = scopesData.loggedUserType[0];
+					
+					// testing
+				//	type="TCI_Admin";
+					
 					that.UserData.setProperty("/Type",type);
 					
 					if(type === "TCI_Admin"){

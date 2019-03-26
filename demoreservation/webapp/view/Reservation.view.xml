@@ -116,7 +116,7 @@
                                     <Text text="Est.End Date" width="auto"/>
                                 </header>
                             </Column>
-                            <Column minScreenWidth="Phone" visible="{UserModel>/admin}">
+                            <Column minScreenWidth="Phone">
                                 <header>
                                     <Text text=""/>
                                 </header>

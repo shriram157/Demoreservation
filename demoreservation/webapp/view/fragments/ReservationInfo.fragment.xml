@@ -1,7 +1,7 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:layout="sap.ui.layout" xmlns:uxap="sap.uxap" xmlns:form="sap.ui.layout.form">
 	<Dialog title="Reservation Info" type="Message" contentHeight="60%" contentWidth="60%" id="feedbackDialog">
 		<content>
-			<Label text="Vehicle Info" class="sapUiSmallMargin font_size_larger"  design="Bold"/>
+			<Label text="Vehicle Info" class="sapUiSmallMargin font_size_larger" design="Bold"/>
 			<HBox>
 				<VBox width="50%">
 					<items>
@@ -195,6 +195,7 @@
 	    <!--<Button xmlns="sap.m" text="Approve" id="btnAppr" press="onApprovePress"/>-->
 	    <!--<Button xmlns="sap.m" text="Reject" id="btnRej"  press="onRejectPress"/>-->
 	    <Button xmlns="sap.m" text="Cancel" id="btnCan" press="onCloseDialog"/>
+	    <Button xmlns="sap.m" text="Edit Reservation" id="btnEdit" visible="{UserModel>/admin}" press="_onEditPress"/>
 	</buttons>
 	</Dialog>
 </core:FragmentDefinition>

@@ -1,7 +1,8 @@
 sap.ui.define([
 	"ca/toyota/demoreservation/demoreservation/controller/BaseController",
-	"sap/m/MessageBox"
-], function (BaseController, MessageBox) {
+	"sap/m/MessageBox",
+	"sap/ui/core/routing/History"
+], function (BaseController, MessageBox, History) {
 	"use strict";
 	return BaseController.extend("ca.toyota.demoreservation.demoreservation.controller.RequestDetail", {
 		onInit: function () {
@@ -478,8 +479,18 @@ sap.ui.define([
 
 		},
 		navigateBack: function () {
-			var headerModel = this.getView().getModel("Header");
-			this.doRoute("VehicleDetails", headerModel.getProperty("/VehicleDetailSet/VHVIN"));
+			var oHistory = History.getInstance();
+			var sPreviousHash = oHistory.getPreviousHash();
+			
+			if (sPreviousHash !== undefined) {
+				window.history.go(-1);
+			} else {
+				var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+				oRouter.navTo("overview", true);
+			}
+			
+			// var headerModel = this.getView().getModel("Header");
+			// this.doRoute("VehicleDetails", headerModel.getProperty("/VehicleDetailSet/VHVIN"));
 			this.clearScreen();
 		},
 		isValidateTrue: function () {

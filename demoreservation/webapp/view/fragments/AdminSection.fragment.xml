@@ -13,7 +13,7 @@
 									<Label text="Notes for requestor" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:label>
 								<form:fields>
-									<Input id="ipNotes" type="Text" showValueHelp="false" enabled="true" visible="true" width="100%" valueHelpOnly="false" maxLength="0"/>
+									<TextArea id="ipNotes" maxLength="255" cols="51" rows="3" growing="true" growingMaxLines="5" showExceededText="true"/>
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement visible="true">
