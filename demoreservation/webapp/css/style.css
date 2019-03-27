@@ -9,6 +9,10 @@
 	color: white;
 }
 
+.hyperlink-font-color {
+	-webkit-text-fill-color: cyan;
+	font-size: 1rem;
+}
 .font_size_larger {
 	font-size: larger !important;
 	padding-top: 2rem;

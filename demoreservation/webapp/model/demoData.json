@@ -19,19 +19,28 @@
 			},{
 			"key": "D",
 			"name": "Department"
-		}],
-		"PurchaserType": [{
-			"key": "S",
-			"name": "TCI Employee Spouse/Child"
-			},{
-			"key": "E",
-			"name": "TCI/TFS Employee"
 			},{
 			"key": "R",
-			"name": "TCI/TFS Retiree"
+			"name": "TCI Retiree"
+			},{
+			"key": "T",
+			"name": "TCCI Retiree"
+			}],
+		"PurchaserType": [{
+			"key": "S",
+			"name": "TCI Associate/Spouse/Children"
 			},{
 			"key": "C",
-			"name": "TCI Contractor Spouse"
+			"name": "TCI Contractor"
+			},{
+			"key": "R",
+			"name": "TCI Retiree"
+			},{
+			"key": "A",
+			"name": "TCCI Associate"
+			},{
+			"key": "T",
+			"name": "TCCI Retiree"
 			},{
 			"key": "O",
 			"name": "Other"

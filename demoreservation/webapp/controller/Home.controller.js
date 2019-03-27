@@ -57,6 +57,7 @@ sap.ui.define([
 		onSearch: function (oEvent){
 			var zoneFilter = this.getView().byId("zoneFilter").getSelectedKey();
 			var seriesFilter = this.getView().byId("seriesFilter").getSelectedKey();
+			var suffixFilter = this.getView().byId("suffixFilter").getSelectedKey();
 			var modelFilter = this.getView().byId("modelFilter").getSelectedKey();
 			var yearFilter = this.getView().byId("yearFilter").getValue();
 			var vinFilter = this.getView().byId("vinFilter").getValue();
@@ -73,13 +74,15 @@ sap.ui.define([
 			var ZZMOYR = new sap.ui.model.Filter("ZZMOYR", sap.ui.model.FilterOperator.EQ, yearFilter);
 			var VHVIN = new sap.ui.model.Filter("VHVIN", sap.ui.model.FilterOperator.Contains, vinFilter);
 			var Status = new sap.ui.model.Filter("Status", sap.ui.model.FilterOperator.EQ, inpStatus);
+			var ZZSUFFIX = new sap.ui.model.Filter("ZZSUFFIX", sap.ui.model.FilterOperator.EQ, suffixFilter);
 			aFilters = [
 				ZZZONE,
 				ZZSERIES,
 				MATNR,
 				ZZMOYR,
 				VHVIN,
-				Status
+				Status,
+				ZZSUFFIX
 			];
 			var finalFilter = new sap.ui.model.Filter({
 				filters: aFilters,

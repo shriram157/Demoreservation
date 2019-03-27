@@ -91,9 +91,11 @@ sap.ui.define([
 					var oJSONModel = new sap.ui.model.json.JSONModel();
 					oJSONModel.setData(oData);
 					that.getView().setModel(oJSONModel, "Reservation");
+					
 					if (oData.ZREQTYP === "E" || oData.ZREQTYP === "C") {
 						that.byId("h_onbehalf").setVisible(true);
 						that.byId("h_department").setVisible(false);
+						that.getEmployeeData(oData.ZREQTYP);
 					} else {
 						that.byId("h_onbehalf").setVisible(false);
 						that.byId("h_department").setVisible(true);
@@ -228,7 +230,7 @@ sap.ui.define([
 			var type = sap.ui.getCore().getModel("UserDataModel").getData().Type;
 			if (type !== "TCI_User") {
 				var reqtype = this.byId("reqtype").getSelectedKey();
-				if (reqtype === "E" || reqtype === "C") {
+				if (reqtype === "E" || reqtype === "C" || reqtype === "R"|| reqtype === "T") {
 					this.byId("h_onbehalf").setVisible(true);
 					this.byId("h_department").setVisible(false);
 					that.byId("idDeptName").setSelectedKey("");
@@ -260,6 +262,7 @@ sap.ui.define([
 			var that = this;
 			var headerModel = this.getView().getModel("Header");
 			var localModel = this.getView().getModel("localDataModel");
+			var resModel = this.getView().getModel("Reservation");
 			var delIndictator = "";
 			var dept = "";
 			if (that.byId("reqtype").getSelectedKey() === "D") {
@@ -275,9 +278,9 @@ sap.ui.define([
 			//	this.evt = revertEvent;
 			var data = {
 				// sample data
-				"Zresreq": headerModel.getProperty("/VehicleDetailSet/ZRESREQ"),
-				"ZSERIES": headerModel.getProperty("/VehicleDetailSet/ZZSERIES"),
-				"MATNR": headerModel.getProperty("/VehicleDetailSet/Model"),
+				"Zresreq": resModel.getProperty("/Zresreq"),
+				"ZSERIES": headerModel.getProperty("/ZSERIES"),
+				"MATNR": headerModel.getProperty("/MATNR"),
 				"ZREQTYP": that.byId("reqtype").getSelectedKey(),
 				"ZINFO_ID": that.byId("onBehalf").getValue(),
 				"ZREQ_NAME": that.byId("idFirstName").getValue(),
@@ -303,7 +306,7 @@ sap.ui.define([
 				"Vehicleidentnumb": headerModel.getProperty("/VehicleDetailSet/VHVIN")
 			};
 			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-				sPath = "/zc_demo_reservationSet('" + headerModel.getProperty("/VehicleDetailSet/ZRESREQ") + "')",
+				sPath = "/zc_demo_reservationSet('" + resModel.getProperty("/Zresreq") + "')",
 				oModifyModel = new sap.ui.model.odata.ODataModel(uri, true);
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
@@ -469,6 +472,7 @@ sap.ui.define([
 			that.byId("ipOthers").setSelected(false);
 			that.byId("h_purchtype").setVisible(false);
 			that.byId("h_purchname").setVisible(false);
+			that.byId("noteOthers").setVisible(false);
 			
 			that.byId("reqtype").setValueState(sap.ui.core.ValueState.None);
 			that.byId("idDeptName").setValueState(sap.ui.core.ValueState.None);
@@ -588,6 +592,14 @@ sap.ui.define([
 				this.byId("purtype").setSelectedKey("");
 				this.byId("idPurName").setValue("");
 			}	
+		},
+		onSelectPurTypeChange: function (oEvent) {
+			var purtype = this.byId("purtype").getSelectedKey();
+			if(purtype ==="O"){
+				this.byId("noteOthers").setVisible(true);
+			}else{
+				this.byId("noteOthers").setVisible(false);
+			}
 		}
 	});
 });

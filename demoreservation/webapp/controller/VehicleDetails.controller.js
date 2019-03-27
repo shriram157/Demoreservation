@@ -39,6 +39,26 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 				method: "GET",
 				success: function (oData, oResponse) {
 					var oJSONModel = new sap.ui.model.json.JSONModel();
+					
+					// extract Requestor type text
+					var mod = that.getOwnerComponent().getModel("vehicles"),
+						i,
+						objR = mod.getContext("/FilterData/RequestorType").getObject();
+						for(i=0 ;i< objR.length;i++){ 
+							if(objR[i].key === oData.ZZREQTYP) { 
+								oData.ZZREQTYPTXT =  objR[i].name;
+							}     
+						}
+
+					// extract Purchaser type text
+					var	objP = mod.getContext("/FilterData/PurchaserType").getObject();
+						for(i=0 ;i< objP.length;i++){ 
+							if(objP[i].key === oData.ZZPURTYP) { 
+								oData.ZZPURTYPTXT =  objP[i].name;
+							}     
+						}
+
+					
 					oJSONModel.setData({
 						VehicleDetailSet: oData
 					});
@@ -56,6 +76,10 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 						that.byId("pageReservation").setVisible(true);
 						that.byId("pageReservation").setTitle("Reservation Details");
 					}
+					
+					
+					
+					
 					that.getView().setModel(oJSONModel);
 					that.getView().byId("listFacOption").setModel(oJSONModel);
 					// release busy indicator

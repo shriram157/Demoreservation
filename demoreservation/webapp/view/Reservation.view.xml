@@ -35,17 +35,18 @@
 									</ComboBox>
                 				</filterbar:control>
                             </filterbar:FilterItem>
+                             <filterbar:FilterItem label="Reserver" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1538428832855---0">
+                                <filterbar:control>
+                                		<Input id="Reserver" placeholder="Enter Reserver ..."/>
+                                </filterbar:control>
+                            </filterbar:FilterItem>
                         </filterbar:filterItems>
                     </filterbar:FilterBar>
                 </f:content>
             </f:DynamicPageHeader>
         </f:header>
         <f:content>
-            <VBox fitContainer="true">
-                <items>
-                    <Table id="tabRservation" width="100%" growing="true" growingScrollToLoad="true" growingThreshold="25" mode="None" 
-                    items="{ path: '/reservationListSet' , sorter : { path : 'VHVIN',	group : true}}" 
-                     itemPress="_onFioriListReportTableItemPress" updateFinished="onUpdateFinished" includeItemInSelection="true">
+                    <Table id="tabRservation" growing="true" items="{ path: '/reservationListSet' , sorter : { path : 'VHVIN', group : true}}" updateFinished="onUpdateFinished" includeItemInSelection="true" growingScrollToLoad="true">
                         <headerToolbar>
                             <OverflowToolbar design="Transparent">
                                 <content>
@@ -145,9 +146,7 @@
                             </ColumnListItem>
                         </items>
                     </Table>
-                </items>
-            </VBox>
-        </f:content>
+         </f:content>
         <f:footer>
             <OverflowToolbar>
                 <content>

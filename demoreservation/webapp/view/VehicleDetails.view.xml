@@ -129,13 +129,6 @@
                             <Label design="Bold" text="{/VehicleDetailSet/NonAssPrice}"/>
                         </items>
                     </HBox>
-                    <!--<HBox>-->
-                    <!--    <items>-->
-                    <!--        <Label text="Type"/>-->
-                    <!--        <Label text=":" class="sapUiTinyMarginEnd"/>-->
-                    <!--        <Label design="Bold" text="Demo"/>-->
-                    <!--    </items>-->
-                    <!--</HBox>-->
                     <HBox>
                         <items>
                             <Label text="SFX Options"/>
@@ -150,25 +143,12 @@
                             <Label design="Bold" text="{/VehicleDetailSet/ZZAPX}"/>
                         </items>
                     </HBox>
-
-                    <!--<HBox>-->
-                    <!--    <items>-->
-                    <!--        <Label text="APX Options"/>-->
-                    <!--        <Label text=":" class="sapUiTinyMarginEnd"/>-->
-                    <!--        <Label design="Bold" text="{/VehicleDetailSet/ZPPO_CODE}"/>-->
-                    <!--    </items>-->
-                    <!--</HBox>-->
-                    <!--<HBox>-->
-                    <!--    <items>-->
-                    <!--        <Label text="Last Updated"/>-->
-                    <!--        <Label text=":" class="sapUiTinyMarginEnd"/>-->
-                    <!--        <Label design="Bold" text="{/VehicleDetailSet/LastUpdated}"/>-->
-                    <!--    </items>-->
-                    <!--</HBox>-->
                 </items>
             </VBox>
-            <Link href="http://tcipb2eiis1a.tci.internal.toyota.ca/DemoVehicleFeederWeb/mvc/init/5TFDY5F10JX754791" text="PAYMENT CALCULATOR" textAlign="Begin" width="165.625px" target="_blank" wrapping="true" enabled="true" visible="true" emphasized="true" subtle="false" class="sapUiMediumMargin"/>
-        </uxap:headerContent>
+             <VBox width="30%">
+ 	            <Link href="https://b2eapps.sit.toyota.ca/DemoVehicleFeederWeb/mvc/init/${/VehicleDetailSet/VHVIN}" text="PAYMENT CALCULATOR" textAlign="Begin" width="165.625px" target="_blank" wrapping="true" enabled="true" visible="true" emphasized="true" subtle="true" class="sapUiMediumMargin hyperlink-font-color"/>
+        	 </VBox>
+         </uxap:headerContent>
         <uxap:sections class="toyota-header-backgroud-color">
             <uxap:ObjectPageSection title="Pricing Disclaimer">
                 <uxap:subSections>
@@ -230,7 +210,7 @@
                                                             <Label text="Requestor Type" required="false"/>
                                                         </form:label>
                                                         <form:fields>
-                                                            <Label design="Bold" text="{/VehicleDetailSet/ZZREQTYP}"/>
+                                                            <Label design="Bold" text="{/VehicleDetailSet/ZZREQTYPTXT}"/>
                                                         </form:fields>
                                                     </form:FormElement>
                                                     <form:FormElement>
@@ -274,7 +254,7 @@
                                                             <Label text="Reserved for  Type" required="false"/>
                                                         </form:label>
                                                         <form:fields>
-                                                            <Label design="Bold" text="{/VehicleDetailSet/ZZPURTYP}"/>
+                                                            <Label design="Bold" text="{/VehicleDetailSet/ZZPURTYPTXT}"/>
                                                         </form:fields>
                                                     </form:FormElement>
                                                     <form:FormElement>

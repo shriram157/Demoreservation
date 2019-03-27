@@ -40,6 +40,13 @@
 									</Input>
 								</fb:control>
 							</fb:FilterItem>
+							<fb:FilterItem name="G" label="Suffix">
+								<fb:control>
+									<ComboBox id="suffixFilter" items="{/ZC_MODEL_YEAR}" placeholder="Select Suffix" showSecondaryValues="true" filterSecondaryValues="true">
+										<core:ListItem key="{suffix}" text="{suffix}"/>
+									</ComboBox>
+								</fb:control>
+							</fb:FilterItem>
 							<fb:FilterItem name="F" label="Status">
 								<fb:control>
 									<!--<Input id="inpStatus" placeholder="Enter Status"/>-->
@@ -95,6 +102,9 @@
 					<Column minScreenWidth="Tablet" demandPopin="true">
 						<Text text="Driver"/>
 					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<Text text="Suffix"/>
+					</Column>
 					<Column width="6rem" minScreenWidth="Tablet" demandPopin="true">
 						<Text text="Repaired"/>
 					</Column>
@@ -113,6 +123,7 @@
 							<Text width="5rem" text="{ZZMOYR}"/>
 							<Text text="{ColorDesc}"/>
 							<Text text="{Driver}"/>
+							<Text text="{ZZSUFFIX}"/>
 							<Text width="6rem" text="{path: 'Repair' ,formatter: '.formatRepair'}"/>
 							<Text text="{Status}"/>
 						</cells>

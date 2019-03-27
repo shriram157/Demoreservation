@@ -128,6 +128,25 @@ sap.ui.define([
 				asynch: false,
 				success: function (oData, oResponse) {
 					var oJSONModel = new sap.ui.model.json.JSONModel();
+					
+					// extract Requestor type text
+					var mod = that.getOwnerComponent().getModel("vehicles"),
+						i,
+						objR = mod.getContext("/FilterData/RequestorType").getObject();
+						for(i=0 ;i< objR.length;i++){ 
+							if(objR[i].key === oData.ZZREQTYP) { 
+								oData.ZZREQTYPTXT =  objR[i].name;
+							}     
+						}
+
+					// extract Purchaser type text
+					var	objP = mod.getContext("/FilterData/PurchaserType").getObject();
+						for(i=0 ;i< objP.length;i++){ 
+							if(objP[i].key === oData.ZZPURTYP) { 
+								oData.ZZPURTYPTXT =  objP[i].name;
+							}     
+						}
+
 					oJSONModel.setData(oData);
 					that.getView().setModel(oJSONModel,"VehicleInfo");
 					// release busy indicator

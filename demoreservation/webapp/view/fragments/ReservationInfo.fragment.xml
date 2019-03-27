@@ -140,7 +140,7 @@
 						<items>
 							<Label text="Requestor Type"/>
 							<Label text=":" class="sapUiTinyMarginEnd"/>
-							<Label text="{VehicleInfo>/ZZREQTYP}" design="Bold"/>
+							<Label text="{VehicleInfo>/ZZREQTYPTXT}" design="Bold"/>
 						</items>
 					</HBox>
 					<HBox class="sapUiTinyMargin">
@@ -178,7 +178,7 @@
 						<items>
 							<Label text="Reserved for Type"/>
 							<Label text=":" class="sapUiTinyMarginEnd"/>
-							<Label text="{VehicleInfo>/ZZPURTYP}" design="Bold"/>
+							<Label text="{VehicleInfo>/ZZPURTYPTXT}" design="Bold"/>
 						</items>
 					</HBox>
 					<HBox class="sapUiTinyMargin">

@@ -85,6 +85,7 @@
 						<ComboBox id="purtype" change="onSelectPurTypeChange" items="{path: 'vehicles>/FilterData/PurchaserType'}" placeholder="Select Purchaser Type" width="20rem" selectedKey="{Reservation>/ZPURTYP}">
 							<core:Item key="{vehicles>key}" text="{vehicles>name}"/>
 						</ComboBox>
+						<Label id="noteOthers" class="sapUiSmallMarginTop" text=" * Please note that you MUST specify the purchaser's name. If you do not, the request will be cancelled by the Vehicle Programs Administrator." text-align="left" editable="false" visible="false"/>
 					</HBox>
 					<HBox id="h_purchname" width="80%" visible="false">
 						<Label width="12rem" class="sapUiSmallMarginTop" text="Purchaser Name : " text-align="left" required="true"/>
