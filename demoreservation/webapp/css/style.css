@@ -68,6 +68,10 @@
     color: white !important;
     text-shadow: 0 0 0 0 #ffffff;
 }
+.sapMIBar-CTX .sapMLabel {
+	color: white !important;
+    text-shadow: 0 0 0 0 #ffffff;
+}
 .sapUxAPObjectPageHeaderDetails .sapMLabel {
     color: white !important;
 }
@@ -79,9 +83,10 @@
 	color: white !important;
 }
 
-.sapMBtnIcon{
+.navButton .sapMBtnIcon{
 	color: white;
 }
+
 /************************** Screen 3 ****************************/
 .sapMIBar.sapMHeader-CTX {
     background-color: #495e70 !important;
@@ -168,6 +173,10 @@
 /* Sort Button */
 .sapMBtnIconSort {
     font-size: 1.25rem;
+
+}
+.sapMBtnIconSort .sapMBtnIcon{
+	color: blue;
 }
 .sapMBarChild .sapMSF .sapMSFF {
     border: 1px solid #7891a7;
