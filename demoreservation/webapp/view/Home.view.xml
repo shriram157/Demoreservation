@@ -69,7 +69,7 @@
                     <Button id="MyResButton" text="My Reservations" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onMyReservationPress"/>
                     <Button id="AllResButton" text="All Reservations" type="Default" iconFirst="true" width="auto" enabled="true" visible="{UserDataModel>/AdminVisible}" iconDensityAware="false" press="onAllReservationPress"/>
 			</VBox>
-			<Table id="idMyReservationsTable" inset="false" growing="true" updateFinished="onUpdateFinished" items="{ path: '/vehicleListSet',          filters: {path: 'ZZZONE',operator: 'EQ',value1: '3000'},            sorter : {path : 'SeriesDesc'} }">
+			<Table id="idMyReservationsTable" growing="true" updateFinished="onUpdateFinished" items="{ path: '/vehicleListSet', filters: {path: 'ZZZONE',operator: 'EQ',value1: '3000'}, sorter : {path : 'SeriesDesc'} }" width="">
 				<headerToolbar>
 					<Toolbar>
 						<Title id="tabTitle" level="H2"/>
@@ -77,39 +77,39 @@
 						<Button class="sapMBtnIconSort" tooltip="View Sort Settings" icon="sap-icon://sort" press="handleSortButtonPressed"/>
 					</Toolbar>
 				</headerToolbar>
-				<columns>
-					<Column width="5rem" minScreenWidth="Tablet" demandPopin="true">
-						<Text text="Series"/>
+<columns>
+					<Column width="5rem" minScreenWidth="Phone">
+						<Text text="Series"  width="auto"/>
 					</Column>
-					<Column width="14rem" minScreenWidth="Tablet" demandPopin="true">
-						<Text text="Model"/>
+					<Column width="14rem" minScreenWidth="Phone">
+						<Text text="Model"  width="auto"/>
 					</Column>
-					<Column minScreenWidth="Tablet" demandPopin="true">
-						<Text text="Zone"/>
+					<Column minScreenWidth="Phone">
+						<Text text="Zone"  width="auto"/>
 					</Column>
-					<Column width="10rem" minScreenWidth="Tablet" demandPopin="true">
-						<Text text="Est. Assoc. Price"/>
+					<Column width="10rem" minScreenWidth="Phone">
+						<Text text="Est. Assoc. Price"  width="auto"/>
 					</Column>
-					<Column width="10rem" minScreenWidth="Tablet" demandPopin="true">
-						<Text text="Est. End Date"/>
+					<Column width="10rem" minScreenWidth="Phone">
+						<Text text="Est. End Date"  width="auto"/>
 					</Column>
-					<Column width="5rem" minScreenWidth="Tablet" demandPopin="true">
-						<Text text="Year"/>
+					<Column width="5rem" minScreenWidth="Phone">
+						<Text text="Year"  width="auto"/>
 					</Column>
-					<Column minScreenWidth="Tablet" demandPopin="true">
-						<Text text="Colour"/>
+					<Column minScreenWidth="Phone">
+						<Text text="Colour"  width="auto"/>
 					</Column>
-					<Column minScreenWidth="Tablet" demandPopin="true">
-						<Text text="Driver"/>
+					<Column minScreenWidth="Phone">
+						<Text text="Driver"  width="auto"/>
 					</Column>
-					<Column minScreenWidth="Tablet" demandPopin="true">
-						<Text text="Suffix"/>
+					<Column minScreenWidth="Phone">
+						<Text text="Suffix"  width="auto"/>
 					</Column>
-					<Column width="6rem" minScreenWidth="Tablet" demandPopin="true">
-						<Text text="Repaired"/>
+					<Column width="6rem" minScreenWidth="Phone">
+						<Text text="Repaired"  width="auto"/>
 					</Column>
-					<Column minScreenWidth="Tablet" demandPopin="true">
-						<Text text="Status"/>
+					<Column minScreenWidth="Phone">
+						<Text text="Status"  width="auto"/>
 					</Column>
 				</columns>
 				<items>

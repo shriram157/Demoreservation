@@ -5,7 +5,7 @@
                 <uxap:navigationBar>
                     <Bar>
                         <contentLeft>
-                            <Button type="Back" press="onNavButtonPress"/>
+                            <Button type="Back" press="onNavButtonPress" class="navButton"/>
                         </contentLeft>
                         <contentMiddle>
                             <Title text="Vehicle Details"/>

@@ -3,15 +3,25 @@
 /*--------Generic CSS------------*/
 .toyota-header-backgroud-color {
     background-color: #495e70 !important;
-    -webkit-text-fill-color: white;
+    -webkit-text-fill-color: white !important;
+    color: white !important;
 }
 .toyota-header-font-color {
-	color: white;
+	-webkit-text-fill-color: white !important;
+	color: white !important;
 }
 
 .hyperlink-font-color {
-	-webkit-text-fill-color: cyan;
+	-webkit-text-fill-color: cyan !important;
 	font-size: 1rem;
+}
+.sapMLnk:visited {
+    color: cyan !important;
+    font-size: 1rem;
+}
+.sapMLnkSubtle {
+    color: cyan;
+    font-size: 1rem;
 }
 .font_size_larger {
 	font-size: larger !important;
@@ -26,26 +36,51 @@
 /* Below are the extention if standard SAP css and it need to be in theme */
 .sapUxAPObjectPageHeaderContentDesign-Light, .sapUxAPObjectPageHeaderContentDesign-Dark{
     background-color: #495e70 !important;
-    -webkit-text-fill-color: white;
+    -webkit-text-fill-color: white !important;
+     color: white !important;
 }
 
 .sapUxAPAnchorBar.sapMTB {
     border: none;
     background-color: #495e70 !important;
-    -webkit-text-fill-color: white;
+    -webkit-text-fill-color: white !important;
+     color: white !important;
 }
 
 .sapUxAPObjectPageHeaderIdentifier {
     background-color: #495e70 !important;
-    -webkit-text-fill-color: white;
+    -webkit-text-fill-color: white !important;
+    color: white !important;
 }
-
+.sapUxAPObjectPageHeaderIdentifier .sapUxAPObjectPageHeaderIdentifierTitle {
+    color: white !important;
+}
 .sapUxAPObjectPageHeader .sapMBar {
     background-color: #495e70 !important;
     text-shadow: none;
     -webkit-box-shadow: none;
     box-shadow: none;
-    -webkit-text-fill-color: white;
+    -webkit-text-fill-color: white !important;
+     color: white !important;
+}
+
+.sapMIBar-CTX .sapMTitle {
+    color: white !important;
+    text-shadow: 0 0 0 0 #ffffff;
+}
+.sapUxAPObjectPageHeaderDetails .sapMLabel {
+    color: white !important;
+}
+
+.sapUxAPAnchorBar .sapUxAPAnchorBarButton.sapUxAPAnchorBarButtonSelected .sapMBtnContent, .sapUxAPAnchorBar .sapUxAPAnchorBarButton.sapUxAPAnchorBarButtonSelected .sapMBtnIcon {
+    color: white !important;
+}
+.sapUiSizeCompact .sapUxAPAnchorBar .sapUxAPAnchorBarButton .sapMBtnInner .sapMBtnContent, .sapUiSizeCompact .sapUxAPAnchorBar .sapUxAPAnchorBarButton .sapMBtnInner .sapMBtnIcon {
+	color: white !important;
+}
+
+.sapMBtnIcon{
+	color: white;
 }
 /************************** Screen 3 ****************************/
 .sapMIBar.sapMHeader-CTX {
