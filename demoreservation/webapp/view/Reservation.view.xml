@@ -46,7 +46,7 @@
             </f:DynamicPageHeader>
         </f:header>
         <f:content>
-                    <Table id="tabRservation" growing="true" items="{ path: '/reservationListSet' , sorter : { path : 'VHVIN', group : true}}" updateFinished="onUpdateFinished" includeItemInSelection="true" growingScrollToLoad="true">
+                    <Table id="tabRservation" items="{ path: '/reservationListSet' , sorter : { path : 'VHVIN', group : true}}" updateFinished="onUpdateFinished" includeItemInSelection="true" fixedLayout="false" growing="true" growingThreshold="12" growingScrollToLoad="false">
                         <headerToolbar>
                             <OverflowToolbar design="Transparent">
                                 <content>
@@ -55,7 +55,7 @@
                                     <ToolbarSpacer/>
                                     <Button icon="sap-icon://excel-attachment" type="Emphasized" press="handleExcelPressed">
                                         <layoutData>
-                                            <OverflowToolbarLayoutData moveToOverflow="true"/>
+                                            <OverflowToolbarLayoutData/>
                                         </layoutData>
                                     </Button>
                                 </content>
