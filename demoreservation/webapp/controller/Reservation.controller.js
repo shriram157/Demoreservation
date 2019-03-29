@@ -16,9 +16,10 @@ sap.ui.define([
 		},
 
 		onRouteMatched: function (oEvent) {
-			var	oArgs = oEvent.getParameter("arguments");
-			var admin = oArgs.admin;
+			// var	oArgs = oEvent.getParameter("arguments");
+			// var admin = oArgs.admin;
 			var email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
+			var admin = sap.ui.getCore().getModel("UserDataModel").getData().AdminVisible;
 			//testing
 		//		email = "anubha_pandey@toyota.ca";
 

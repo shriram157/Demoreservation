@@ -140,8 +140,8 @@
                                     <Text text="{Price}" width="auto"/>
                                     <Text text="{EndDate}" width="auto"/>
                                     <Button icon="sap-icon://hint" press="onReservationInfoPress"/>
-                                    <Button text="Approve" press="onApprovePress" visible="{= ${StatusCode} === 'PA' || ${StatusCode} === 'WL'}"/>
-                                    <Button text="Reject" press="onRejectPress" visible="{= ${StatusCode} === 'AP' || ${StatusCode} === 'PA' || ${StatusCode} === 'WL'}"/>
+                                    <Button text="Approve" press="onApprovePress" visible="{= ${StatusCode} === 'PA'}"/>
+                                    <Button text="Reject" press="onRejectPress" visible="{= ${StatusCode} === 'AP' || ${StatusCode} === 'PA'}"/>
                                 </cells>
                             </ColumnListItem>
                         </items>
