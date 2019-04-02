@@ -14,8 +14,8 @@ module.exports = function (appContext) {
 	var router = express.Router();
 	var routerTracer = appContext.createLogContext().getTracer(__filename);
 
-	// TODO: provide service name via environment variable instead
-	var apimServiceName = "DEMO_RESERVATION_APIM_CUPS";
+	// Get UPS name from env var UPS_NAME
+	var apimServiceName = process.env.UPS_NAME;
 	var options = {};
 	options = Object.assign(options, xsenv.getServices({
 		apim: {
