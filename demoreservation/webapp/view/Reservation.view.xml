@@ -46,7 +46,7 @@
             </f:DynamicPageHeader>
         </f:header>
         <f:content>
-                    <Table id="tabRservation" items="{ path: '/reservationListSet' , sorter : { path : 'VHVIN', group : true}}" updateFinished="onUpdateFinished" includeItemInSelection="true" fixedLayout="false" growing="true" growingThreshold="12" growingScrollToLoad="false">
+                    <Table id="tabRservation" items="{ path: '/reservationListSet' , sorter : { path : 'VHVIN', group : true}}" updateFinished="onUpdateFinished" includeItemInSelection="true" fixedLayout="false" growing="true" growingThreshold="20" growingScrollToLoad="false">
                         <headerToolbar>
                             <OverflowToolbar design="Transparent">
                                 <content>
@@ -117,7 +117,7 @@
                                     <Text text="Est.End Date" width="auto"/>
                                 </header>
                             </Column>
-                            <Column minScreenWidth="Phone">
+                             <Column minScreenWidth="Phone">
                                 <header>
                                     <Text text=""/>
                                 </header>
@@ -139,7 +139,7 @@
                                     <Text text="{Driver}" width="auto"/>
                                     <Text text="{Price}" width="auto"/>
                                     <Text text="{EndDate}" width="auto"/>
-                                    <Button icon="sap-icon://hint" press="onReservationInfoPress"/>
+                                     <Button icon="sap-icon://hint" press="onReservationInfoPress"/>
                                     <Button text="Approve" press="onApprovePress" visible="{= ${StatusCode} === 'PA'}"/>
                                     <Button text="Reject" press="onRejectPress" visible="{= ${StatusCode} === 'AP' || ${StatusCode} === 'PA'}"/>
                                 </cells>
