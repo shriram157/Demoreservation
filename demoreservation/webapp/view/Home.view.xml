@@ -5,52 +5,52 @@
 				<f:content>
 					<fb:FilterBar xmlns:fb="sap.ui.comp.filterbar" id="filterbar" filterContainerWidth="14rem" showGoOnFB="true" useToolbar="false" search="onSearch" reset="onReset">
 						<fb:filterItems>
-							<fb:FilterItem label="VIN" name="V">
+							<fb:FilterItem label="{i18n>lblVIN}" name="V">
 								<fb:control>
-									<Input xmlns="sap.m" id="vinFilter" placeholder="Enter VIN ..."/>
+									<Input xmlns="sap.m" id="vinFilter" placeholder="{i18n>plVIN}"/>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem label="Zone" name="A">
+							<fb:FilterItem label="{i18n>lblZone}" name="A">
 								<fb:control>
-									<ComboBox xmlns="sap.m" id="zoneFilter" placeholder="Select Zone" items="{ path: '/ZC_ZONES', filters: {path: 'spras',operator: 'EQ',value1: 'E'} }" change="onSelectChange">
+									<ComboBox xmlns="sap.m" id="zoneFilter" placeholder="{i18n>plZone}" items="{ path: '/ZC_ZONES', filters: {path: 'spras',operator: 'EQ',value1: 'E'} }" change="onSelectChange">
 										<core:Item xmlns:core="sap.ui.core" text="{bezei}" key="{vkbur}"/>
 									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem label="Year" name="D">
+							<fb:FilterItem label="{i18n>lblYear}" name="D">
 								<fb:control>
-									<ComboBox xmlns="sap.m" id="yearFilter" placeholder="Select Year" items="{YearModel>/}" change="onSelectChange">
+									<ComboBox xmlns="sap.m" id="yearFilter" placeholder="{i18n>plYear}" items="{YearModel>/}" change="onSelectChange">
 										<core:Item xmlns:core="sap.ui.core" text="{YearModel>dtext}" key="{YearModel>dkey}"/>
 									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem label="Series" name="B">
+							<fb:FilterItem label="{i18n>lblSeries}" name="B">
 								<fb:control>
-									<ComboBox xmlns="sap.m" id="seriesFilter" placeholder="Select Series" items="{/zc_mmfields}" change="onSelectChange" filterSecondaryValues="true" showSecondaryValues="true">
+									<ComboBox xmlns="sap.m" id="seriesFilter" placeholder="{i18n>plSeries}" items="{/zc_mmfields}" change="onSelectChange" filterSecondaryValues="true" showSecondaryValues="true">
 										<core:ListItem xmlns:core="sap.ui.core" text="{TCISeriesDescriptionEN}" key="{ModelSeriesNo}" additionalText="{ModelSeriesNo}"/>
 									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem label="Model" name="C">
+							<fb:FilterItem label="{i18n>lblModel}" name="C">
 								<fb:control>
-									<Input xmlns="sap.m" type="Text" id="modelFilter" placeholder="Enter Model ..." suggestionItems="{/ZC_MODEL_YEAR}" suggestionItemSelected="suggestionItemSelected" valueHelpRequest="handleModelValueHelp" showValueHelp="true" showSuggestion="true" textFormatMode="KeyValue">
+									<Input xmlns="sap.m" type="Text" id="modelFilter" placeholder="{i18n>plModel}" suggestionItems="{/ZC_MODEL_YEAR}" suggestionItemSelected="suggestionItemSelected" valueHelpRequest="handleModelValueHelp" showValueHelp="true" showSuggestion="true" textFormatMode="KeyValue">
 										<suggestionItems>
 											<core:ListItem xmlns:core="sap.ui.core" text="{model_desc_en}" key="{model}"/>
 										</suggestionItems>
 									</Input>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem label="Suffix" name="G">
+							<fb:FilterItem label="{i18n>lblSuffix}" name="G">
 								<fb:control>
-									<ComboBox xmlns="sap.m" id="suffixFilter" placeholder="Select Suffix" items="{/ZC_MODEL_YEAR}" filterSecondaryValues="true" showSecondaryValues="true">
+									<ComboBox xmlns="sap.m" id="suffixFilter" placeholder="{i18n>plSuffix}" items="{/ZC_MODEL_YEAR}" filterSecondaryValues="true" showSecondaryValues="true">
 										<core:ListItem xmlns:core="sap.ui.core" text="{suffix}" key="{suffix}"/>
 									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem label="Status" name="F">
+							<fb:FilterItem label="{i18n>lblStatus}" name="F">
 								<fb:control>
 									<!--<Input id="inpStatus" placeholder="Enter Status"/>-->
-									<ComboBox xmlns="sap.m" id="inpStatus" placeholder="Select Status" items="{path: 'vehicles>/FilterData/ReservationStatus'}" change="onSelectChange">
+									<ComboBox xmlns="sap.m" id="inpStatus" placeholder="{i18n>plStatus}" items="{path: 'vehicles>/FilterData/ReservationStatus'}" change="onSelectChange">
 										<core:Item xmlns:core="sap.ui.core" text="{vehicles>name}" key="{vehicles>key}"/>
 									</ComboBox>
 
@@ -66,50 +66,50 @@
 			<FlexBox xmlns="sap.m" alignItems="Start" direction="Column">
 			<items>
 			<VBox>
-                    <Button type="Default" id="MyResButton" text="My Reservations" enabled="true" width="auto" visible="true" press="onMyReservationPress" iconDensityAware="false" iconFirst="true"/>
-                    <Button type="Default" id="AllResButton" text="All Reservations" enabled="true" width="auto" visible="{UserDataModel>/AdminVisible}" press="onAllReservationPress" iconDensityAware="false" iconFirst="true"/>
+                    <Button type="Default" id="MyResButton" text="{i18n>btnMyResrv}" enabled="true" width="auto" visible="true" press="onMyReservationPress" iconDensityAware="false" iconFirst="true"/>
+                    <Button type="Default" id="AllResButton" text="{i18n>btnAllResrv}" enabled="true" width="auto" visible="{UserDataModel>/AdminVisible}" press="onAllReservationPress" iconDensityAware="false" iconFirst="true"/>
 			</VBox>
 			<Table id="idMyReservationsTable" items="{ path: '/vehicleListSet', filters: {path: 'ZZZONE',operator: 'EQ',value1: '3000'}, sorter : {path : 'SeriesDesc'} }" fixedLayout="false" updateFinished="onUpdateFinished" growing="true">
 				<headerToolbar>
 					<Toolbar>
 						<Title id="tabTitle" level="H2"/>
 						<ToolbarSpacer/>
-						<Button class="sapMBtnIconSort" tooltip="View Sort Settings" icon="sap-icon://sort" press="handleSortButtonPressed"/>
+						<Button class="sapMBtnIconSort" tooltip="{i18n>tooltipSort}" icon="sap-icon://sort" press="handleSortButtonPressed"/>
 					</Toolbar>
 				</headerToolbar>
 <columns>
 					<Column width="5rem" minScreenWidth="Phone">
-						<Text text="Series" width="auto"/>
+						<Text text="{i18n>lblSeries}" width="auto"/>
 					</Column>
 					<Column width="17rem" minScreenWidth="Phone">
-						<Text text="Model" width="auto"/>
+						<Text text="{i18n>lblModel}" width="auto"/>
 					</Column>
 					<Column minScreenWidth="Phone">
-						<Text text="Zone" width="auto"/>
+						<Text text="{i18n>lblZone}" width="auto"/>
 					</Column>
 					<Column width="10rem" minScreenWidth="Phone">
-						<Text text="Est. Assoc. Price" width="auto"/>
+						<Text text="{i18n>lblPrice}" width="auto"/>
 					</Column>
 					<Column width="10rem" minScreenWidth="Phone">
-						<Text text="Est. End Date" width="auto"/>
+						<Text text="{i18n>lblEndDate}" width="auto"/>
 					</Column>
 					<Column width="5rem" minScreenWidth="Phone">
-						<Text text="Year" width="auto"/>
+						<Text text="{i18n>lblYear}" width="auto"/>
 					</Column>
 					<Column minScreenWidth="Phone">
-						<Text text="Colour" width="auto"/>
+						<Text text="{i18n>lblColour}" width="auto"/>
 					</Column>
 					<Column minScreenWidth="Phone">
-						<Text text="Driver" width="auto"/>
+						<Text text="{i18n>lblDriver}" width="auto"/>
 					</Column>
 					<Column width="5rem" minScreenWidth="Phone">
-						<Text text="Suffix" width="auto"/>
+						<Text text="{i18n>lblSuffix}" width="auto"/>
 					</Column>
 					<Column width="6rem" minScreenWidth="Phone">
-						<Text text="Repaired" width="auto"/>
+						<Text text="{i18n>lblRepaired}" width="auto"/>
 					</Column>
 					<Column minScreenWidth="Phone">
-						<Text text="Status" width="auto"/>
+						<Text text="{i18n>lblStatus}" width="auto"/>
 					</Column>
 				</columns>
 				<items>
@@ -132,15 +132,6 @@
 			</Table>
 				</items>
 				</FlexBox>
-
 		</f:content>
-		<!-- DynamicPage Footer -->
-		<f:footer>
-			<OverflowToolbar xmlns="sap.m">
-				<ToolbarSpacer/>
-				<Button type="Accept" text="Accept"/>
-				<Button type="Reject" text="Reject"/>
-			</OverflowToolbar>
-		</f:footer>
 	</f:DynamicPage>
 </mvc:View>

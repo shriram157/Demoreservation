@@ -16,8 +16,8 @@ sap.ui.define([
 		},
 
 		onRouteMatched: function (oEvent) {
-			// var	oArgs = oEvent.getParameter("arguments");
-			// var admin = oArgs.admin;
+			var	oArgs = oEvent.getParameter("arguments");
+			var allClicked = oArgs.admin;
 			var email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
 			var admin = sap.ui.getCore().getModel("UserDataModel").getData().AdminVisible;
 			//testing
@@ -29,7 +29,11 @@ sap.ui.define([
 				this.filterReservationListAdmin(a,email);
 			}else{					// Admin Login
 				a = true;
-				this.filterReservationListAdmin(a,"");
+				if(allClicked === "true"){
+					this.filterReservationListAdmin(a,"");
+				}else{
+					this.filterReservationListAdmin(false,email);
+				}
 			}
 			
 			var userModel = new sap.ui.model.json.JSONModel();

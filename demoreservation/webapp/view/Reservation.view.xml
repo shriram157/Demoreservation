@@ -7,37 +7,37 @@
                  	
                     <filterbar:FilterBar id="ListReportFilterBar" useToolbar="false" showGoOnFB="true" searchEnabled="true" search="onSearch">
                         <filterbar:filterItems>
-                            <filterbar:FilterItem label="Request Status" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1537538709735---0">
+                            <filterbar:FilterItem label="{i18n>lblReqStatus}" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1537538709735---0">
                                 <filterbar:control>
-  									<ComboBox id="inpStatus" change="onSelectChange" items="{path: 'vehicles>/FilterData/RequestStatus'}" placeholder="Select Status">
+  									<ComboBox id="inpStatus" change="onSelectChange" items="{path: 'vehicles>/FilterData/RequestStatus'}" placeholder="{i18n>plStatus}">
 										<core:Item key="{vehicles>key}" text="{vehicles>name}"/>
 									</ComboBox>
                                 </filterbar:control>
                             </filterbar:FilterItem>
-                            <filterbar:FilterItem label="VIN" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1538428831201---0">
+                            <filterbar:FilterItem label="{i18n>lblVIN}" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1538428831201---0">
                                 <filterbar:control>
-                                    <Input id="vinFilter" placeholder="Enter VIN ..."/>
+                                    <Input id="vinFilter" placeholder="{i18n>plVIN}"/>
                                 </filterbar:control>
                             </filterbar:FilterItem>
-                            <filterbar:FilterItem label="Model" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1538428832851---0">
+                            <filterbar:FilterItem label="{i18n>lblModel}" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1538428832851---0">
                                 <filterbar:control>
-               						<Input id="modelFilter" type="Text" textFormatMode="KeyValue" placeholder="Enter Model ..." showSuggestion="true" showValueHelp="true" valueHelpRequest="handleModelValueHelp" suggestionItems="{/ZC_MODEL_YEAR}" suggestionItemSelected="suggestionItemSelected">
+               						<Input id="modelFilter" type="Text" textFormatMode="KeyValue" placeholder="{i18n>plModel}" showSuggestion="true" showValueHelp="true" valueHelpRequest="handleModelValueHelp" suggestionItems="{/ZC_MODEL_YEAR}" suggestionItemSelected="suggestionItemSelected">
 										<suggestionItems>
 											<core:ListItem key="{model}" text="{model_desc_en}"/>
 										</suggestionItems>
 									</Input>
                                 </filterbar:control>
                             </filterbar:FilterItem>
-                            <filterbar:FilterItem label="Model Year" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1538428836358---0">
+                            <filterbar:FilterItem label="{i18n>lblModYear}" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1538428836358---0">
                                 <filterbar:control>
-               						<ComboBox id="yearFilter" change="onSelectChange" items="{YearModel>/}" placeholder="Select Year">
+               						<ComboBox id="yearFilter" change="onSelectChange" items="{YearModel>/}" placeholder="{i18n>plYear}">
 										<core:Item key="{YearModel>dkey}" text="{YearModel>dtext}"/>
 									</ComboBox>
                 				</filterbar:control>
                             </filterbar:FilterItem>
-                             <filterbar:FilterItem label="Reserver" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1538428832855---0">
+                             <filterbar:FilterItem label="{i18n>lblReserver}" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1538428832855---0">
                                 <filterbar:control>
-                                		<Input id="Reserver" placeholder="Enter Reserver ..."/>
+                                		<Input id="Reserver" placeholder="{i18n>plReserver}"/>
                                 </filterbar:control>
                             </filterbar:FilterItem>
                         </filterbar:filterItems>
@@ -64,57 +64,57 @@
                         <columns>
                             <Column width="auto" minScreenWidth="Phone">
                                 <header>
-                                    <Text text="Status" width="auto"/>
+                                    <Text text="{i18n>lblStatus}" width="auto"/>
                                 </header>
                             </Column>
                             <Column width="auto" minScreenWidth="Phone">
                                 <header>
-                                    <Text text="Model" width="auto"/>
+                                    <Text text="{i18n>lblModel}" width="auto"/>
                                 </header>
                             </Column>
                             <Column width="auto" minScreenWidth="Phone">
                                 <header>
-                                    <Text text="Model Year" width="auto"/>
+                                    <Text text="{i18n>lblModYear}" width="auto"/>
                                 </header>
                             </Column>
                             <Column width="auto" minScreenWidth="Phone">
                                 <header>
-                                    <Text text="Colour" width="auto"/>
+                                    <Text text="{i18n>lblColour}" width="auto"/>
                                 </header>
                             </Column>
                             <Column width="auto" minScreenWidth="Phone">
                                 <header>
-                                    <Text text="Request Date" width="auto"/>
+                                    <Text text="{i18n>lblReqDate}" width="auto"/>
                                 </header>
                             </Column>
                             <Column width="auto" minScreenWidth="Phone">
                                 <header>
-                                    <Text text="Reserver" width="auto"/>
+                                    <Text text="{i18n>lblReserver}" width="auto"/>
                                 </header>
                             </Column>
                             <Column width="auto" minScreenWidth="Phone">
                                 <header>
-                                    <Text text="VIN" width="auto"/>
+                                    <Text text="{i18n>lblVIN}" width="auto"/>
                                 </header>
                             </Column>
                             <Column width="auto" minScreenWidth="Phone">
                                 <header>
-                                    <Text text="Purchaser" width="auto"/>
+                                    <Text text="{i18n>lblPurchaser}" width="auto"/>
                                 </header>
                             </Column>
                             <Column width="auto" minScreenWidth="Phone">
                                 <header>
-                                    <Text text="Driver" width="auto"/>
+                                    <Text text="{i18n>lblDriver}" width="auto"/>
                                 </header>
                             </Column>
                             <Column width="auto" minScreenWidth="Phone">
                                 <header>
-                                    <Text text="Assoc. Price" width="auto"/>
+                                    <Text text="{i18n>lblAsPrice}" width="auto"/>
                                 </header>
                             </Column>
                             <Column width="auto" minScreenWidth="Phone">
                                 <header>
-                                    <Text text="Est.End Date" width="auto"/>
+                                    <Text text="{i18n>lblEndDate}" width="auto"/>
                                 </header>
                             </Column>
                              <Column minScreenWidth="Phone">
@@ -140,21 +140,12 @@
                                     <Text text="{Price}" width="auto"/>
                                     <Text text="{EndDate}" width="auto"/>
                                      <Button icon="sap-icon://hint" press="onReservationInfoPress"/>
-                                    <Button text="Approve" press="onApprovePress" visible="{= ${StatusCode} === 'PA'}"/>
-                                    <Button text="Reject" press="onRejectPress" visible="{= ${StatusCode} === 'AP' || ${StatusCode} === 'PA'}"/>
+                                    <Button text="{i18n>btnApprove}" press="onApprovePress" visible="{= ${StatusCode} === 'PA'}"/>
+                                    <Button text="{i18n>btnReject}" press="onRejectPress" visible="{= ${StatusCode} === 'AP' || ${StatusCode} === 'PA'}"/>
                                 </cells>
                             </ColumnListItem>
                         </items>
                     </Table>
          </f:content>
-        <f:footer>
-            <OverflowToolbar>
-                <content>
-                    <ToolbarSpacer/>
-                    <Button text="Save" type="Emphasized" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
-                    <Button text="Cancel" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
-                </content>
-            </OverflowToolbar>
-        </f:footer>
     </f:DynamicPage>
 </mvc:View>
