@@ -9,7 +9,6 @@ module.exports = function (appContext) {
 	var xsenv = require("@sap/xsenv");
 
 	var router = express.Router();
-	var routerTracer = appContext.createLogContext().getTracer(__filename);
 
 	// Get UPS name from env var UPS_NAME
 	var apimServiceName = process.env.UPS_NAME;
@@ -19,7 +18,6 @@ module.exports = function (appContext) {
 			name: apimServiceName
 		}
 	}));
-	routerTracer.debug("Properties of APIM user-provided service '%s' : %s", apimServiceName, JSON.stringify(options));
 
 	var xsuaaService = xsenv.getServices({
 		xsuaa: {

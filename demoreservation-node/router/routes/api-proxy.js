@@ -12,7 +12,6 @@ module.exports = function (appContext) {
 	var xsenv = require("@sap/xsenv");
 
 	var router = express.Router();
-	var routerTracer = appContext.createLogContext().getTracer(__filename);
 
 	// Get UPS name from env var UPS_NAME
 	var apimServiceName = process.env.UPS_NAME;
@@ -22,7 +21,6 @@ module.exports = function (appContext) {
 			name: apimServiceName
 		}
 	}));
-	routerTracer.debug("Properties of APIM user-provided service '%s' : %s", apimServiceName, JSON.stringify(options));
 
 	var apimUrl = options.apim.host;
 	if (apimUrl.endsWith("/")) {
@@ -57,8 +55,17 @@ module.exports = function (appContext) {
 		var csrfTokenHeaderValue = req.get("X-Csrf-Token");
 		proxiedReqHeaders["X-Csrf-Token"] = csrfTokenHeaderValue;
 
+		// Redact security-sensitive header values before writing to trace log
+		var traceProxiedReqHeaders = JSON.parse(JSON.stringify(proxiedReqHeaders));
+		var secSensitiveHeaderNames = ["authorization", "apikey", "x-csrf-token"];
+		Object.keys(traceProxiedReqHeaders).forEach(key => {
+			if (secSensitiveHeaderNames.includes(key.toLowerCase())) {
+				traceProxiedReqHeaders[key] = "REDACTED";
+			}
+		});
+
 		tracer.debug("Proxied Method: %s", proxiedMethod);
-		tracer.debug("Proxied request headers: %s", JSON.stringify(proxiedReqHeaders));
+		tracer.debug("Proxied request headers: %s", JSON.stringify(traceProxiedReqHeaders));
 		tracer.debug("Proxied URL: %s", proxiedUrl);
 
 		let proxiedReq = request({
