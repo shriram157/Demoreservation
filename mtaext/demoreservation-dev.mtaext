@@ -1,0 +1,11 @@
+_schema-version: "3.1"
+ID: demoreservation.dev
+extends: demoreservation
+
+modules:
+ - name: demoreservation-node
+   parameters:
+      host: tci-dev-${app-name}
+ - name: demoreservation
+   parameters:
+      host: tci-dev-${app-name}

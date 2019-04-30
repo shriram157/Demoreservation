@@ -8,7 +8,6 @@ modules:
    type: nodejs
    path: demoreservation-node
    parameters:
-      host: tci-dev-demoreservation-node
       disk-quota: 512M
       memory: 256M
    properties:
@@ -31,13 +30,13 @@ modules:
    type: html5
    path: demoreservation
    parameters:
-      host: tci-dev-demoreservation
       disk-quota: 512M
       memory: 256M
    properties:
       XS_APP_LOG_LEVEL: info
    build-parameters:
       builder: grunt
+      build-result: dist
    requires:
     - name: application-logs_demoreservation
     - name: uaa_demoreservation
