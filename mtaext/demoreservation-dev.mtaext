@@ -6,6 +6,9 @@ modules:
  - name: demoreservation-node
    parameters:
       host: tci-dev-${app-name}
+   properties:
+      MOCK_USER_MODE: true
+      MOCK_USER_ORIGIN: d36z7bqhz1-GSR-Neo-to-CF
  - name: demoreservation
    parameters:
       host: tci-dev-${app-name}
