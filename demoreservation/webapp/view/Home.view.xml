@@ -7,7 +7,7 @@
 						<fb:filterItems>
 							<fb:FilterItem label="{i18n>lblVIN}" name="V">
 								<fb:control>
-									<Input xmlns="sap.m" id="vinFilter" placeholder="{i18n>plVIN}"/>
+									<Input xmlns="sap.m" id="vinFilter" placeholder="{i18n>plVIN}" submit="onSearch"/>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem label="{i18n>lblZone}" name="A">

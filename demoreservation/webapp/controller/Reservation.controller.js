@@ -24,7 +24,7 @@ sap.ui.define([
 		//		email = "anubha_pandey@toyota.ca";
 
 			var a = false;
-			if(admin ==="false"){   // Employee Login
+			if(admin === false){   // Employee Login
 				a = false;
 				this.filterReservationListAdmin(a,email);
 			}else{					// Admin Login
