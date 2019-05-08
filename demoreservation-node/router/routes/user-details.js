@@ -9,17 +9,21 @@ module.exports = function (appContext) {
 	var xsenv = require("@sap/xsenv");
 
 	var router = express.Router();
-	var routerTracer = appContext.createLogContext().getTracer(__filename);
 
-	// TODO: provide service name via environment variable instead
-	var apimServiceName = "DEMO_RESERVATION_APIM_CUPS";
+	var mockUserMode = false;
+	if (process.env.MOCK_USER_MODE === "true" || process.env.MOCK_USER_MODE === "TRUE") {
+		mockUserMode = true;
+	}
+	var mockUserOrigin = process.env.MOCK_USER_ORIGIN;
+
+	// Get UPS name from env var UPS_NAME
+	var apimServiceName = process.env.UPS_NAME;
 	var options = {};
 	options = Object.assign(options, xsenv.getServices({
 		apim: {
 			name: apimServiceName
 		}
 	}));
-	routerTracer.debug("Properties of APIM user-provided service '%s' : %s", apimServiceName, JSON.stringify(options));
 
 	var xsuaaService = xsenv.getServices({
 		xsuaa: {
@@ -42,12 +46,13 @@ module.exports = function (appContext) {
 		tracer.debug("User attributes from JWT: %s", JSON.stringify(userAttributes));
 
 		// If there is no user type, it is most probably a call from Neo, in which case we can fake the data as TCI user
-		if (!userAttributes.UserType) {
+		if (mockUserMode && mockUserOrigin === req.authInfo.origin) {
 			userAttributes = {
 				Language: ["English"],
 				UserType: ["National"]
 			};
-			tracer.debug("JWT likely refers to a development user from Neo, switch to mock user attributes: %s", JSON.stringify(userAttributes));
+			tracer.debug("Mock user mode is enabled and JWT is from origin %s, switch to mock user attributes: %s", req.authInfo.origin, JSON.stringify(
+				userAttributes));
 		}
 
 		var resBody = {
@@ -210,6 +215,14 @@ module.exports = function (appContext) {
 
 		tracer.debug("Scopes from JWT: %s", JSON.stringify(scopes));
 		tracer.debug("User attributes from JWT: %s", JSON.stringify(userAttributes));
+
+		// If there is no user type, it is most probably a call from Neo, in which case we can fake the data as TCI user
+		if (mockUserMode && mockUserOrigin === req.authInfo.origin) {
+			tracer.debug("Mock user mode is enabled and JWT is from origin %s, switch to mock user type.", req.authInfo.origin);
+			return res.type("application/json").status(200).send(JSON.stringify({
+				loggedUserType: ["TCI_User"]
+			}));
+		}
 
 		var role = "Unknown";
 		var approveReservations = false;
