@@ -35,7 +35,7 @@
 								<fb:control>
 									<Input xmlns="sap.m" type="Text" id="modelFilter" placeholder="{i18n>plModel}" suggestionItems="{/ZC_MODEL_YEAR}" suggestionItemSelected="suggestionItemSelected" valueHelpRequest="handleModelValueHelp" showValueHelp="true" showSuggestion="true" textFormatMode="KeyValue">
 										<suggestionItems>
-											<core:ListItem xmlns:core="sap.ui.core" text="{model_desc_en}" key="{model}"/>
+											<core:ListItem xmlns:core="sap.ui.core" key="{model}" text="{model_desc_en}" />
 										</suggestionItems>
 									</Input>
 								</fb:control>
@@ -53,9 +53,14 @@
 									<ComboBox xmlns="sap.m" id="inpStatus" placeholder="{i18n>plStatus}" items="{path: 'vehicles>/FilterData/ReservationStatus'}" change="onSelectChange">
 										<core:Item xmlns:core="sap.ui.core" text="{vehicles>name}" key="{vehicles>key}"/>
 									</ComboBox>
-
 								</fb:control>
 							</fb:FilterItem>
+							<!--<fb:FilterItem label="{i18n>lblReserver}" name="RI">-->
+							<!--	<fb:control>-->
+							<!--		<Input xmlns="sap.m" id="ReserverFilter" placeholder="{i18n>plReserver}"/>-->
+							<!--	</fb:control>-->
+							<!--</fb:FilterItem>-->
+
 						</fb:filterItems>
 					</fb:FilterBar>
 				</f:content>

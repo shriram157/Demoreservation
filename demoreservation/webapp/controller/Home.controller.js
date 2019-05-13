@@ -165,7 +165,8 @@ sap.ui.define([
 				//	oText = this.byId('selectedKey'),
 					sDescription = oSelectedItem.getDescription();
 
-				modelInput.setSelectedKey(sDescription);
+			//	modelInput.setSelectedKey(sDescription);
+					modelInput.setValue(sDescription);
 			//	oText.setText(sDescription);
 			}
 			evt.getSource().getBinding("items").filter([]);
@@ -252,7 +253,7 @@ sap.ui.define([
 					var type = scopesData.loggedUserType[0];
 					
 					// testing
-				//	type="TCI_Admin";
+				//	type="TCI_User";
 					
 					that.UserData.setProperty("/Type",type);
 					
@@ -284,30 +285,30 @@ sap.ui.define([
 		
 		},
 		
-		fetchLDAPuserdata:function(){
+		fetchLDAPuserdata:function(inputuser){
 			// this.UserData = new sap.ui.model.json.JSONModel();
 			// this.getView().setModel(this.UserData, "UserDataModel");
 			// sap.ui.getCore().setModel(this.UserData, "UserDataModel");
 			var that = this;
-
+			inputuser = "SDRAPER";
+			var reqData = {"uid":inputuser};
 			//	sap.ui.core.BusyIndicator.show();
 				$.ajax({
 				dataType: "json",
 				url: "/demoreservation-node/node/tci/internal/api/v1.0/security/ldap/rest/getUserByUID",
 				type: "POST",
-				success: function (userAttributes) {
+				data: JSON.stringify(reqData),
+				headers: {
+			      'Accept': 'application/json',
+			      'Content-Type' : 'application/json'
+			    },
+				success: function (respdata) {
 		//			sap.ui.core.BusyIndicator.hide();
-					// console.log("User Attributes", userAttributes);
-					// that.UserData.setProperty("/FirstName",userAttributes.samlAttributes.FirstName);
-					// that.UserData.setProperty("/LastName",userAttributes.samlAttributes.LastName);
-					// that.UserData.setProperty("/Email",userAttributes.samlAttributes.Email);
-					// that.UserData.setProperty("/Userid",userAttributes.userProfile.id);
-					// sap.ui.core.BusyIndicator.hide();
-					// that.UserData.updateBindings(true);
-					// that.UserData.refresh(true);
+					console.log("Response", respdata);
 				},
 				error: function (oError) {
 		//			sap.ui.core.BusyIndicator.hide();
+					console.log("Error: ", oError);
 				}
 			});
 		}

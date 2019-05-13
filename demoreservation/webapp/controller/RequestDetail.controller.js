@@ -600,6 +600,9 @@ sap.ui.define([
 			}else{
 				this.byId("noteOthers").setVisible(false);
 			}
+		},
+		onEventfillUserInfo: function (oEvent) {
+			
 		}
 	});
 });

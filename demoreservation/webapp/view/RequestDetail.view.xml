@@ -59,6 +59,7 @@
 								</ColumnListItem>
 							</suggestionRows>
 						</Input>
+						<!--<Input id="onBehalf" placeholder="Enter User ..." value="{Reservation>/ZINFO_ID}" change="onEventfillUserInfo" submit="onEventfillUserInfo"/>-->
 					</HBox>
 					<HBox width="80%">
 						<Label width="12rem" class="sapUiSmallMarginTop" text="First Name : " text-align="left" required="true"/>

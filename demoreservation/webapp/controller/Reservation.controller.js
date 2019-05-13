@@ -101,7 +101,8 @@ sap.ui.define([
 				//	oText = this.byId('selectedKey'),
 					sDescription = oSelectedItem.getDescription();
 
-				modelInput.setSelectedKey(sDescription);
+			//	modelInput.setSelectedKey(sDescription);
+				modelInput.setValue(sDescription);
 			//	oText.setText(sDescription);
 			}
 			evt.getSource().getBinding("items").filter([]);
@@ -353,10 +354,12 @@ sap.ui.define([
 			if(admin){
 				email = "";
 			}    
-			var modelFilter = this.getView().byId("modelFilter").getSelectedKey();
+			var modelFilter = this.getView().byId("modelFilter").getValue();
 			var yearFilter = this.getView().byId("yearFilter").getValue();
 			var vinFilter = this.getView().byId("vinFilter").getValue();
 			var inpStatus = this.getView().byId("inpStatus").getSelectedKey();
+			var ReserverFilter = this.getView().byId("ReserverFilter").getValue();
+			
 			
 			var aFilters = [];
 			var MATNR = new sap.ui.model.Filter("MATNR", sap.ui.model.FilterOperator.EQ, modelFilter);
@@ -365,6 +368,7 @@ sap.ui.define([
 			var StatusCode = new sap.ui.model.Filter("StatusCode", sap.ui.model.FilterOperator.EQ, inpStatus);
 	//		var Admin = new sap.ui.model.Filter("Admin", sap.ui.model.FilterOperator.EQ, admin);
 			var Email = new sap.ui.model.Filter("Email", sap.ui.model.FilterOperator.EQ, email);
+			var Reserver = new sap.ui.model.Filter("Reserver", sap.ui.model.FilterOperator.EQ, ReserverFilter);
 
 			aFilters = [
 				MATNR,
@@ -372,7 +376,8 @@ sap.ui.define([
 				VHVIN,
 				StatusCode,
 		//		Admin,
-				Email
+				Email,
+				Reserver
 			];
 			var finalFilter = new sap.ui.model.Filter({
 				filters: aFilters,
