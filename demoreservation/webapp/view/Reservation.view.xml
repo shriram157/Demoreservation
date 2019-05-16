@@ -5,7 +5,7 @@
 		<f:header>
 			<f:DynamicPageHeader pinnable="false">
 				<f:content>
-					<Button icon="sap-icon://home" type="Transparent" press="onNavButtonPress"/>
+					<Button icon="sap-icon://home" class="mCustomIcon" type="Transparent" press="onNavButtonPress"/>
 					<filterbar:FilterBar id="ListReportFilterBar" useToolbar="false" showGoOnFB="true" searchEnabled="true" search="onSearch">
 						<filterbar:filterItems>
 							<filterbar:FilterItem label="{i18n>lblReqStatus}"

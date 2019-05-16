@@ -59,7 +59,7 @@ sap.ui.define([
 			var zoneFilter = this.getView().byId("zoneFilter").getSelectedKey();
 			var seriesFilter = this.getView().byId("seriesFilter").getSelectedKey();
 			var suffixFilter = this.getView().byId("suffixFilter").getSelectedKey();
-			var modelFilter = this.getView().byId("modelFilter").getSelectedKey();
+			var modelFilter = this.getView().byId("modelFilter").getValue();
 			var yearFilter = this.getView().byId("yearFilter").getValue();
 			var vinFilter = this.getView().byId("vinFilter").getValue();
 			var inpStatus = this.getView().byId("inpStatus").getValue();
@@ -138,11 +138,6 @@ sap.ui.define([
 				filters: aFilters,
 				and: true
 			});
-			// // update list binding
-			// var list = this.getView().byId("idMyReservationsTable");
-			// var binding = list.getBinding("items");
-			// binding.filter(finalFilter, "Application");
-			
 			this._valueHelpDialog.getBinding("items").filter(finalFilter, "Application");
 
 			// open value help dialog filtered by the input value
@@ -162,23 +157,15 @@ sap.ui.define([
 			var oSelectedItem = evt.getParameter("selectedItem");
 			if (oSelectedItem) {
 				var modelInput = this.byId(this.inputId),
-				//	oText = this.byId('selectedKey'),
-					sDescription = oSelectedItem.getDescription();
-
-			//	modelInput.setSelectedKey(sDescription);
-					modelInput.setValue(sDescription);
-			//	oText.setText(sDescription);
+				sDescription = oSelectedItem.getDescription();
+				modelInput.setValue(sDescription);
 			}
 			evt.getSource().getBinding("items").filter([]);
 		},
 
 		suggestionItemSelected: function (evt) {
-
 			var oItem = evt.getParameter('selectedItem'),
-			//	oText = this.byId('selectedKey'),
 				sKey = oItem ? oItem.getKey() : '';
-
-		//	oText.setText(sKey);
 		},
 		
 		handleSortButtonPressed: function () {
@@ -253,7 +240,7 @@ sap.ui.define([
 					var type = scopesData.loggedUserType[0];
 					
 					// testing
-				//	type="TCI_User";
+				//	type="TCI_Admin";
 					
 					that.UserData.setProperty("/Type",type);
 					
@@ -265,24 +252,6 @@ sap.ui.define([
 				},
 				error: function (oError) {}
 			});
-			
-			// for local testing
-				// var data ={
-				// 	"FirstName": "Anubha",
-				// 	"LastName": "Pandey",
-				// 	"Email": "anubha_pandey@toyota.ca"
-				// 	};
-				// 	that.UserData.setData(data);
-				// var type = 	"TCI_Admin";         // TCI_User ; TCI_Admin
-				// that.UserData.setProperty("/Type",type);
-				// 	if(type === "TCI_Admin"){
-				// 		that.UserData.setProperty("/AdminVisible",true);
-				// 	}else{
-				// 		that.UserData.setProperty("/AdminVisible",false);
-				// 	}	
-		
-		
-		
 		},
 		
 		fetchLDAPuserdata:function(inputuser){

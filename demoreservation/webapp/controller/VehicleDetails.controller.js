@@ -3,7 +3,6 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 	return BaseController.extend("ca.toyota.demoreservation.demoreservation.controller.VehicleDetails", {
 		onInit: function () {
 			this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
-		//	this.initSecurity();
 		},
 		onRouteMatched: function (oEvent) {
 			var oArgs;
@@ -58,7 +57,6 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 							}     
 						}
 
-					
 					oJSONModel.setData({
 						VehicleDetailSet: oData
 					});
@@ -76,10 +74,7 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 						that.byId("pageReservation").setVisible(true);
 						that.byId("pageReservation").setTitle("Reservation Details");
 					}
-					
-					
-					
-					
+
 					that.getView().setModel(oJSONModel);
 					that.getView().byId("listFacOption").setModel(oJSONModel);
 					// release busy indicator
@@ -98,58 +93,6 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 		_onCreatePress: function (oEvent) {
 			var vhvin = this.getView().getModel().getData().VehicleDetailSet.VHVIN;
 			this.doReqRoute("RequestDetail",vhvin,"C");
-			// this.getOwnerComponent().getRouter().navTo("RequestDetail", {
-			// 	vhvin: vhvin,
-			// 	action: "C"
-			// });
-		},
-		initSecurity:function(){
-			this.UserData = new sap.ui.model.json.JSONModel();
-			this.getView().setModel(this.UserData, "UserDataModel");
-			sap.ui.getCore().setModel(this.UserData, "UserDataModel");
-			var that = this;
-
-			//	sap.ui.core.BusyIndicator.show();
-				$.ajax({
-				dataType: "json",
-				url: "/demoreservation-node/userDetails/attributes",
-				type: "GET",
-				success: function (userAttributes) {
-		//			sap.ui.core.BusyIndicator.hide();
-					console.log("User Attributes", userAttributes);
-					var data ={
-					"FirstName": userAttributes.samlAttributes.FirstName,
-					"LastName": userAttributes.samlAttributes.LastName,
-					"Email": userAttributes.samlAttributes.Email
-					};
-					that.UserData.setData(data);
-					sap.ui.core.BusyIndicator.hide();
-					that.UserData.updateBindings(true);
-					that.UserData.refresh(true);
-				},
-				error: function (oError) {
-		//			sap.ui.core.BusyIndicator.hide();
-				}
-			});
-			
-			// Current user scope
-				$.ajax({
-				dataType: "json",
-				url: "/demoreservation-node/userDetails/currentScopesForUser",
-				type: "GET",
-				success: function (scopesData) {
-					console.log("currentScopesForUser", scopesData);
-					var type = scopesData.loggedUserType;
-					that.UserData.setProperty("/Type",type);
-					
-					if(type === "TCI_Admin"){
-						that.UserData.setProperty("/AdminVisible",true);
-					}else{
-						that.UserData.setProperty("/AdminVisible",false);
-					}
-				},
-				error: function (oError) {}
-			});
 		}
 	});
 });

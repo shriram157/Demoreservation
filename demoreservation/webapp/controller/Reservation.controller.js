@@ -98,23 +98,15 @@ sap.ui.define([
 			var oSelectedItem = evt.getParameter("selectedItem");
 			if (oSelectedItem) {
 				var modelInput = this.byId(this.inputId),
-				//	oText = this.byId('selectedKey'),
-					sDescription = oSelectedItem.getDescription();
-
-			//	modelInput.setSelectedKey(sDescription);
+				sDescription = oSelectedItem.getDescription();
 				modelInput.setValue(sDescription);
-			//	oText.setText(sDescription);
 			}
 			evt.getSource().getBinding("items").filter([]);
 		},
 
 		suggestionItemSelected: function (evt) {
-
 			var oItem = evt.getParameter('selectedItem'),
-			//	oText = this.byId('selectedKey'),
 				sKey = oItem ? oItem.getKey() : '';
-
-		//	oText.setText(sKey);
 		},
 
 		getVehicleData: function (VHVIN,dialogType,requestorEmail) {
@@ -226,11 +218,9 @@ sap.ui.define([
 		},
 		
 		onCloseDialog: function (oEvent) {
-		//	oEvent.getSource().getParent().close();
 			this.dlgReservation.close();
 		},
 		onCloseAdmin: function (oEvent) {
-		//	oEvent.getSource().getParent().close();
 			this.dlgAppRej.close();
 			Fragment.byId("adminSectionFragment", "ipDateDue").setValue("");
 			Fragment.byId("adminSectionFragment", "ipDateRec").setValue("");

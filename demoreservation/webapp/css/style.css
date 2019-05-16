@@ -32,6 +32,9 @@
 .sapMHBox {
     padding-left: 1rem;
 }
+.mCustomIcon .sapMBtnIcon{
+	font-size: 1.7rem;
+}
 
 /* Below are the extention if standard SAP css and it need to be in theme */
 .sapUxAPObjectPageHeaderContentDesign-Light, .sapUxAPObjectPageHeaderContentDesign-Dark{
