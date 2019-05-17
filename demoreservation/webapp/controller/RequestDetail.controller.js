@@ -550,7 +550,27 @@ sap.ui.define([
 					} else {
 						that.byId("onBehalf").setValueState(sap.ui.core.ValueState.None);
 					}
+					
+					var email = that.byId("idEmail").getValue();
+					if (email === "") {
+						msg = oBundle.getText("errEmpEmailBlankValidation");
+						that.byId("idEmail").setValueState(sap.ui.core.ValueState.Error);
+						that.byId("idEmail").setValueStateText(msg);
+						return false;
+					} else {
+						that.byId("idEmail").setValueState(sap.ui.core.ValueState.None);
+					}
 				}
+			}else{
+					var email = that.byId("idEmail").getValue();
+					if (email === "") {
+						msg = oBundle.getText("errEmpEmailBlankValidation");
+						that.byId("idEmail").setValueState(sap.ui.core.ValueState.Error);
+						that.byId("idEmail").setValueStateText(msg);
+						return false;
+					} else {
+						that.byId("idEmail").setValueState(sap.ui.core.ValueState.None);
+					}
 			}
 			if (ZPURDT === "") {
 				// // Purchase date can't be blank
