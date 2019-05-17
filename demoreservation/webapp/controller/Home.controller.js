@@ -12,7 +12,6 @@ sap.ui.define([
 			this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
 			this.initialFilter();
 			this.initSecurity();
-			this.fetchLDAPuserdata();
 		},
 		initialFilter: function () {
 			this.getView().byId("zoneFilter").setSelectedKey("3000");
@@ -252,36 +251,7 @@ sap.ui.define([
 				},
 				error: function (oError) {}
 			});
-		},
-		
-		fetchLDAPuserdata:function(inputuser){
-			// this.UserData = new sap.ui.model.json.JSONModel();
-			// this.getView().setModel(this.UserData, "UserDataModel");
-			// sap.ui.getCore().setModel(this.UserData, "UserDataModel");
-			var that = this;
-			inputuser = "SDRAPER";
-			var reqData = {"uid":inputuser};
-			//	sap.ui.core.BusyIndicator.show();
-				$.ajax({
-				dataType: "json",
-				url: "/demoreservation-node/node/tci/internal/api/v1.0/security/ldap/rest/getUserByUID",
-				type: "POST",
-				data: JSON.stringify(reqData),
-				headers: {
-			      'Accept': 'application/json',
-			      'Content-Type' : 'application/json'
-			    },
-				success: function (respdata) {
-		//			sap.ui.core.BusyIndicator.hide();
-					console.log("Response", respdata);
-				},
-				error: function (oError) {
-		//			sap.ui.core.BusyIndicator.hide();
-					console.log("Error: ", oError);
-				}
-			});
 		}
-
 	});
 
 });

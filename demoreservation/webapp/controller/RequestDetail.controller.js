@@ -40,7 +40,7 @@ sap.ui.define([
 				that.byId("idLastName").setValue(sap.ui.getCore().getModel("UserDataModel").getData().LastName);
 				that.byId("idEmail").setValue(sap.ui.getCore().getModel("UserDataModel").getData().Email);
 				that.byId("h_department").setVisible(false);
-				var dept = that.getEmployeeData("E");
+				var dept = that.getEmployeeData("E","")[0];
 				that.byId("idDept").setValue(dept);
 			}
 		},
@@ -95,7 +95,7 @@ sap.ui.define([
 					if (oData.ZREQTYP === "E" || oData.ZREQTYP === "C") {
 						that.byId("h_onbehalf").setVisible(true);
 						that.byId("h_department").setVisible(false);
-						that.getEmployeeData(oData.ZREQTYP);
+						that.getEmployeeData(oData.ZREQTYP,"");
 					} else {
 						that.byId("h_onbehalf").setVisible(false);
 						that.byId("h_department").setVisible(true);
@@ -143,12 +143,13 @@ sap.ui.define([
 				}
 			});
 		},
-		getEmployeeData: function (reqtype) {
+		getEmployeeData: function (reqtype,userid) {
 			var persg;
 			var that = this;
 			var email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
 			this.logiEmpDept = "";
 			this.logiEmpDeptText="";
+			var retData=[];
 			if (reqtype === "E") {
 				persg = "1";
 			} else {
@@ -176,6 +177,16 @@ sap.ui.define([
 						if (oData.results[i].usrid_long === email) {
 							that.logiEmpDept = oData.results[i].orgeh;
 							that.logiEmpDeptText = oData.results[i].orgtx;
+							retData[0]= that.logiEmpDeptText;
+							retData[1]= oData.results[i].usrid_long;
+						}
+						if(userid!==""){
+							if (oData.results[i].usrid === userid) {
+								that.logiEmpDept = oData.results[i].orgeh;
+								that.logiEmpDeptText = oData.results[i].orgtx;
+								retData[0]= that.logiEmpDeptText;
+								retData[1]= oData.results[i].usrid_long;
+							}
 						}
 					}
 					var oJSONModel = that.getOwnerComponent().getModel("localDataModel");
@@ -191,7 +202,7 @@ sap.ui.define([
 					oBusyDialog.close();
 				}
 			});
-			return this.logiEmpDeptText;
+			return retData;
 		},
 		suggestionItemSelected: function (evt) {
 			//Get Selected Row
@@ -234,7 +245,7 @@ sap.ui.define([
 					this.byId("h_onbehalf").setVisible(true);
 					this.byId("h_department").setVisible(false);
 					that.byId("idDeptName").setSelectedKey("");
-					that.getEmployeeData(reqtype);
+				//	that.getEmployeeData(reqtype,"");
 				} else {
 					this.byId("h_onbehalf").setVisible(false);
 					this.byId("h_department").setVisible(true);
@@ -410,7 +421,7 @@ sap.ui.define([
 						icon: sap.m.MessageBox.Icon.ERROR,
 						title: "Error",
 						actions: [sap.m.MessageBox.Action.OK],
-						details: e.response.body,
+					//	details: e.response.body,
 						onClose: function (oAction) {
 							that.navigateBack();
 						}
@@ -602,7 +613,66 @@ sap.ui.define([
 			}
 		},
 		onEventfillUserInfo: function (oEvent) {
-			
+			var that = this;
+			var inputuser = "";
+			inputuser = that.byId("onBehalf").getValue();
+			if(inputuser ===""){
+				
+			}else{
+					var reqData = {"uid":inputuser};
+					//	sap.ui.core.BusyIndicator.show();
+						$.ajax({
+						dataType: "json",
+						url: "/demoreservation-node/node/tci/internal/api/v1.0/security/ldap/rest/getUserByUID",
+						type: "POST",
+						data: JSON.stringify(reqData),
+						headers: {
+					      'Accept': 'application/json',
+					      'Content-Type' : 'application/json'
+					    },
+						success: function (respdata) {
+				//			sap.ui.core.BusyIndicator.hide();
+							console.log("Response", respdata);
+							
+							if(respdata.errorCode ==="ERROR_USER_NOT_FOUND"){
+								that.byId("idFirstName").setValue("");
+								that.byId("idLastName").setValue("");
+		
+								sap.m.MessageBox.show(respdata.errorMessage, {
+								icon: sap.m.MessageBox.Icon.ERROR,
+								title: "Error",
+								actions: [sap.m.MessageBox.Action.OK],
+							//	details: e.response.body,
+								onClose: function (oAction) {
+								}
+								});
+							}else{
+								var firstName = respdata.tciUser.firstName;
+								var lastName = respdata.tciUser.lastName;
+								that.byId("idFirstName").setValue(firstName);
+								that.byId("idLastName").setValue(lastName);
+								that.byId("idDept").setValue(that.getEmployeeData("",inputuser)[0]);
+								that.byId("idEmail").setValue(that.getEmployeeData("",inputuser)[1]);
+							}
+						//	that.byId("onBehalf").setValue(obj.usrid);
+						//	that.byId("idEmail").setValue(obj.usrid_long);
+						//	that.byId("idDept").setValue(that.logiEmpDeptText);
+						//	that.logiEmpDept = obj.orgeh;
+						},
+						error: function (oError) {
+				//			sap.ui.core.BusyIndicator.hide();
+							console.log("Error: ", oError);
+								sap.m.MessageBox.show("Error is fetching user data from LDAP.", {
+								icon: sap.m.MessageBox.Icon.ERROR,
+								title: "Error",
+								actions: [sap.m.MessageBox.Action.OK],
+								details: oError.response.body,
+								onClose: function (oAction) {
+								}
+							});
+						}
+					});
+			}
 		}
 	});
 });

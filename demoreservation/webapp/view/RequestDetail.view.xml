@@ -37,29 +37,29 @@
 					</HBox>
 					<HBox id="h_onbehalf" width="100%">
 						<Label width="12rem" class="sapUiSmallMarginTop" text="On behalf of : " text-align="left" editable="false" visible="true"/>
-						<Input id="onBehalf" type="Text" width="20rem" showSuggestion="true" showTableSuggestionValueHelp="true" suggestionRows="{localDataModel>/Employee}" suggest="handleInputSuggest" suggestionItemSelected="suggestionItemSelected" placeholder="Enter User ..." change="onBehalfValueChange" liveChange="onBehalfValueChange" value="{Reservation>/ZINFO_ID}">
-							<suggestionColumns>
-								<Column hAlign="Begin" popinDisplay="Inline" demandPopin="true" minScreenWidth="Tablet">
-									<Label text="User ID"/>
-								</Column>
-								<Column hAlign="Center" popinDisplay="Inline" demandPopin="true">
-									<Label text="First Name"/>
-								</Column>
-								<Column hAlign="Center" popinDisplay="Inline" demandPopin="true">
-									<Label text="Last Name"/>
-								</Column>
-							</suggestionColumns>
-							<suggestionRows>
-								<ColumnListItem>
-									<cells>
-										<Label text="{localDataModel>usrid}"/>
-										<Label text="{localDataModel>nchmc}"/>
-										<Label text="{localDataModel>vnamc}"/>
-									</cells>
-								</ColumnListItem>
-							</suggestionRows>
-						</Input>
-						<!--<Input id="onBehalf" placeholder="Enter User ..." value="{Reservation>/ZINFO_ID}" change="onEventfillUserInfo" submit="onEventfillUserInfo"/>-->
+						<!--<Input id="onBehalf" type="Text" width="20rem" showSuggestion="true" showTableSuggestionValueHelp="true" suggestionRows="{localDataModel>/Employee}" suggest="handleInputSuggest" suggestionItemSelected="suggestionItemSelected" placeholder="Enter User ..." change="onBehalfValueChange" liveChange="onBehalfValueChange" value="{Reservation>/ZINFO_ID}">-->
+						<!--	<suggestionColumns>-->
+						<!--		<Column hAlign="Begin" popinDisplay="Inline" demandPopin="true" minScreenWidth="Tablet">-->
+						<!--			<Label text="User ID"/>-->
+						<!--		</Column>-->
+						<!--		<Column hAlign="Center" popinDisplay="Inline" demandPopin="true">-->
+						<!--			<Label text="First Name"/>-->
+						<!--		</Column>-->
+						<!--		<Column hAlign="Center" popinDisplay="Inline" demandPopin="true">-->
+						<!--			<Label text="Last Name"/>-->
+						<!--		</Column>-->
+						<!--	</suggestionColumns>-->
+						<!--	<suggestionRows>-->
+						<!--		<ColumnListItem>-->
+						<!--			<cells>-->
+						<!--				<Label text="{localDataModel>usrid}"/>-->
+						<!--				<Label text="{localDataModel>nchmc}"/>-->
+						<!--				<Label text="{localDataModel>vnamc}"/>-->
+						<!--			</cells>-->
+						<!--		</ColumnListItem>-->
+						<!--	</suggestionRows>-->
+						<!--</Input>-->
+						<Input id="onBehalf" placeholder="Enter User ..." value="{Reservation>/ZINFO_ID}" change="onEventfillUserInfo"/>
 					</HBox>
 					<HBox width="80%">
 						<Label width="12rem" class="sapUiSmallMarginTop" text="First Name : " text-align="left" required="true"/>
