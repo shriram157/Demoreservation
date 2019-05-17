@@ -5,7 +5,7 @@
 		"logoutEndpoint": "/do/logout"
 	},
 	"routes": [{
-		"source": "^/demoreservation/index.html$",
+		"source": "^/demoreservation/index.html",
 		"target": "index.html",
 		"localDir": "webapp",
 		"cacheControl": "no-cache, no-store, must-revalidate",
