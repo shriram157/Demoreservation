@@ -110,6 +110,8 @@ sap.ui.define([
 		},
 
 		getVehicleData: function (VHVIN,dialogType,requestorEmail) {
+			console.log("VHVIN: "+VHVIN);
+			console.log("requestorEmail: "+requestorEmail);
 			var email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
 			//testing
 	//		email = "anubha_pandey@toyota.ca";
@@ -126,7 +128,7 @@ sap.ui.define([
 				asynch: false,
 				success: function (oData, oResponse) {
 					var oJSONModel = new sap.ui.model.json.JSONModel();
-					
+					console.log("ZRESREQ: "+oData.ZRESREQ);
 					// extract Requestor type text
 					var mod = that.getOwnerComponent().getModel("vehicles"),
 						i,

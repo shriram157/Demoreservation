@@ -245,7 +245,7 @@ sap.ui.define([
 					this.byId("h_onbehalf").setVisible(true);
 					this.byId("h_department").setVisible(false);
 					that.byId("idDeptName").setSelectedKey("");
-				//	that.getEmployeeData(reqtype,"");
+					that.getEmployeeData(reqtype,"");
 				} else {
 					this.byId("h_onbehalf").setVisible(false);
 					this.byId("h_department").setVisible(true);
