@@ -9,28 +9,39 @@ sap.ui.define([
 
 		onInit: function () {
 			this.populateYear();
-			this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
+		//	this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
 			this.initialFilter();
 			this.initSecurity();
+			
+			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			oRouter.getRoute("Home").attachMatched(this.onRouteMatched, this);
+
 		},
 		initialFilter: function () {
 			this.getView().byId("zoneFilter").setSelectedKey("3000");
 		},
 		onRouteMatched: function (oEvent) {
+		//	this.getView().byId("idMyReservationsTable").getModel().refresh(true);
 		},
 
 		onListItemPress: function (oEvent) {
 			var listItemContext = oEvent.getSource().getBindingContext();
 			var selectedvin = listItemContext.getProperty("VHVIN");
 			this.getView().getModel("localDataModel").setProperty("/Screen1",{"VHVIN":selectedvin});
-			this.doRoute("VehicleDetails",selectedvin);
+		//	this.doRoute("VehicleDetails",selectedvin);
+			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			oRouter.navTo("VehicleDetails",{vguid:selectedvin});
 		},
 		
 		onMyReservationPress: function (oEvent){
-			this.doReserveRoute("Reservation",false);
+		//	this.doReserveRoute("Reservation",false);
+			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			oRouter.navTo("Reservation", {admin:false});
 		},
 		onAllReservationPress: function (oEvent){
-			this.doReserveRoute("Reservation",true);
+		//	this.doReserveRoute("Reservation",true);
+			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			oRouter.navTo("Reservation", {admin:true});
 		},
 
 		onSegmentedButtonPress: function (oEvent) {

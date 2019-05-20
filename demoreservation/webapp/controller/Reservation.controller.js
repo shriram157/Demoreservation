@@ -12,7 +12,10 @@ sap.ui.define([
 
 		onInit: function () {
 			this.populateYear();
-			this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
+		//	this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
+			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			oRouter.getRoute("Reservation").attachMatched(this.onRouteMatched, this);
+
 		},
 
 		onRouteMatched: function (oEvent) {
@@ -230,7 +233,10 @@ sap.ui.define([
 
 		},
 		onNavButtonPress: function (oEvent) {
-			this.doRoute("Home");
+		//	this.doRoute("Home");
+			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			oRouter.navTo("Home");
+
 		},
 		isValidateTrue: function(){
 			var that = this;
@@ -416,7 +422,10 @@ sap.ui.define([
 			if(Zresreq===""){
 				// msg
 			}else{
-				this.doReqRoute("RequestDetail",vhvin,Zresreq);
+			//	this.doReqRoute("RequestDetail",vhvin,Zresreq);
+				var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+				oRouter.navTo("RequestDetail",{vhvin:vhvin, Zresreq:Zresreq});
+
 			}
 
 		}

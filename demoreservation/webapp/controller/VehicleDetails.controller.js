@@ -2,7 +2,10 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 	"use strict";
 	return BaseController.extend("ca.toyota.demoreservation.demoreservation.controller.VehicleDetails", {
 		onInit: function () {
-			this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
+		//	this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
+			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			oRouter.getRoute("VehicleDetails").attachMatched(this.onRouteMatched, this);
+
 		},
 		onRouteMatched: function (oEvent) {
 			var oArgs;
@@ -10,7 +13,9 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 			this.getVehicleData(oArgs.vguid);
 		},
 		onNavButtonPress: function (oEvent) {
-			this.doRoute("Home");
+		//	this.doRoute("Home");
+			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			oRouter.navTo("Home");
 		},
 		_onEditPress: function (oEvent) {
 			//	this.doRoute("RequestDetail");
@@ -19,7 +24,9 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 			if(Zresreq===""){
 				// msg
 			}else{
-			this.doReqRoute("RequestDetail",vhvin,Zresreq);
+			//	this.doReqRoute("RequestDetail",vhvin,Zresreq);
+				var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+				oRouter.navTo("RequestDetail",{vhvin:vhvin, Zresreq:Zresreq});
 			}
 
 		},
@@ -92,7 +99,10 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 		 */
 		_onCreatePress: function (oEvent) {
 			var vhvin = this.getView().getModel().getData().VehicleDetailSet.VHVIN;
-			this.doReqRoute("RequestDetail",vhvin,"C");
+		//	this.doReqRoute("RequestDetail",vhvin,"C");
+			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			oRouter.navTo("RequestDetail",{vhvin:vhvin, Zresreq:"C"});
+
 		}
 	});
 });

@@ -6,7 +6,10 @@ sap.ui.define([
 	"use strict";
 	return BaseController.extend("ca.toyota.demoreservation.demoreservation.controller.RequestDetail", {
 		onInit: function () {
-			this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
+		//	this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
+			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			oRouter.getRoute("RequestDetail").attachMatched(this.onRouteMatched, this);
+
 			this.action = "";
 			this.Zresreq = "";
 			this.vhvin = "";
@@ -53,7 +56,8 @@ sap.ui.define([
 			//testing
 		//	email = "anubha_pandey@toyota.ca";
 			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-				sPath = "VehicleDetailSet(VHVIN='" + VHVIN + "',Email='" + email + "')?$expand=NAVFACOPTION,NAVDEALEROPTION",
+			//	sPath = "VehicleDetailSet(VHVIN='" + VHVIN + "',Email='" + email + "')?$expand=NAVFACOPTION,NAVDEALEROPTION",
+				sPath = "vehicleListSet('" + VHVIN + "')",
 				oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
 				that = this;
 			var oBusyDialog = new sap.m.BusyDialog();
@@ -290,7 +294,7 @@ sap.ui.define([
 			var data = {
 				// sample data
 				"Zresreq": resModel.getProperty("/Zresreq"),
-				"ZSERIES": headerModel.getProperty("/ZSERIES"),
+				"ZSERIES": headerModel.getProperty("/ZZSERIES"),
 				"MATNR": headerModel.getProperty("/MATNR"),
 				"ZREQTYP": that.byId("reqtype").getSelectedKey(),
 				"ZINFO_ID": that.byId("onBehalf").getValue(),
@@ -366,7 +370,7 @@ sap.ui.define([
 				// sample data
 				"Zresreq": "",
 				"ZSERIES": headerModel.getProperty("/VehicleDetailSet/ZZSERIES"),
-				"MATNR": headerModel.getProperty("/VehicleDetailSet/Model"),
+				"MATNR": headerModel.getProperty("/VehicleDetailSet/MATNR"),
 				"ZREQTYP": that.byId("reqtype").getSelectedKey(),
 				"ZINFO_ID": that.byId("onBehalf").getValue(),
 				"ZREQ_NAME": that.byId("idFirstName").getValue(),
@@ -501,7 +505,7 @@ sap.ui.define([
 				window.history.go(-1);
 			} else {
 				var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-				oRouter.navTo("overview", true);
+				oRouter.navTo("Reservation", {admin:true});
 			}
 			
 			// var headerModel = this.getView().getModel("Header");
