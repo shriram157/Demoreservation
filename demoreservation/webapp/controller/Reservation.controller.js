@@ -293,7 +293,12 @@ sap.ui.define([
 					"Vehicleaction": this.APP_REJ,
 					"Vehiclenumber": vehicleModel.getProperty("/Vehiclenumber"),
 					"Vehicleidentnumb": vehicleModel.getProperty("/VHVIN"),
-					"Zresreq": vehicleModel.getProperty("/ZRESREQ")
+					"Zresreq": vehicleModel.getProperty("/ZRESREQ"),
+					"ZZMOYR": vehicleModel.getProperty("/ZZMOYR"),
+					"ModelDesc": vehicleModel.getProperty("/ModelDesc"),
+					"EndDate": vehicleModel.getProperty("/EndDate"),
+					"ColorDesc": vehicleModel.getProperty("/ColorDesc"),
+					"Driver": vehicleModel.getProperty("/Driver")
 				};
 				var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
 					sPath = "/zc_demo_reservationSet('"+ vehicleModel.getProperty("/ZRESREQ") +"')",
