@@ -11,7 +11,10 @@
 		"@sap/approuter": "5.13.0"
 	},
 	"scripts": {
-		"start": "node node_modules/@sap/approuter/approuter.js",
+		"start": "node server.js",
 		"test": "grunt unit_and_integration_tests"
+	},
+	"engines": {
+		"node": "8.x"
 	}
 }
