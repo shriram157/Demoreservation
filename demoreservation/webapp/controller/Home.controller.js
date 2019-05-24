@@ -12,10 +12,8 @@ sap.ui.define([
 		//	this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
 			this.initialFilter();
 			this.initSecurity();
-			
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.getRoute("Home").attachMatched(this.onRouteMatched, this);
-
 		},
 		initialFilter: function () {
 			this.getView().byId("zoneFilter").setSelectedKey("3000");
@@ -25,7 +23,7 @@ sap.ui.define([
 		},
 
 		onListItemPress: function (oEvent) {
-			var listItemContext = oEvent.getSource().getBindingContext();
+			var listItemContext = oEvent.getSource().getBindingContext("DemoOdataModel");
 			var selectedvin = listItemContext.getProperty("VHVIN");
 			this.getView().getModel("localDataModel").setProperty("/Screen1",{"VHVIN":selectedvin});
 		//	this.doRoute("VehicleDetails",selectedvin);
@@ -43,19 +41,6 @@ sap.ui.define([
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.navTo("Reservation", {admin:true});
 		},
-
-		onSegmentedButtonPress: function (oEvent) {
-			var pressedButtonKey = oEvent.getSource().getSelectedKey();
-			var idMyReservationsTable = this.byId("idMyReservationsTable");
-			var idAllReservationsTable = this.byId("idAllReservationsTable");
-			if (pressedButtonKey === "myReservations") {
-				idMyReservationsTable.setVisible(true);
-				idAllReservationsTable.setVisible(false);
-			} else if (pressedButtonKey === "allReservations") {
-				idMyReservationsTable.setVisible(false);
-				idAllReservationsTable.setVisible(true);
-			}
-		},
 		onUpdateFinished: function(oEvent) {
 			// count and display number of nominations in Table Header title
 			var sTitle, oTable = this.getView().byId("idMyReservationsTable");
@@ -63,7 +48,6 @@ sap.ui.define([
 			sTitle = "Vehicle List";
 			var lengthTotal = oTable.getBinding("items").getLength();
 			title.setText(sTitle + " ("+lengthTotal+")");
-
 		},
 		onSearch: function (oEvent){
 			var zoneFilter = this.getView().byId("zoneFilter").getSelectedKey();
@@ -73,6 +57,7 @@ sap.ui.define([
 			var yearFilter = this.getView().byId("yearFilter").getValue();
 			var vinFilter = this.getView().byId("vinFilter").getValue();
 			var inpStatus = this.getView().byId("inpStatus").getValue();
+//			var ReserverFilter = this.getView().byId("ReserverFilter").getValue();
 			
 			if(inpStatus ==="All"){ // If Status selected All, send blank value in filter
 				inpStatus="";
@@ -86,6 +71,7 @@ sap.ui.define([
 			var VHVIN = new sap.ui.model.Filter("VHVIN", sap.ui.model.FilterOperator.Contains, vinFilter);
 			var Status = new sap.ui.model.Filter("Status", sap.ui.model.FilterOperator.EQ, inpStatus);
 			var ZZSUFFIX = new sap.ui.model.Filter("ZZSUFFIX", sap.ui.model.FilterOperator.EQ, suffixFilter);
+//			var Reserver = new sap.ui.model.Filter("Reserver", sap.ui.model.FilterOperator.EQ, ReserverFilter);
 			aFilters = [
 				ZZZONE,
 				ZZSERIES,
@@ -94,6 +80,7 @@ sap.ui.define([
 				VHVIN,
 				Status,
 				ZZSUFFIX
+	//			Reserver
 			];
 			var finalFilter = new sap.ui.model.Filter({
 				filters: aFilters,
@@ -200,7 +187,6 @@ sap.ui.define([
 			sPath = mParams.sortItem.getKey();
 			bDescending = mParams.sortDescending;
 			aSorters.push(new Sorter(sPath, bDescending));
-
 			// apply the selected sort and group settings
 			oBinding.sort(aSorters);
 		},
@@ -218,25 +204,21 @@ sap.ui.define([
 			this.getView().setModel(this.UserData, "UserDataModel");
 			sap.ui.getCore().setModel(this.UserData, "UserDataModel");
 			var that = this;
-
-			//	sap.ui.core.BusyIndicator.show();
 				$.ajax({
 				dataType: "json",
 				url: "/demoreservation-node/userDetails/attributes",
 				type: "GET",
 				success: function (userAttributes) {
-		//			sap.ui.core.BusyIndicator.hide();
-					console.log("User Attributes", userAttributes);
 					that.UserData.setProperty("/FirstName",userAttributes.samlAttributes.FirstName);
 					that.UserData.setProperty("/LastName",userAttributes.samlAttributes.LastName);
 					that.UserData.setProperty("/Email",userAttributes.samlAttributes.Email);
 					that.UserData.setProperty("/Userid",userAttributes.userProfile.id);
-					sap.ui.core.BusyIndicator.hide();
+				//	sap.ui.core.BusyIndicator.hide();
 					that.UserData.updateBindings(true);
 					that.UserData.refresh(true);
 				},
 				error: function (oError) {
-		//			sap.ui.core.BusyIndicator.hide();
+					console.log("Error in fetching user details from LDAP", oError);
 				}
 			});
 			
@@ -246,21 +228,21 @@ sap.ui.define([
 				url: "/demoreservation-node/userDetails/currentScopesForUser",
 				type: "GET",
 				success: function (scopesData) {
-					console.log("currentScopesForUser", scopesData);
 					var type = scopesData.loggedUserType[0];
-					
 					// testing
 				//	type="TCI_Admin";
-					
 					that.UserData.setProperty("/Type",type);
-					
 					if(type === "TCI_Admin"){
 						that.UserData.setProperty("/AdminVisible",true);
 					}else{
 						that.UserData.setProperty("/AdminVisible",false);
 					}
 				},
-				error: function (oError) {}
+				error: function (oError) {
+					console.log("Error in fetching user details from LDAP", oError);
+					that.UserData.setProperty("/Type","TCI_User");
+					that.UserData.setProperty("/AdminVisible",false);
+				}
 			});
 		}
 	});

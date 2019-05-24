@@ -4,12 +4,12 @@
 	<SelectDialog
 		title="Models"
 		class="sapUiPopupWithPadding"
-		items="{/ZC_MODEL_YEAR}"
+		items="{DemoOdataModel>/ZC_MODEL_YEAR}"
 		search="_handleValueHelpSearch"
 		confirm="_handleValueHelpClose"
 		cancel="_handleValueHelpClose">
 		<StandardListItem
-			title="{model_desc_en}"
-			description="{model}" />
+			title="{DemoOdataModel>model_desc_en}"
+			description="{DemoOdataModel>model}" />
 	</SelectDialog>
 </core:FragmentDefinition>

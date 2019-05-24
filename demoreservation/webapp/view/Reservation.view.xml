@@ -1,6 +1,4 @@
-<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.f" xmlns:variants="sap.ui.comp.variants" xmlns="sap.m"
-	xmlns:filterbar="sap.ui.comp.filterbar" xmlns:core="sap.ui.core"
-	controllerName="ca.toyota.demoreservation.demoreservation.controller.Reservation">
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.f" xmlns:variants="sap.ui.comp.variants" xmlns="sap.m" xmlns:filterbar="sap.ui.comp.filterbar" xmlns:core="sap.ui.core" controllerName="ca.toyota.demoreservation.demoreservation.controller.Reservation">
 	<f:DynamicPage headerExpanded="true" showFooter="false" class="sapUiSizeCompact">
 		<f:header>
 			<f:DynamicPageHeader pinnable="false">
@@ -8,39 +6,35 @@
 					<Button icon="sap-icon://home" class="mCustomIcon" type="Transparent" press="onNavButtonPress"/>
 					<filterbar:FilterBar id="ListReportFilterBar" useToolbar="false" showGoOnFB="true" searchEnabled="true" search="onSearch">
 						<filterbar:filterItems>
-							<filterbar:FilterItem label="{i18n>lblReqStatus}"
-								name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1537538709735---0">
+							<filterbar:FilterItem label="{i18n>lblReqStatus}" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1537538709735---0">
 								<filterbar:control>
 									<ComboBox id="inpStatus" change="onSelectChange" items="{path: 'vehicles>/FilterData/RequestStatus'}" placeholder="{i18n>plStatus}">
 										<core:Item key="{vehicles>key}" text="{vehicles>name}"/>
 									</ComboBox>
 								</filterbar:control>
 							</filterbar:FilterItem>
-							<filterbar:FilterItem label="{i18n>lblVIN}"
-								name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1538428831201---0">
+							<filterbar:FilterItem label="{i18n>lblVIN}" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1538428831201---0">
 								<filterbar:control>
 									<Input id="vinFilter" placeholder="{i18n>plVIN}"/>
 								</filterbar:control>
 							</filterbar:FilterItem>
 							<filterbar:FilterItem label="{i18n>lblModel}" name="RC">
 								<filterbar:control>
-									<Input id="modelFilter" type="Text" textFormatMode="KeyValue" placeholder="{i18n>plModel}" showSuggestion="true" showValueHelp="true"
-										valueHelpRequest="handleModelValueHelp" suggestionItems="{/ZC_MODEL_YEAR}" suggestionItemSelected="suggestionItemSelected">
+									<Input id="modelFilter" type="Text" textFormatMode="KeyValue" placeholder="{i18n>plModel}" showSuggestion="true" showValueHelp="true" valueHelpRequest="handleModelValueHelp" suggestionItems="{DemoOdataModel>/ZC_MODEL_YEAR}" suggestionItemSelected="suggestionItemSelected">
 										<suggestionItems>
-											<core:ListItem key="{model}" text="{model_desc_en}"/>
+											<core:ListItem key="{DemoOdataModel>model}" text="{DemoOdataModel>model_desc_en}"/>
 										</suggestionItems>
 									</Input>
 								</filterbar:control>
 							</filterbar:FilterItem>
-							<filterbar:FilterItem label="{i18n>lblModYear}"
-								name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1538428836358---0">
+							<filterbar:FilterItem label="{i18n>lblModYear}" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1538428836358---0">
 								<filterbar:control>
 									<ComboBox id="yearFilter" change="onSelectChange" items="{YearModel>/}" placeholder="{i18n>plYear}">
 										<core:Item key="{YearModel>dkey}" text="{YearModel>dtext}"/>
 									</ComboBox>
 								</filterbar:control>
 							</filterbar:FilterItem>
-							<filterbar:FilterItem label="{i18n>lblReserver}" name="RI">
+							<filterbar:FilterItem label="{i18n>lblReserver}" name="RI"> <!-- visible="{UserModel>/admin}" -->
 								<filterbar:control>
 									<Input xmlns="sap.m" id="ReserverFilter" placeholder="{i18n>plReserver}"/>
 								</filterbar:control>
@@ -51,14 +45,11 @@
 			</f:DynamicPageHeader>
 		</f:header>
 		<f:content>
-			<Table id="tabRservation" items="{ path: '/reservationListSet' , sorter : { path : 'VHVIN', group : true}}"
-				updateFinished="onUpdateFinished" includeItemInSelection="true" fixedLayout="false" growing="true" growingThreshold="20"
-				growingScrollToLoad="false">
+			<Table id="tabRservation" items="{ path: 'DemoOdataModel>/reservationListSet' , sorter : { path : 'VHVIN', group : true}}" updateFinished="onUpdateFinished" includeItemInSelection="true" fixedLayout="false" growing="true" growingThreshold="20" growingScrollToLoad="false">
 				<headerToolbar>
 					<OverflowToolbar design="Transparent">
 						<content>
 							<Title textAlign="Begin" id="tabTitle"/>
-							<!--<Title text="(1)"/>-->
 							<ToolbarSpacer/>
 							<Button icon="sap-icon://excel-attachment" type="Emphasized" press="handleExcelPressed">
 								<layoutData>
@@ -69,62 +60,62 @@
 					</OverflowToolbar>
 				</headerToolbar>
 				<columns>
-					<Column width="auto" minScreenWidth="Phone">
+					<Column width="auto" hAlign="Center">
 						<header>
-							<Text text="{i18n>lblStatus}" width="auto"/>
+							<Text text="{i18n>lblStatus}"/>
 						</header>
 					</Column>
-					<Column width="auto" minScreenWidth="Phone">
+					<Column width="auto" hAlign="Center">
 						<header>
-							<Text text="{i18n>lblModel}" width="auto"/>
+							<Text text="{i18n>lblModel}"/>
 						</header>
 					</Column>
-					<Column width="auto" minScreenWidth="Phone">
+					<Column width="auto" hAlign="Center">
 						<header>
-							<Text text="{i18n>lblModYear}" width="auto"/>
+							<Text text="{i18n>lblModYear}"/>
 						</header>
 					</Column>
-					<Column width="auto" minScreenWidth="Phone">
+					<Column width="auto" hAlign="Center">
 						<header>
-							<Text text="{i18n>lblColour}" width="auto"/>
+							<Text text="{i18n>lblColour}"/>
 						</header>
 					</Column>
-					<Column width="auto" minScreenWidth="Phone">
+					<Column width="auto" hAlign="Center">
 						<header>
-							<Text text="{i18n>lblReqDate}" width="auto"/>
+							<Text text="{i18n>lblReqDate}"/>
 						</header>
 					</Column>
-					<Column width="auto" minScreenWidth="Phone">
+					<Column width="auto" hAlign="Center">
 						<header>
-							<Text text="{i18n>lblReserver}" width="auto"/>
+							<Text text="{i18n>lblReserver}"/>
 						</header>
 					</Column>
-					<Column width="auto" minScreenWidth="Phone">
+					<Column width="auto" hAlign="Center">
 						<header>
-							<Text text="{i18n>lblVIN}" width="auto"/>
+							<Text text="{i18n>lblVIN}"/>
 						</header>
 					</Column>
-					<Column width="auto" minScreenWidth="Phone">
+					<Column width="auto" hAlign="Center">
 						<header>
-							<Text text="{i18n>lblPurchaser}" width="auto"/>
+							<Text text="{i18n>lblPurchaser}"/>
 						</header>
 					</Column>
-					<Column width="auto" minScreenWidth="Phone">
+					<Column width="auto" hAlign="Center">
 						<header>
-							<Text text="{i18n>lblDriver}" width="auto"/>
+							<Text text="{i18n>lblDriver}"/>
 						</header>
 					</Column>
-					<Column width="auto" minScreenWidth="Phone">
+					<Column width="auto" hAlign="Center">
 						<header>
-							<Text text="{i18n>lblAsPrice}" width="auto"/>
+							<Text text="{i18n>lblAsPrice}"/>
 						</header>
 					</Column>
-					<Column width="auto" minScreenWidth="Phone">
+					<Column width="auto" hAlign="Center">
 						<header>
-							<Text text="{i18n>lblEndDate}" width="auto"/>
+							<Text text="{i18n>lblEndDate}"/>
 						</header>
 					</Column>
-					<Column minScreenWidth="Phone">
+					<Column>
 						<header>
 							<Text text=""/>
 						</header>
@@ -135,20 +126,20 @@
 				<items>
 					<ColumnListItem selected="true" type="Active">
 						<cells>
-							<Text text="{Status}" width="auto"/>
-							<Text text="{ModelDesc}" width="auto"/>
-							<Text text="{ZZMOYR}" width="auto"/>
-							<Text text="{ColorDesc}" width="auto"/>
-							<Text text="{RequestDate}" width="auto"/>
-							<Text text="{Reserver}" width="auto"/>
-							<Text text="{VHVIN}" width="auto"/>
-							<Text text="{Purchaser}" width="auto"/>
-							<Text text="{Driver}" width="auto"/>
-							<Text text="{Price}" width="auto"/>
-							<Text text="{EndDate}" width="auto"/>
+							<Text text="{DemoOdataModel>Status}" />
+							<Text text="{DemoOdataModel>ModelDesc}" />
+							<Text text="{DemoOdataModel>ZZMOYR}"/>
+							<Text text="{DemoOdataModel>ColorDesc}" />
+							<Text text="{DemoOdataModel>RequestDate}" />
+							<Text text="{DemoOdataModel>Reserver}" />
+							<Text text="{DemoOdataModel>VHVIN}" />
+							<Text text="{DemoOdataModel>Purchaser}" />
+							<Text text="{DemoOdataModel>Driver}" />
+							<Text text="{DemoOdataModel>Price}" />
+							<Text text="{DemoOdataModel>EndDate}" />
 							<Button icon="sap-icon://hint" press="onReservationInfoPress"/>
-							<Button text="{i18n>btnApprove}" press="onApprovePress" visible="{= ${StatusCode} === 'PA'}"/>
-							<Button text="{i18n>btnReject}" press="onRejectPress" visible="{= ${StatusCode} === 'AP' || ${StatusCode} === 'PA'}"/>
+							<Button text="{i18n>btnApprove}" press="onApprovePress" visible="{= ${DemoOdataModel>StatusCode} === 'PA'}"/>
+							<Button text="{i18n>btnReject}" press="onRejectPress" visible="{= ${DemoOdataModel>StatusCode} === 'AP' || ${DemoOdataModel>StatusCode} === 'PA'}"/>
 						</cells>
 					</ColumnListItem>
 				</items>

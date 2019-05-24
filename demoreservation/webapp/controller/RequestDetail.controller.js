@@ -52,14 +52,16 @@ sap.ui.define([
 			this.byId("h_department").setVisible(true);
 		},
 		getVehicleData: function (VHVIN) {
-			var email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
+		//	var email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
 			//testing
 		//	email = "anubha_pandey@toyota.ca";
-			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
+	//		var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
+				var that = this,
 			//	sPath = "VehicleDetailSet(VHVIN='" + VHVIN + "',Email='" + email + "')?$expand=NAVFACOPTION,NAVDEALEROPTION",
-				sPath = "vehicleListSet('" + VHVIN + "')",
-				oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
-				that = this;
+				sPath = "/vehicleListSet('" + VHVIN + "')",
+			//	oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
+				oDetailModel = that.getOwnerComponent().getModel("DemoOdataModel");
+				
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
 			// read OData model data into local JSON model 
@@ -82,10 +84,11 @@ sap.ui.define([
 			});
 		},
 		getReservationData: function (resreq) {
-			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-				sPath = "zc_demo_reservationSet('" + resreq + "')",
-				oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
-				that = this;
+		//	var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
+				var sPath = "zc_demo_reservationSet('" + resreq + "')",
+			//	oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
+				that = this,
+				oDetailModel = that.getOwnerComponent().getModel("DemoOdataModel");
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
 			// read OData model data into local JSON model 
@@ -123,10 +126,11 @@ sap.ui.define([
 			});
 		},
 		getDepartmentData: function () {
-			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-				sPath = "ZC_DEPT",
-				oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
-				that = this;
+		//	var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
+				var sPath = "ZC_DEPT",
+			//	oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
+				that = this,
+				oDetailModel = that.getOwnerComponent().getModel("DemoOdataModel");
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
 			// read OData model data into local JSON model 
@@ -160,10 +164,10 @@ sap.ui.define([
 				persg = "2";
 			}
 			var curr_datetime = this.getCurrentDate();
-			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-				sPath = "ZC_EMP_DETAILS(datetime'" + curr_datetime + "')/Set",
-				oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
-				that = this;
+		//	var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
+				var sPath = "/ZC_EMP_DETAILS(datetime'" + curr_datetime + "')/Set",
+			//	oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
+				oDetailModel = that.getOwnerComponent().getModel("DemoOdataModel");
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
 			// read OData model data into local JSON model 
@@ -325,14 +329,15 @@ sap.ui.define([
 				"Vehiclenumber": headerModel.getProperty("/VehicleDetailSet/Vehiclenumber"),
 				"Vehicleidentnumb": headerModel.getProperty("/VehicleDetailSet/VHVIN")
 			};
-			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-				sPath = "/zc_demo_reservationSet('" + resModel.getProperty("/Zresreq") + "')",
-				oModifyModel = new sap.ui.model.odata.ODataModel(uri, true);
+		//	var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
+			var sPath = "/zc_demo_reservationSet('" + resModel.getProperty("/Zresreq") + "')",
+			//	oModifyModel = new sap.ui.model.odata.ODataModel(uri, true)
+			oModifyModel = that.getOwnerComponent().getModel("DemoOdataModel");
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
 			// Set busy indicator
 			//				oModifyModel.update(sPath, data, {
-			this.getView().getModel().update(sPath, data, {
+			oModifyModel.update(sPath, data, {
 				// method: "PATCH",
 				// async: false,
 				success: function (oData, oResponse) {
@@ -397,9 +402,10 @@ sap.ui.define([
 				"Vehiclenumber": headerModel.getProperty("/VehicleDetailSet/Vehiclenumber"),
 				"Vehicleidentnumb": headerModel.getProperty("/VehicleDetailSet/VHVIN")
 			};
-			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-				sPath = "zc_demo_reservationSet",
-				oModifyModel = new sap.ui.model.odata.ODataModel(uri, true);
+			//var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
+				var sPath = "/zc_demo_reservationSet",
+				oModifyModel = that.getOwnerComponent().getModel("DemoOdataModel");
+				
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
 			// Set busy indicator
@@ -666,7 +672,7 @@ sap.ui.define([
 					    },
 						success: function (respdata) {
 				//			sap.ui.core.BusyIndicator.hide();
-							console.log("Response", respdata);
+					//		console.log("Response", respdata);
 							
 							if(respdata.errorCode ==="ERROR_USER_NOT_FOUND"){
 								that.byId("idFirstName").setValue("");
@@ -695,7 +701,7 @@ sap.ui.define([
 						},
 						error: function (oError) {
 				//			sap.ui.core.BusyIndicator.hide();
-							console.log("Error: ", oError);
+					//		console.log("Error: ", oError);
 								sap.m.MessageBox.show("Error is fetching user data from LDAP.", {
 								icon: sap.m.MessageBox.Icon.ERROR,
 								title: "Error",

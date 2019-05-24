@@ -12,8 +12,8 @@
 							</fb:FilterItem>
 							<fb:FilterItem label="{i18n>lblZone}" name="A">
 								<fb:control>
-									<ComboBox xmlns="sap.m" id="zoneFilter" placeholder="{i18n>plZone}" items="{ path: '/ZC_ZONES', filters: {path: 'spras',operator: 'EQ',value1: 'E'} }" change="onSelectChange">
-										<core:Item xmlns:core="sap.ui.core" text="{bezei}" key="{vkbur}"/>
+									<ComboBox xmlns="sap.m" id="zoneFilter" placeholder="{i18n>plZone}" items="{ path: 'DemoOdataModel>/ZC_ZONES', filters: {path: 'spras',operator: 'EQ',value1: 'E'} }" change="onSelectChange">
+										<core:Item xmlns:core="sap.ui.core" text="{DemoOdataModel>bezei}" key="{DemoOdataModel>vkbur}"/>
 									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
@@ -26,24 +26,24 @@
 							</fb:FilterItem>
 							<fb:FilterItem label="{i18n>lblSeries}" name="B">
 								<fb:control>
-									<ComboBox xmlns="sap.m" id="seriesFilter" placeholder="{i18n>plSeries}" items="{/zc_mmfields}" change="onSelectChange" filterSecondaryValues="true" showSecondaryValues="true">
-										<core:ListItem xmlns:core="sap.ui.core" text="{TCISeriesDescriptionEN}" key="{ModelSeriesNo}" additionalText="{ModelSeriesNo}"/>
+									<ComboBox xmlns="sap.m" id="seriesFilter" placeholder="{i18n>plSeries}" items="{DemoOdataModel>/zc_mmfields}" change="onSelectChange" filterSecondaryValues="true" showSecondaryValues="true">
+										<core:ListItem xmlns:core="sap.ui.core" text="{DemoOdataModel>TCISeriesDescriptionEN}" key="{DemoOdataModel>ModelSeriesNo}" additionalText="{DemoOdataModel>ModelSeriesNo}"/>
 									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem label="{i18n>lblModel}" name="C">
 								<fb:control>
-									<Input xmlns="sap.m" type="Text" id="modelFilter" placeholder="{i18n>plModel}" suggestionItems="{/ZC_MODEL_YEAR}" suggestionItemSelected="suggestionItemSelected" valueHelpRequest="handleModelValueHelp" showValueHelp="true" showSuggestion="true" textFormatMode="KeyValue">
+									<Input xmlns="sap.m" type="Text" id="modelFilter" placeholder="{i18n>plModel}" suggestionItems="{DemoOdataModel>/ZC_MODEL_YEAR}" suggestionItemSelected="suggestionItemSelected" valueHelpRequest="handleModelValueHelp" showValueHelp="true" showSuggestion="true" textFormatMode="KeyValue">
 										<suggestionItems>
-											<core:ListItem xmlns:core="sap.ui.core" key="{model}" text="{model_desc_en}" />
+											<core:ListItem xmlns:core="sap.ui.core" key="{DemoOdataModel>model}" text="{DemoOdataModel>model_desc_en}"/>
 										</suggestionItems>
 									</Input>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem label="{i18n>lblSuffix}" name="G">
 								<fb:control>
-									<ComboBox xmlns="sap.m" id="suffixFilter" placeholder="{i18n>plSuffix}" items="{/ZC_MODEL_YEAR}" filterSecondaryValues="true" showSecondaryValues="true">
-										<core:ListItem xmlns:core="sap.ui.core" text="{suffix}" key="{suffix}"/>
+									<ComboBox xmlns="sap.m" id="suffixFilter" placeholder="{i18n>plSuffix}" items="{DemoOdataModel>/ZC_MODEL_YEAR}" filterSecondaryValues="true" showSecondaryValues="true">
+										<core:ListItem xmlns:core="sap.ui.core" text="{DemoOdataModel>suffix}" key="{DemoOdataModel>suffix}"/>
 									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
@@ -55,7 +55,7 @@
 									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
-							<!--<fb:FilterItem label="{i18n>lblReserver}" name="RI">-->
+							<!--<fb:FilterItem label="{i18n>lblReserver}" name="RI" visible="{UserDataModel>/AdminVisible}">-->
 							<!--	<fb:control>-->
 							<!--		<Input xmlns="sap.m" id="ReserverFilter" placeholder="{i18n>plReserver}"/>-->
 							<!--	</fb:control>-->
@@ -74,7 +74,7 @@
                     <Button type="Default" id="MyResButton" text="{i18n>btnMyResrv}" enabled="true" width="auto" visible="true" press="onMyReservationPress" iconDensityAware="false" iconFirst="true"/>
                     <Button type="Default" id="AllResButton" text="{i18n>btnAllResrv}" enabled="true" width="auto" visible="{UserDataModel>/AdminVisible}" press="onAllReservationPress" iconDensityAware="false" iconFirst="true"/>
 			</VBox>
-			<Table id="idMyReservationsTable" items="{ path: '/vehicleListSet', filters: {path: 'ZZZONE',operator: 'EQ',value1: '3000'}, sorter : {path : 'SeriesDesc'} }" fixedLayout="false" updateFinished="onUpdateFinished" growing="true">
+			<Table id="idMyReservationsTable" items="{ path: 'DemoOdataModel>/vehicleListSet', filters: {path: 'ZZZONE',operator: 'EQ',value1: '3000'}, sorter : {path : 'SeriesDesc'} }" fixedLayout="false" updateFinished="onUpdateFinished" growing="true">
 				<headerToolbar>
 					<Toolbar>
 						<Title id="tabTitle" level="H2"/>
@@ -83,54 +83,58 @@
 					</Toolbar>
 				</headerToolbar>
 <columns>
-					<Column width="5rem" minScreenWidth="Phone">
+					<Column width="3rem" hAlign="Center">
 						<Text text="{i18n>lblSeries}" width="auto"/>
 					</Column>
-					<Column width="17rem" minScreenWidth="Phone">
+					<Column width="13rem" hAlign="Center">
 						<Text text="{i18n>lblModel}" width="auto"/>
 					</Column>
-					<Column minScreenWidth="Phone">
+					<Column width="8rem" hAlign="Center">
 						<Text text="{i18n>lblZone}" width="auto"/>
 					</Column>
-					<Column width="10rem" minScreenWidth="Phone">
+					<Column width="7rem" hAlign="Center">
 						<Text text="{i18n>lblPrice}" width="auto"/>
 					</Column>
-					<Column width="10rem" minScreenWidth="Phone">
+					<Column width="8rem" hAlign="Center">
 						<Text text="{i18n>lblEndDate}" width="auto"/>
 					</Column>
-					<Column width="5rem" minScreenWidth="Phone">
+					<Column width="5rem" hAlign="Center">
 						<Text text="{i18n>lblYear}" width="auto"/>
 					</Column>
-					<Column minScreenWidth="Phone">
+					<Column width="8rem" hAlign="Center">
 						<Text text="{i18n>lblColour}" width="auto"/>
 					</Column>
-					<Column minScreenWidth="Phone">
+					<Column width="7rem" hAlign="Center">
 						<Text text="{i18n>lblDriver}" width="auto"/>
 					</Column>
-					<Column width="5rem" minScreenWidth="Phone">
+					<!--<Column width="7rem" hAlign="Center">-->
+					<!--	<Text text="{i18n>lblReserver}" width="auto"/>-->
+					<!--</Column>-->
+					<Column width="4rem" hAlign="Center">
 						<Text text="{i18n>lblSuffix}" width="auto"/>
 					</Column>
-					<Column width="6rem" minScreenWidth="Phone">
+					<Column width="4rem" hAlign="Center">
 						<Text text="{i18n>lblRepaired}" width="auto"/>
 					</Column>
-					<Column minScreenWidth="Phone">
+					<Column width="4rem" hAlign="Center">
 						<Text text="{i18n>lblStatus}" width="auto"/>
 					</Column>
 				</columns>
 				<items>
 					<ColumnListItem type="Navigation" press="onListItemPress" vAlign="Middle">
 						<cells>
-							<Text text="{ZZSERIES}" width="5rem"/>
-							<Text text="{ModelDesc}"/>
-							<Text text="{ZoneDesc}"/>
-							<Text text="{Price}"/>
-							<Text text="{EndDate}"/>
-							<Text text="{ZZMOYR}" width="5rem"/>
-							<Text text="{ColorDesc}"/>
-							<Text text="{Driver}"/>
-							<Text text="{ZZSUFFIX}"/>
-							<Text text="{path: 'Repair' ,formatter: '.formatRepair'}" width="6rem"/>
-							<Text text="{Status}"/>
+							<Text text="{DemoOdataModel>ZZSERIES}" width="3rem" textDirection="LTR"/>
+							<Text text="{DemoOdataModel>ModelDesc}" width="13rem" textDirection="LTR"/>
+							<Text text="{DemoOdataModel>ZoneDesc}" width="8rem" textDirection="LTR"/>
+							<Text text="{DemoOdataModel>Price}" width="7rem" textDirection="LTR"/>
+							<Text text="{DemoOdataModel>EndDate}" width="8rem" textDirection="LTR"/>
+							<Text text="{DemoOdataModel>ZZMOYR}" width="5rem" textDirection="LTR"/>
+							<Text text="{DemoOdataModel>ColorDesc}" width="8rem" textDirection="LTR"/>
+							<Text text="{DemoOdataModel>Driver}" width="7rem" textDirection="LTR"/>
+							<Text text="{DemoOdataModel>Reserver}" width="7rem" textDirection="LTR"/>
+							<Text text="{DemoOdataModel>ZZSUFFIX}" width="4rem" textDirection="LTR"/>
+							<Text text="{path: 'DemoOdataModel>Repair' ,formatter: '.formatRepair'}" width="4rem" textDirection="LTR"/>
+							<Text text="{DemoOdataModel>Status}" width="4rem" textDirection="LTR"/>
 						</cells>
 					</ColumnListItem>
 				</items>

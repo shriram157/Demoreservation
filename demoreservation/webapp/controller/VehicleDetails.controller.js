@@ -34,10 +34,12 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 			var email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
 			//testing
 	//		email = "anubha_pandey@toyota.ca";
-			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-			sPath = "VehicleDetailSet(VHVIN='" + VHVIN + "',Email='" + email + "')?$expand=NAVFACOPTION,NAVDEALEROPTION",
-				oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
-				that = this;
+			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/";
+			var that = this,
+			sPath = "/VehicleDetailSet(VHVIN='" + VHVIN + "',Email='" + email + "')?$expand=NAVFACOPTION,NAVDEALEROPTION",
+		//	var OrderChangeModel = that.getOwnerComponent().getModel("DemoOdataModel");
+				oDetailModel = new sap.ui.model.odata.ODataModel(uri, true);
+		//	oDetailModel = 	that.getOwnerComponent().getModel("DemoOdataModel");
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
 			// read OData model data into local JSON model 

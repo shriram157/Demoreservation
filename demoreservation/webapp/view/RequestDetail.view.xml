@@ -6,21 +6,21 @@
 			<HBox class="sapMHBox_padding">
 				<VBox width="50%" class="sapUiLargeMarginBegin">
 					<HBox width="80%">
-						<Label width="12rem" text="VIN : " text-align="left"/>
+						<Label width="12rem" text="VIN : "/>
 						<Text width="12rem" text="{Header>/VehicleDetailSet/VHVIN}"/>
 					</HBox>
 					<HBox width="80%">
-						<Label width="12rem" text="Model Year : " text-align="left"/>
+						<Label width="12rem" text="Model Year : "/>
 						<Text width="12rem" text="{Header>/VehicleDetailSet/ZZMOYR}"/>
 					</HBox>
 				</VBox>
 				<VBox width="50%">
 					<HBox width="80%">
-						<Label width="12rem" text="Model Description : " text-align="left"/>
+						<Label width="12rem" text="Model Description : "/>
 						<Text width="12rem" text="{Header>/VehicleDetailSet/MATNR}"/>
 					</HBox>
 					<HBox width="80%">
-						<Label width="12rem" text="Colour : " text-align="left"/>
+						<Label width="12rem" text="Colour : "/>
 						<Text width="12rem" text="{Header>/VehicleDetailSet/ColorDesc}"/>
 					</HBox>
 				</VBox>
@@ -62,45 +62,45 @@
 						<Input id="onBehalf" placeholder="Enter User ..." value="{Reservation>/ZINFO_ID}" change="onEventfillUserInfo"/>
 					</HBox>
 					<HBox width="80%">
-						<Label width="12rem" class="sapUiSmallMarginTop" text="First Name : " text-align="left" required="true"/>
+						<Label width="12rem" class="sapUiSmallMarginTop" text="First Name : " required="true"/>
 						<Input width="20rem" placeholder="Enter Text ..." showTableSuggestionValueHelp="false" id="idFirstName" editable="false" value="{Reservation>/ZREQ_NAME} "/>
 					</HBox>
 					<HBox width="80%">
-						<Label width="12rem" class="sapUiSmallMarginTop" text="Last Name : " text-align="left" required="true"/>
+						<Label width="12rem" class="sapUiSmallMarginTop" text="Last Name : " required="true"/>
 						<Input width="20rem" placeholder="Enter Text ..." id="idLastName" editable="false" value="{Reservation>/ZREQ_LNAME} "/>
 					</HBox>
 					<HBox width="80%">
-						<Label width="12rem" class="sapUiSmallMarginTop" text="Email Address : " text-align="left" required="true"/>
+						<Label width="12rem" class="sapUiSmallMarginTop" text="Email Address : " required="true"/>
 						<Input width="20rem" placeholder="Enter Text ..." id="idEmail" editable="true" value="{Reservation>/ZEMAIL} "/>
 					</HBox>
 					<HBox width="80%">
-						<Label width="12rem" class="sapUiSmallMarginTop" text="Department : " text-align="left" visible="false"/>
+						<Label width="12rem" class="sapUiSmallMarginTop" text="Department : " visible="false"/>
 						<Input width="20rem" placeholder="Enter Text ..." id="idDept" editable="false" value="{Reservation>/ZDEPT}" visible="false"/>
 					</HBox>
 					<HBox width="80%">
-						<Label width="12rem" class="sapUiSmallMarginTop" text="Request for Others : " text-align="left" required="true" visible="true"/>
+						<Label width="12rem" class="sapUiSmallMarginTop" text="Request for Others : " required="true" visible="true"/>
 						<CheckBox id="ipOthers" text="" selected="{Reservation>/ZOTHERS}" editable="true" enabled="true" visible="true" width="auto" textDirection="Inherit" wrapping="false" useEntireWidth="true" select="selectRequestOther"/>
 					</HBox>
 					<HBox id="h_purchtype" width="80%" visible="false">
-						<Label width="12rem" class="sapUiSmallMarginTop" text="Purchaser Type : " text-align="left" editable="false" visible="true"/>
+						<Label width="12rem" class="sapUiSmallMarginTop" text="Purchaser Type : " visible="true"/>
 						<ComboBox id="purtype" change="onSelectPurTypeChange" items="{path: 'vehicles>/FilterData/PurchaserType'}" placeholder="Select Purchaser Type" width="20rem" selectedKey="{Reservation>/ZPURTYP}">
 							<core:Item key="{vehicles>key}" text="{vehicles>name}"/>
 						</ComboBox>
 						<Label id="noteOthers" class="sapUiSmallMarginTop" text=" * Please note that you MUST specify the purchaser's name. If you do not, the request will be cancelled by the Vehicle Programs Administrator." text-align="left" editable="false" visible="false"/>
 					</HBox>
 					<HBox id="h_purchname" width="80%" visible="false">
-						<Label width="12rem" class="sapUiSmallMarginTop" text="Purchaser Name : " text-align="left" required="true"/>
+						<Label width="12rem" class="sapUiSmallMarginTop" text="Purchaser Name : " required="true"/>
 						<Input width="20rem" placeholder="Enter Text ..." id="idPurName" value="{Reservation>/ZPUR_NAME} "/>
 					</HBox>
 					<HBox width="80%">
-						<Label width="12rem" class="sapUiSmallMarginTop" text="Ideal Purchase Date : " text-align="left" required="true"/>
+						<Label width="12rem" class="sapUiSmallMarginTop" text="Ideal Purchase Date : " required="true"/>
 						<DatePicker xmlns="sap.m" id="idPurchDate" placeholder="YYYY-MM-DD" change="onSelectDate" width="20rem" valueFormat="yyyyMMdd" displayFormat="yyyy-MM-dd" value="{Reservation>/ZPURDT} "/>
 					</HBox>
 
 				</VBox>
 				<VBox width="100%">
 					<HBox id="h_department" width="80%">
-						<Label width="12rem" text="Department : " text-align="left" required="true" class="statusLabel nes-label-font-white"/>
+						<Label width="12rem" text="Department : " required="true" class="statusLabel nes-label-font-white"/>
 						<ComboBox id="idDeptName" selectionChange="onSelectDepartment" width="20rem" items="{localDataModel>/Department}" selectedKey="{Reservation>/ZDEPT}">
 							<core:Item key="{localDataModel>orgeh}" text="{localDataModel>orgtx}" enabled="{= ${LocalDataModel>status} === 'ACTIVE'}"/>
 						</ComboBox>
@@ -112,19 +112,19 @@
 			<HBox class="sapMHBox_padding" visible="false">
 				<VBox width="100%" class="sapUiLargeMarginBegin">
 					<HBox width="80%">
-						<Label width="12rem" class="sapUiSmallMarginTop" text="Notes for requestor : " text-align="left" required="true"/>
+						<Label width="12rem" class="sapUiSmallMarginTop" text="Notes for requestor : " required="true"/>
 						<Input id="idNotes" width="40rem" placeholder="Enter Text ..." value="{Reservation>/ZANOTES} "/>
 					</HBox>
 					<HBox width="80%">
-						<Label width="12rem" class="sapUiSmallMarginTop" text="Cheque Required? : " text-align="left" required="true"/>
+						<Label width="12rem" class="sapUiSmallMarginTop" text="Cheque Required? : " required="true"/>
 						<CheckBox id="idCheckReq"/>
 					</HBox>
 					<HBox width="80%">
-						<Label width="12rem" class="sapUiSmallMarginTop" text="Date Cheque Due : " text-align="left" required="true"/>
+						<Label width="12rem" class="sapUiSmallMarginTop" text="Date Cheque Due : " required="true"/>
 						<DatePicker xmlns="sap.m" id="idDueDate" placeholder="YYYY/MM/DD" change="onSelectDate" width="12rem" valueFormat="yyyyMMdd" displayFormat="yyyy/MM/dd" value="{Reservation>/ZCSUDT} "/>
 					</HBox>
 					<HBox width="80%">
-						<Label width="12rem" class="sapUiSmallMarginTop" text="Date Cheque Received : " text-align="left" required="true"/>
+						<Label width="12rem" class="sapUiSmallMarginTop" text="Date Cheque Received : " required="true"/>
 						<DatePicker xmlns="sap.m" id="idCheqDate" placeholder="YYYY/MM/DD" change="onSelectDate" width="12rem" valueFormat="yyyyMMdd" displayFormat="yyyy/MM/dd" value="{Reservation>/ZCREDT} "/>
 					</HBox>
 				</VBox>
