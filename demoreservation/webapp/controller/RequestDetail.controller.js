@@ -85,7 +85,7 @@ sap.ui.define([
 		},
 		getReservationData: function (resreq) {
 		//	var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-				var sPath = "zc_demo_reservationSet('" + resreq + "')",
+				var sPath = "/zc_demo_reservationSet('" + resreq + "')",
 			//	oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
 				that = this,
 				oDetailModel = that.getOwnerComponent().getModel("DemoOdataModel");
