@@ -18,7 +18,7 @@
 	"scripts": {
 		"test": "node node_modules/jest/bin/jest --config jest.json",
 		"test-coverage": "node node_modules/jest/bin/jest --coverage --config jest.json",
-		"start": "node server.js"
+		"start": "node --max-http-header-size=16384 server.js"
 	},
 	"engines": {
 		"node": "8.x"
