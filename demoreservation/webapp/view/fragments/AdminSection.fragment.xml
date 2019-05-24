@@ -29,7 +29,7 @@
 									<Label text="Date Cheque Due" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:label>
 								<form:fields>
-									<DatePicker id="ipDateDue" width="128.6750030517578px" displayFormat="yyyy-MM-dd" enabled="true" visible="true" valueFormat="yyyyMMdd" placeholder="yyyy-MM-dd"/>
+									<DatePicker id="ipDateDue" width="10rem" change="onSelectDate" displayFormat="yyyy-MM-dd" enabled="true" visible="true" valueFormat="yyyyMMdd" placeholder="yyyy-MM-dd"/>
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement visible="true">
@@ -37,7 +37,7 @@
 									<Label text="Date Cheque Received" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:label>
 								<form:fields>
-									<DatePicker id="ipDateRec" width="128.3125px" displayFormat="yyyy-MM-dd" enabled="true" visible="true" valueFormat="yyyyMMdd" placeholder="yyyy-MM-dd"/>
+									<DatePicker id="ipDateRec" width="10rem" displayFormat="yyyy-MM-dd" enabled="true" visible="true" valueFormat="yyyyMMdd" placeholder="yyyy-MM-dd"/>
 								</form:fields>
 							</form:FormElement>
 						</form:formElements>

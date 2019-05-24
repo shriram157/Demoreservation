@@ -121,11 +121,11 @@
 					</HBox>
 					<HBox width="80%">
 						<Label width="12rem" class="sapUiSmallMarginTop" text="Date Cheque Due : " required="true"/>
-						<DatePicker xmlns="sap.m" id="idDueDate" placeholder="YYYY/MM/DD" change="onSelectDate" width="12rem" valueFormat="yyyyMMdd" displayFormat="yyyy/MM/dd" value="{Reservation>/ZCSUDT} "/>
+						<DatePicker xmlns="sap.m" id="idDueDate" placeholder="YYYY/MM/DD" width="12rem" valueFormat="yyyyMMdd" displayFormat="yyyy/MM/dd" value="{Reservation>/ZCSUDT} "/>
 					</HBox>
 					<HBox width="80%">
 						<Label width="12rem" class="sapUiSmallMarginTop" text="Date Cheque Received : " required="true"/>
-						<DatePicker xmlns="sap.m" id="idCheqDate" placeholder="YYYY/MM/DD" change="onSelectDate" width="12rem" valueFormat="yyyyMMdd" displayFormat="yyyy/MM/dd" value="{Reservation>/ZCREDT} "/>
+						<DatePicker xmlns="sap.m" id="idCheqDate" placeholder="YYYY/MM/DD" width="12rem" valueFormat="yyyyMMdd" displayFormat="yyyy/MM/dd" value="{Reservation>/ZCREDT} "/>
 					</HBox>
 				</VBox>
 			</HBox>	

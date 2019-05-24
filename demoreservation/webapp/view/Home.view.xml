@@ -55,11 +55,11 @@
 									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
-							<!--<fb:FilterItem label="{i18n>lblReserver}" name="RI" visible="{UserDataModel>/AdminVisible}">-->
-							<!--	<fb:control>-->
-							<!--		<Input xmlns="sap.m" id="ReserverFilter" placeholder="{i18n>plReserver}"/>-->
-							<!--	</fb:control>-->
-							<!--</fb:FilterItem>-->
+							<fb:FilterItem label="{i18n>lblReserver}" name="RI" visible="{= ${UserDataModel>/AdminVisible} === true ? false : true }">
+								<fb:control>
+									<Input xmlns="sap.m" id="ReserverFilter" placeholder="{i18n>plReserver}"/>
+								</fb:control>
+							</fb:FilterItem>
 
 						</fb:filterItems>
 					</fb:FilterBar>
@@ -107,9 +107,9 @@
 					<Column width="7rem" hAlign="Center">
 						<Text text="{i18n>lblDriver}" width="auto"/>
 					</Column>
-					<!--<Column width="7rem" hAlign="Center">-->
-					<!--	<Text text="{i18n>lblReserver}" width="auto"/>-->
-					<!--</Column>-->
+					<Column width="7rem" hAlign="Center">
+						<Text text="{i18n>lblReserver}" width="auto"/>
+					</Column>
 					<Column width="4rem" hAlign="Center">
 						<Text text="{i18n>lblSuffix}" width="auto"/>
 					</Column>

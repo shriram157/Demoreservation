@@ -34,7 +34,7 @@
 									</ComboBox>
 								</filterbar:control>
 							</filterbar:FilterItem>
-							<filterbar:FilterItem label="{i18n>lblReserver}" name="RI"> <!-- visible="{UserModel>/admin}" -->
+							<filterbar:FilterItem label="{i18n>lblReserver}" name="RI" visible="{UserModel>/admin}"> 
 								<filterbar:control>
 									<Input xmlns="sap.m" id="ReserverFilter" placeholder="{i18n>plReserver}"/>
 								</filterbar:control>
@@ -127,12 +127,12 @@
 					<ColumnListItem selected="true" type="Active">
 						<cells>
 							<Text text="{DemoOdataModel>Status}" />
-							<Text text="{DemoOdataModel>ModelDesc}" width="13rem"/>
+							<Text text="{DemoOdataModel>ModelDesc}" width="12rem"/>
 							<Text text="{DemoOdataModel>ZZMOYR}"/>
 							<Text text="{DemoOdataModel>ColorDesc}" />
 							<Text text="{DemoOdataModel>RequestDate}" />
 							<Text text="{DemoOdataModel>Reserver}" />
-							<Text text="{DemoOdataModel>VHVIN}" width="10rem"/>
+							<Text text="{DemoOdataModel>VHVIN}" width="9rem"/>
 							<Text text="{DemoOdataModel>Purchaser}" />
 							<Text text="{DemoOdataModel>Driver}" />
 							<Text text="{DemoOdataModel>Price}" />

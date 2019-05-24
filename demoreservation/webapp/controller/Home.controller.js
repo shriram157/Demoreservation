@@ -57,7 +57,7 @@ sap.ui.define([
 			var yearFilter = this.getView().byId("yearFilter").getValue();
 			var vinFilter = this.getView().byId("vinFilter").getValue();
 			var inpStatus = this.getView().byId("inpStatus").getValue();
-//			var ReserverFilter = this.getView().byId("ReserverFilter").getValue();
+			var ReserverFilter = this.getView().byId("ReserverFilter").getValue();
 			
 			if(inpStatus ==="All"){ // If Status selected All, send blank value in filter
 				inpStatus="";
@@ -71,7 +71,7 @@ sap.ui.define([
 			var VHVIN = new sap.ui.model.Filter("VHVIN", sap.ui.model.FilterOperator.Contains, vinFilter);
 			var Status = new sap.ui.model.Filter("Status", sap.ui.model.FilterOperator.EQ, inpStatus);
 			var ZZSUFFIX = new sap.ui.model.Filter("ZZSUFFIX", sap.ui.model.FilterOperator.EQ, suffixFilter);
-//			var Reserver = new sap.ui.model.Filter("Reserver", sap.ui.model.FilterOperator.EQ, ReserverFilter);
+			var Reserver = new sap.ui.model.Filter("Reserver", sap.ui.model.FilterOperator.EQ, ReserverFilter);
 			aFilters = [
 				ZZZONE,
 				ZZSERIES,
@@ -79,8 +79,8 @@ sap.ui.define([
 				ZZMOYR,
 				VHVIN,
 				Status,
-				ZZSUFFIX
-	//			Reserver
+				ZZSUFFIX,
+				Reserver
 			];
 			var finalFilter = new sap.ui.model.Filter({
 				filters: aFilters,

@@ -20,9 +20,15 @@ sap.ui.define([
 
 		onRouteMatched: function (oEvent) {
 			var	oArgs = oEvent.getParameter("arguments");
-			var allClicked = oArgs.admin;
-			var email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
-			var admin = sap.ui.getCore().getModel("UserDataModel").getData().AdminVisible;
+			var allClicked = oArgs.admin, email, admin;
+			
+			if(sap.ui.getCore().getModel("UserDataModel") !== undefined){
+				email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
+				admin = sap.ui.getCore().getModel("UserDataModel").getData().AdminVisible;
+			}else{
+				email = "";
+				admin = false;
+			}
 			//testing
 		//		email = "anubha_pandey@toyota.ca";
 
@@ -283,7 +289,7 @@ sap.ui.define([
 				chk ="X";
 			}
 			
-			if(this.isValidateTrue()){
+			if(this.isValidateTrue() && this.onSelectDate()){
 				var data = {
 					// sample data
 					"ZANOTES": Fragment.byId("adminSectionFragment", "ipNotes").getValue(),
@@ -434,6 +440,27 @@ sap.ui.define([
 
 			}
 
+		},
+		onSelectDate: function(oEvent){
+			var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
+				pattern: "yyyyMMdd"
+			});
+			var msg, oBundle = this.getView().getModel("i18n").getResourceBundle();
+			var today = dateFormat.format(new Date()), selectedDueDate;
+			
+			if(Fragment.byId("adminSectionFragment", "ipDateDue").getDateValue() !==""){
+				selectedDueDate = dateFormat.format(Fragment.byId("adminSectionFragment", "ipDateDue").getDateValue());
+				if(selectedDueDate<today){
+				// error
+					msg = oBundle.getText("errBackdateValidation");
+					Fragment.byId("adminSectionFragment", "ipDateDue").setValueState(sap.ui.core.ValueState.Error);
+					Fragment.byId("adminSectionFragment", "ipDateDue").setValueStateText(msg);
+					return false;
+				}else {
+						Fragment.byId("adminSectionFragment", "ipDateDue").setValueState(sap.ui.core.ValueState.None);
+				}
+			}
+			return true;
 		}
 	});
 

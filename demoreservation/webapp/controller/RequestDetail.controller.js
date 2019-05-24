@@ -269,7 +269,7 @@ sap.ui.define([
 		},
 		onSubmitPress: function (oEvent) {
 			var that = this;
-			if (this.isValidateTrue()) {
+			if (this.isValidateTrue() && this.onSelectDate()) {
 				if (this.action === "U") {
 					that._saveData("U");
 				} else {
@@ -660,7 +660,6 @@ sap.ui.define([
 				
 			}else{
 					var reqData = {"uid":inputuser};
-					//	sap.ui.core.BusyIndicator.show();
 						$.ajax({
 						dataType: "json",
 						url: "/demoreservation-node/node/tci/internal/api/v1.0/security/ldap/rest/getUserByUID",
@@ -671,9 +670,6 @@ sap.ui.define([
 					      'Content-Type' : 'application/json'
 					    },
 						success: function (respdata) {
-				//			sap.ui.core.BusyIndicator.hide();
-					//		console.log("Response", respdata);
-							
 							if(respdata.errorCode ==="ERROR_USER_NOT_FOUND"){
 								that.byId("idFirstName").setValue("");
 								that.byId("idLastName").setValue("");
@@ -682,7 +678,6 @@ sap.ui.define([
 								icon: sap.m.MessageBox.Icon.ERROR,
 								title: "Error",
 								actions: [sap.m.MessageBox.Action.OK],
-							//	details: e.response.body,
 								onClose: function (oAction) {
 								}
 								});
@@ -694,14 +689,8 @@ sap.ui.define([
 								that.byId("idDept").setValue(that.getEmployeeData("",inputuser)[0]);
 								that.byId("idEmail").setValue(that.getEmployeeData("",inputuser)[1]);
 							}
-						//	that.byId("onBehalf").setValue(obj.usrid);
-						//	that.byId("idEmail").setValue(obj.usrid_long);
-						//	that.byId("idDept").setValue(that.logiEmpDeptText);
-						//	that.logiEmpDept = obj.orgeh;
 						},
 						error: function (oError) {
-				//			sap.ui.core.BusyIndicator.hide();
-					//		console.log("Error: ", oError);
 								sap.m.MessageBox.show("Error is fetching user data from LDAP.", {
 								icon: sap.m.MessageBox.Icon.ERROR,
 								title: "Error",
@@ -713,6 +702,28 @@ sap.ui.define([
 						}
 					});
 			}
+		},
+		
+		onSelectDate: function(oEvent){
+			var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
+				pattern: "yyyyMMdd"
+			});
+			var msg, that = this, oBundle = this.getView().getModel("i18n").getResourceBundle();
+			var today = dateFormat.format(new Date()), selectedPurchaseDate;
+			
+			if(this.byId("idPurchDate").getDateValue() !==""){
+				selectedPurchaseDate = dateFormat.format(this.byId("idPurchDate").getDateValue());
+				if(selectedPurchaseDate<today){
+				// error
+					msg = oBundle.getText("errBackdateValidation");
+					that.byId("idPurchDate").setValueState(sap.ui.core.ValueState.Error);
+					that.byId("idPurchDate").setValueStateText(msg);
+					return false;
+				}else {
+						that.byId("idPurchDate").setValueState(sap.ui.core.ValueState.None);
+				}
+			}
+			return true;
 		}
 	});
 });
