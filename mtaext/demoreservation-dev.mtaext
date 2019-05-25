@@ -5,10 +5,20 @@ extends: demoreservation
 modules:
  - name: demoreservation-node
    parameters:
-      host: tci-dev-${app-name}
+      host: dev-demoreservation-node
+      domain: scp.toyota.ca
    properties:
       MOCK_USER_MODE: true
       MOCK_USER_ORIGIN: d36z7bqhz1-GSR-Neo-to-CF
  - name: demoreservation
    parameters:
-      host: tci-dev-${app-name}
+      host: dev-demoreservation
+      domain: scp.toyota.ca
+
+resources:
+ - name: uaa_demoreservation
+   parameters:
+      config:
+         oauth2-configuration:
+            redirect-uris:
+               - https://dev-demoreservation.scp.toyota.ca/login/callback
