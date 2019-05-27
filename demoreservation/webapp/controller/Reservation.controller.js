@@ -448,7 +448,7 @@ sap.ui.define([
 			var msg, oBundle = this.getView().getModel("i18n").getResourceBundle();
 			var today = dateFormat.format(new Date()), selectedDueDate;
 			
-			if(Fragment.byId("adminSectionFragment", "ipDateDue").getDateValue() !==""){
+			if(Fragment.byId("adminSectionFragment", "ipDateDue").getDateValue() !=="" && Fragment.byId("adminSectionFragment", "ipDateDue").getDateValue() !== null){
 				selectedDueDate = dateFormat.format(Fragment.byId("adminSectionFragment", "ipDateDue").getDateValue());
 				if(selectedDueDate<today){
 				// error
