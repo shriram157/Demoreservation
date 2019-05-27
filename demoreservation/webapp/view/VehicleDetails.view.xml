@@ -226,7 +226,7 @@
                                                             <Label text="Request Date" required="false"/>
                                                         </form:label>
                                                         <form:fields>
-                                                            <Label design="Bold" text="{/VehicleDetailSet/zzcretms}"/>
+                                                            <Label design="Bold" text="{/VehicleDetailSet/ZZCRETMS}"/>
                                                         </form:fields>
                                                     </form:FormElement>
                                                     <form:FormElement>
