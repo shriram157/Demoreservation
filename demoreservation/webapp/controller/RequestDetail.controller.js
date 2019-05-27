@@ -52,16 +52,9 @@ sap.ui.define([
 			this.byId("h_department").setVisible(true);
 		},
 		getVehicleData: function (VHVIN) {
-		//	var email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
-			//testing
-		//	email = "anubha_pandey@toyota.ca";
-	//		var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-				var that = this,
-			//	sPath = "VehicleDetailSet(VHVIN='" + VHVIN + "',Email='" + email + "')?$expand=NAVFACOPTION,NAVDEALEROPTION",
-				sPath = "/vehicleListSet('" + VHVIN + "')",
-			//	oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
-				oDetailModel = that.getOwnerComponent().getModel("DemoOdataModel");
-				
+			var that = this,
+			sPath = "/vehicleListSet('" + VHVIN + "')",
+			oDetailModel = that.getOwnerComponent().getModel("DemoOdataModel");
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
 			// read OData model data into local JSON model 
@@ -84,11 +77,9 @@ sap.ui.define([
 			});
 		},
 		getReservationData: function (resreq) {
-		//	var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-				var sPath = "/zc_demo_reservationSet('" + resreq + "')",
-			//	oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
-				that = this,
-				oDetailModel = that.getOwnerComponent().getModel("DemoOdataModel");
+			var sPath = "/zc_demo_reservationSet('" + resreq + "')",
+			that = this,
+			oDetailModel = that.getOwnerComponent().getModel("DemoOdataModel");
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
 			// read OData model data into local JSON model 
@@ -126,11 +117,9 @@ sap.ui.define([
 			});
 		},
 		getDepartmentData: function () {
-		//	var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-				var sPath = "/ZC_DEPT",
-			//	oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
-				that = this,
-				oDetailModel = that.getOwnerComponent().getModel("DemoOdataModel");
+			var sPath = "/ZC_DEPT",
+			that = this,
+			oDetailModel = that.getOwnerComponent().getModel("DemoOdataModel");
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
 			// read OData model data into local JSON model 
@@ -164,9 +153,7 @@ sap.ui.define([
 				persg = "2";
 			}
 			var curr_datetime = this.getCurrentDate();
-		//	var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
 				var sPath = "/ZC_EMP_DETAILS(datetime'" + curr_datetime + "')/Set",
-			//	oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
 				oDetailModel = that.getOwnerComponent().getModel("DemoOdataModel");
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
@@ -318,7 +305,6 @@ sap.ui.define([
 				"ZUDEL": delIndictator,
 				// X in case of delete
 				"ZANOTES": that.byId("idNotes").getValue(),
-				//	  "ZCHERQ" : that.byId("idCheckReq").getValue(),
 				"ZCHERQ": "",
 				// x in case selected
 				"ZCSUDT": that.byId("idDueDate").getValue(),
@@ -329,17 +315,12 @@ sap.ui.define([
 				"Vehiclenumber": headerModel.getProperty("/VehicleDetailSet/Vehiclenumber"),
 				"Vehicleidentnumb": headerModel.getProperty("/VehicleDetailSet/VHVIN")
 			};
-		//	var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
 			var sPath = "/zc_demo_reservationSet('" + resModel.getProperty("/Zresreq") + "')",
-			//	oModifyModel = new sap.ui.model.odata.ODataModel(uri, true)
 			oModifyModel = that.getOwnerComponent().getModel("DemoOdataModel");
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
 			// Set busy indicator
-			//				oModifyModel.update(sPath, data, {
 			oModifyModel.update(sPath, data, {
-				// method: "PATCH",
-				// async: false,
 				success: function (oData, oResponse) {
 					// release busy indicator
 					sap.m.MessageBox.show("Reservation request updated", {
@@ -402,7 +383,6 @@ sap.ui.define([
 				"Vehiclenumber": headerModel.getProperty("/VehicleDetailSet/Vehiclenumber"),
 				"Vehicleidentnumb": headerModel.getProperty("/VehicleDetailSet/VHVIN")
 			};
-			//var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
 				var sPath = "/zc_demo_reservationSet",
 				oModifyModel = that.getOwnerComponent().getModel("DemoOdataModel");
 				
