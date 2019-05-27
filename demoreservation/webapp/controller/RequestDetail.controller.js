@@ -127,7 +127,7 @@ sap.ui.define([
 		},
 		getDepartmentData: function () {
 		//	var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
-				var sPath = "ZC_DEPT",
+				var sPath = "/ZC_DEPT",
 			//	oDetailModel = new sap.ui.model.odata.ODataModel(uri, true),
 				that = this,
 				oDetailModel = that.getOwnerComponent().getModel("DemoOdataModel");
