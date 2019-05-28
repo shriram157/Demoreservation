@@ -118,7 +118,7 @@ sap.ui.define([
 				sKey = oItem ? oItem.getKey() : '';
 		},
 
-		getVehicleData: function (VHVIN,dialogType,requestorEmail) {
+		getVehicleData: function (VHVIN,dialogType,requestorEmail,StatusCode) {
 			//testing
 	//		email = "anubha_pandey@toyota.ca";
 
@@ -152,7 +152,7 @@ sap.ui.define([
 								oData.ZZPURTYPTXT =  objP[i].name;
 							}     
 						}
-
+					oData.StatusCode = StatusCode;           
 					oJSONModel.setData(oData);
 					that.getView().setModel(oJSONModel,"VehicleInfo");
 					// release busy indicator
@@ -182,6 +182,7 @@ sap.ui.define([
 			this._selectedPath = oEvent.getSource().getParent().getBindingContextPath("DemoOdataModel");
 			var tabModel = this.getView().byId("tabRservation").getModel("DemoOdataModel");
 			var vhvin = tabModel.getData(this._selectedPath).VHVIN,
+			statusCode = tabModel.getData(this._selectedPath).StatusCode,
 			requestorEmail = tabModel.getData(this._selectedPath).Email;
 			
 			this._selectedObject = tabModel.getProperty(this._selectedPath);
@@ -192,7 +193,7 @@ sap.ui.define([
 				);
 				this.getView().addDependent(this.dlgReservation);
 			}
-			this.getVehicleData(vhvin,"INFO",requestorEmail);
+			this.getVehicleData(vhvin,"INFO",requestorEmail,statusCode);
 		},
 		
 		onApprovePress: function (oEvent) {
@@ -208,8 +209,9 @@ sap.ui.define([
 			var tabModel = this.getView().byId("tabRservation").getModel("DemoOdataModel");
 			this._selectedObject = tabModel.getProperty(this._selectedPath);
 			var vhvin = tabModel.getData(this._selectedPath).VHVIN,
+			statusCode = tabModel.getData(this._selectedPath).StatusCode,
 			requestorEmail = tabModel.getData(this._selectedPath).Email;
-			this.getVehicleData(vhvin,"APRJ",requestorEmail);
+			this.getVehicleData(vhvin,"APRJ",requestorEmail,statusCode);
 		},
 
 		onRejectPress: function (oEvent) {
@@ -225,8 +227,9 @@ sap.ui.define([
 			this._selectedPath = oEvent.getSource().getParent().getBindingContextPath("DemoOdataModel");
 			this._selectedObject = tabModel.getProperty(this._selectedPath);
 			var vhvin = tabModel.getData(this._selectedPath).VHVIN,
+			statusCode = tabModel.getData(this._selectedPath).StatusCode,
 			requestorEmail = tabModel.getData(this._selectedPath).Email;
-			this.getVehicleData(vhvin,"APRJ",requestorEmail);
+			this.getVehicleData(vhvin,"APRJ",requestorEmail,statusCode);
 		},
 		
 		onCloseDialog: function (oEvent) {
