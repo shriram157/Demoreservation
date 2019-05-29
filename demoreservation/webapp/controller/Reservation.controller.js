@@ -164,10 +164,12 @@ sap.ui.define([
 					}
 				},
 				error: function (oError) {
+					var obj = JSON.parse(oError.responseText),
+					errMsg = obj.error.message.value;
 					// release busy indicator
 					oBusyDialog.close();
 					// Message - error in accessing vehicle data
-						sap.m.MessageBox.show("Error in accessing vehicle data", {
+						sap.m.MessageBox.show("Error in accessing vehicle data. "+errMsg, {
 						icon: sap.m.MessageBox.Icon.ERROR,
 						title: "Error",
 						actions: [sap.m.MessageBox.Action.OK],
@@ -322,7 +324,7 @@ sap.ui.define([
 					// method: "PATCH",
 					// async: false,
 					success: function (oData, oResponse) {
-						sap.m.MessageBox.show("Reservation request updated", {
+						sap.m.MessageBox.show("Reservation request updated - "+vehicleModel.getProperty("/ZRESREQ"), {
 						icon: sap.m.MessageBox.Icon.SUCCESS,
 						title: "Success",
 						actions: [sap.m.MessageBox.Action.OK],
@@ -331,14 +333,17 @@ sap.ui.define([
 							Fragment.byId("adminSectionFragment", "ipDateDue").setValue("");
 							Fragment.byId("adminSectionFragment", "ipDateRec").setValue("");
 							Fragment.byId("adminSectionFragment", "ipNotes").setValue("");
-							that.getView().getModel().refresh();
+							that.getView().getModel("DemoOdataModel").refresh();
 						}
 					});
 						// release busy indicator
 						oBusyDialog.close();
 					},
 					error: function (e) {
-						sap.m.MessageBox.show("Reservation request update failed", {
+						var obj = JSON.parse(e.responseText),
+						errMsg = obj.error.message.value;
+						
+						sap.m.MessageBox.show("Reservation request update failed. "+errMsg, {
 							icon: sap.m.MessageBox.Icon.ERROR,
 							title: "Error",
 							actions: [sap.m.MessageBox.Action.OK],

@@ -30,6 +30,8 @@ sap.ui.define([
 				that.action = "U";
 				// Make Delete button visible
 				that.byId("btnDelete").setVisible(true);
+			}else if (oArgs.Zresreq === "C"){
+				that.action = "C";
 			}
 			this.getVehicleData(oArgs.vhvin);
 			// On employee login, fill details
@@ -89,8 +91,7 @@ sap.ui.define([
 					var oJSONModel = new sap.ui.model.json.JSONModel();
 					oJSONModel.setData(oData);
 					that.getView().setModel(oJSONModel, "Reservation");
-					
-					if (oData.ZREQTYP === "E" || oData.ZREQTYP === "C") {
+					if (oData.ZREQTYP === "E" || oData.ZREQTYP === "C" || oData.ZREQTYP === "R"|| oData.ZREQTYP === "T") {
 						that.byId("h_onbehalf").setVisible(true);
 						that.byId("h_department").setVisible(false);
 						that.getEmployeeData(oData.ZREQTYP,"");
@@ -323,7 +324,7 @@ sap.ui.define([
 			oModifyModel.update(sPath, data, {
 				success: function (oData, oResponse) {
 					// release busy indicator
-					sap.m.MessageBox.show("Reservation request updated", {
+					sap.m.MessageBox.show("Reservation request updated -"+resModel.getProperty("/Zresreq"), {
 						icon: sap.m.MessageBox.Icon.SUCCESS,
 						title: "Success",
 						actions: [sap.m.MessageBox.Action.OK],
@@ -334,7 +335,9 @@ sap.ui.define([
 					oBusyDialog.close();
 				},
 				error: function (e) {
-					sap.m.MessageBox.show("Reservation request update failed", {
+					var obj = JSON.parse(e.responseText),
+					errMsg = obj.error.message.value;
+					sap.m.MessageBox.show("Reservation request update failed. "+errMsg, {
 						icon: sap.m.MessageBox.Icon.ERROR,
 						title: "Error",
 						actions: [sap.m.MessageBox.Action.OK],
@@ -417,7 +420,9 @@ sap.ui.define([
 					oBusyDialog.close();
 				},
 				error: function (e) {
-					sap.m.MessageBox.show("Reservation request creation failed", {
+					var obj = JSON.parse(e.responseText),
+						errMsg = obj.error.message.value;
+					sap.m.MessageBox.show("Reservation request creation failed. "+errMsg, {
 						icon: sap.m.MessageBox.Icon.ERROR,
 						title: "Error",
 						actions: [sap.m.MessageBox.Action.OK],
@@ -671,6 +676,7 @@ sap.ui.define([
 							}
 						},
 						error: function (oError) {
+							
 								sap.m.MessageBox.show("Error is fetching user data from LDAP.", {
 								icon: sap.m.MessageBox.Icon.ERROR,
 								title: "Error",
