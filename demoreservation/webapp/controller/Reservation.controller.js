@@ -468,6 +468,20 @@ sap.ui.define([
 						Fragment.byId("adminSectionFragment", "ipDateDue").setValueState(sap.ui.core.ValueState.None);
 				}
 			}
+			
+			if(Fragment.byId("adminSectionFragment", "ipDateRec").getDateValue() !=="" && Fragment.byId("adminSectionFragment", "ipDateRec").getDateValue() !== null){
+				selectedDueDate = dateFormat.format(Fragment.byId("adminSectionFragment", "ipDateRec").getDateValue());
+				if(selectedDueDate<today){
+				// error
+					msg = oBundle.getText("errBackdateValidation");
+					Fragment.byId("adminSectionFragment", "ipDateRec").setValueState(sap.ui.core.ValueState.Error);
+					Fragment.byId("adminSectionFragment", "ipDateRec").setValueStateText(msg);
+					return false;
+				}else {
+						Fragment.byId("adminSectionFragment", "ipDateRec").setValueState(sap.ui.core.ValueState.None);
+				}
+			}
+
 			return true;
 		}
 	});

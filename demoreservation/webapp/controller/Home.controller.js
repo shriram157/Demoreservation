@@ -230,7 +230,7 @@ sap.ui.define([
 				success: function (scopesData) {
 					var type = scopesData.loggedUserType[0];
 					// testing
-				//	type="TCI_User";
+				//	type="TCI_Admin";
 					that.UserData.setProperty("/Type",type);
 					if(type === "TCI_Admin"){
 						that.UserData.setProperty("/AdminVisible",true);

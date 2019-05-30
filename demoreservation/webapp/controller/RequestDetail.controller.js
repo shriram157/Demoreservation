@@ -32,6 +32,7 @@ sap.ui.define([
 				that.byId("btnDelete").setVisible(true);
 			}else if (oArgs.Zresreq === "C"){
 				that.action = "C";
+				that.byId("idHboxCheqDate").setVisible(false);
 			}
 			this.getVehicleData(oArgs.vhvin);
 			// On employee login, fill details
@@ -45,6 +46,7 @@ sap.ui.define([
 				that.byId("idLastName").setValue(sap.ui.getCore().getModel("UserDataModel").getData().LastName);
 				that.byId("idEmail").setValue(sap.ui.getCore().getModel("UserDataModel").getData().Email);
 				that.byId("h_department").setVisible(false);
+				that.byId("idHboxCheqDate").setVisible(false);
 				var dept = that.getEmployeeData("E","")[0];
 				that.byId("idDept").setValue(dept);
 			}
@@ -577,15 +579,15 @@ sap.ui.define([
 						that.byId("idEmail").setValueState(sap.ui.core.ValueState.None);
 					}
 			}
-			if (ZPURDT === "") {
-				// // Purchase date can't be blank
-				msg = oBundle.getText("errCheckPurDateValidation");
-				that.byId("idPurchDate").setValueState(sap.ui.core.ValueState.Error);
-				that.byId("idPurchDate").setValueStateText(msg);
-				return false;
-			} else {
-				that.byId("idPurchDate").setValueState(sap.ui.core.ValueState.None);
-			}
+			// if (ZPURDT === "") {     // Ideal Purchase date is not mandatory - UAT
+			// 	// // Purchase date can't be blank
+			// 	msg = oBundle.getText("errCheckPurDateValidation");
+			// 	that.byId("idPurchDate").setValueState(sap.ui.core.ValueState.Error);
+			// 	that.byId("idPurchDate").setValueStateText(msg);
+			// 	return false;
+			// } else {
+			// 	that.byId("idPurchDate").setValueState(sap.ui.core.ValueState.None);
+			// }
 			if (ZOTHERS) {
 				// If Request for Others checkbox is checked
 				if (ZPURTYP === "") {

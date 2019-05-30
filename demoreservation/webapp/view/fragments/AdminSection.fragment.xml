@@ -21,7 +21,7 @@
 									<Label text="Cheque Required?" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:label>
 								<form:fields>
-									<CheckBox id="ipCheck" text="" selected="true" editable="true" enabled="true" visible="true" width="auto" textDirection="Inherit" wrapping="false" useEntireWidth="true"/>
+									<CheckBox id="ipCheck" text="" selected="false" editable="true" enabled="true" visible="true" width="auto" textDirection="Inherit" wrapping="false" useEntireWidth="true"/>
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement visible="true">

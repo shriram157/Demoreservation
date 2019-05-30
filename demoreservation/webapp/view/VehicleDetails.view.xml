@@ -223,7 +223,7 @@
                                                     </form:FormElement>
                                                     <form:FormElement>
                                                         <form:label>
-                                                            <Label text="Request Date" required="false"/>
+                                                            <Label text="Ideal Purchase Date" required="false"/>
                                                         </form:label>
                                                         <form:fields>
                                                             <Label design="Bold" text="{/VehicleDetailSet/ZZCRETMS}"/>
