@@ -699,7 +699,7 @@ sap.ui.define([
 			var msg, that = this, oBundle = this.getView().getModel("i18n").getResourceBundle();
 			var today = dateFormat.format(new Date()), selectedPurchaseDate;
 			
-			if(this.byId("idPurchDate").getDateValue() !==""){
+			if(this.byId("idPurchDate").getDateValue() !=="" && this.byId("idPurchDate").getDateValue() !== null){
 				selectedPurchaseDate = dateFormat.format(this.byId("idPurchDate").getDateValue());
 				if(selectedPurchaseDate<today){
 				// error
@@ -711,7 +711,7 @@ sap.ui.define([
 						that.byId("idPurchDate").setValueState(sap.ui.core.ValueState.None);
 				}
 			}
-			if(this.byId("idCheqRecDate").getDateValue() !==""){
+			if(this.byId("idCheqRecDate").getDateValue() !=="" && this.byId("idCheqRecDate").getDateValue() !== null){
 				selectedPurchaseDate = dateFormat.format(this.byId("idCheqRecDate").getDateValue());
 				if(selectedPurchaseDate<today){
 				// error
