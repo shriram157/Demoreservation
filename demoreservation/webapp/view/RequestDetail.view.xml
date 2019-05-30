@@ -98,7 +98,7 @@
 					</HBox>
 					<HBox id="idHboxCheqDate" width="80%">
 						<Label width="12rem" class="sapUiSmallMarginTop" text="Date Cheque Received : "/>
-						<DatePicker xmlns="sap.m" id="idCheqRecDate" placeholder="YYYY/MM/DD" width="12rem" valueFormat="yyyyMMdd" displayFormat="yyyy/MM/dd" value="{Reservation>/ZCREDT} "/>
+						<DatePicker xmlns="sap.m" id="idCheqRecDate" placeholder="YYYY-MM-DD" width="20rem" valueFormat="yyyyMMdd" displayFormat="yyyy-MM-dd" value="{Reservation>/ZCREDT} "/>
 					</HBox>
 				</VBox>
 				<VBox width="100%">

@@ -311,7 +311,7 @@ sap.ui.define([
 				"ZCHERQ": "",
 				// x in case selected
 				"ZCSUDT": that.byId("idDueDate").getValue(),
-				"ZCREDT": that.byId("idCheqDate").getValue(),
+				"ZCREDT": that.byId("idCheqRecDate").getValue(),
 				"ZCREATED_BY": "",
 				"ZCREATED_ON": "",
 				"Vehicleaction": "",
@@ -709,6 +709,18 @@ sap.ui.define([
 					return false;
 				}else {
 						that.byId("idPurchDate").setValueState(sap.ui.core.ValueState.None);
+				}
+			}
+			if(this.byId("idCheqRecDate").getDateValue() !==""){
+				selectedPurchaseDate = dateFormat.format(this.byId("idCheqRecDate").getDateValue());
+				if(selectedPurchaseDate<today){
+				// error
+					msg = oBundle.getText("errBackdateValidation");
+					that.byId("idCheqRecDate").setValueState(sap.ui.core.ValueState.Error);
+					that.byId("idCheqRecDate").setValueStateText(msg);
+					return false;
+				}else {
+						that.byId("idCheqRecDate").setValueState(sap.ui.core.ValueState.None);
 				}
 			}
 			return true;
