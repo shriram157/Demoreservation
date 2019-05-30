@@ -55,9 +55,9 @@ sap.ui.define([
 			var suffixFilter = this.getView().byId("suffixFilter").getSelectedKey();
 			var modelFilter = this.getView().byId("modelFilter").getValue();
 			var yearFilter = this.getView().byId("yearFilter").getValue();
-			var vinFilter = this.getView().byId("vinFilter").getValue();
+			var vinFilter = this.getView().byId("vinFilter").getValue().toUpperCase();
 			var inpStatus = this.getView().byId("inpStatus").getValue();
-			var ReserverFilter = this.getView().byId("ReserverFilter").getValue();
+			var ReserverFilter = this.getView().byId("ReserverFilter").getValue().toUpperCase();
 			
 			if(inpStatus ==="All"){ // If Status selected All, send blank value in filter
 				inpStatus="";

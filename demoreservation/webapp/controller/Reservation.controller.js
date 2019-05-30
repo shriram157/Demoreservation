@@ -374,11 +374,10 @@ sap.ui.define([
 			}    
 			var modelFilter = this.getView().byId("modelFilter").getValue();
 			var yearFilter = this.getView().byId("yearFilter").getValue();
-			var vinFilter = this.getView().byId("vinFilter").getValue();
+			var vinFilter = this.getView().byId("vinFilter").getValue().toUpperCase();
 			var inpStatus = this.getView().byId("inpStatus").getSelectedKey();
-			var ReserverFilter = this.getView().byId("ReserverFilter").getValue();
-			
-			
+			var ReserverFilter = this.getView().byId("ReserverFilter").getValue().toUpperCase();
+
 			var aFilters = [];
 			var MATNR = new sap.ui.model.Filter("MATNR", sap.ui.model.FilterOperator.EQ, modelFilter);
 			var ZZMOYR = new sap.ui.model.Filter("ZZMOYR", sap.ui.model.FilterOperator.EQ, yearFilter);
