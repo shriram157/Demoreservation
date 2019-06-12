@@ -60,7 +60,7 @@ sap.ui.define([
 		onSearch: function (oEvent) {
 			var zoneFilter = this.getView().byId("zoneFilter").getSelectedKey();
 			var seriesFilter = this.getView().byId("seriesFilter").getSelectedKey();
-			var suffixFilter = this.getView().byId("suffixFilter").getSelectedKey();
+			var suffixFilter = this.getView().byId("suffixFilter").getValue();
 			var modelFilter = this.getView().byId("modelFilter").getValue();
 			var yearFilter = this.getView().byId("yearFilter").getValue();
 			var vinFilter = this.getView().byId("vinFilter").getValue().toUpperCase();
