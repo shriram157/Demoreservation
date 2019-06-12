@@ -42,7 +42,7 @@
 							</fb:FilterItem>
 							<fb:FilterItem label="{i18n>lblSuffix}" name="G">
 								<fb:control>
-									<ComboBox xmlns="sap.m" id="suffixFilter" placeholder="{i18n>plSuffix}" items="{ path: 'DemoOdataModel>/ZC_MODEL_YEAR, filters: [{path: 'model_year ',operator: 'EQ',value1: 'YearModel>dkey'}, {path: 'tci_series',operator: 'EQ',value1: 'DemoOdataModel>ModelSeriesNo'}, {path: 'model',operator: 'EQ',value1: 'DemoOdataModel>model'}]}" filterSecondaryValues="true" showSecondaryValues="true">
+									<ComboBox xmlns="sap.m" id="suffixFilter" placeholder="{i18n>plSuffix}" items="{ path: 'DemoOdataModel>/ZC_MODEL_YEAR', filters: [{path: 'model_year ',operator: 'EQ',value1: 'YearModel>dkey'}, {path: 'tci_series',operator: 'EQ',value1: 'DemoOdataModel>ModelSeriesNo'}, {path: 'model',operator: 'EQ',value1: 'DemoOdataModel>model'}]}" filterSecondaryValues="true" showSecondaryValues="true">
 										<core:ListItem xmlns:core="sap.ui.core" text="{DemoOdataModel>suffix}" key="{DemoOdataModel>suffix}"/>
 									</ComboBox>
 								</fb:control>
