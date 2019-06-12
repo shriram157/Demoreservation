@@ -1,0 +1,15 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<SelectDialog
+		title="Suffix List"
+		class="sapUiPopupWithPadding"
+		items="{DemoOdataModel>/ZC_MODEL_YEAR}"
+		search="_handleValueHelpSearchSuf"
+		confirm="_handleValueHelpCloseSuf"
+		cancel="_handleValueHelpCloseSuf">
+		<StandardListItem
+			title="{DemoOdataModel>suffix}"
+			description="{DemoOdataModel>suffix}" />
+	</SelectDialog>
+</core:FragmentDefinition>

@@ -9,7 +9,7 @@ sap.ui.define([
 
 		onInit: function () {
 			this.populateYear();
-		//	this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
+			//	this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
 			this.initialFilter();
 			this.initSecurity();
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
@@ -19,37 +19,45 @@ sap.ui.define([
 			this.getView().byId("zoneFilter").setSelectedKey("3000");
 		},
 		onRouteMatched: function (oEvent) {
-		//	this.getView().byId("idMyReservationsTable").getModel().refresh(true);
+			//	this.getView().byId("idMyReservationsTable").getModel().refresh(true);
 		},
 
 		onListItemPress: function (oEvent) {
 			var listItemContext = oEvent.getSource().getBindingContext("DemoOdataModel");
 			var selectedvin = listItemContext.getProperty("VHVIN");
-			this.getView().getModel("localDataModel").setProperty("/Screen1",{"VHVIN":selectedvin});
-		//	this.doRoute("VehicleDetails",selectedvin);
+			this.getView().getModel("localDataModel").setProperty("/Screen1", {
+				"VHVIN": selectedvin
+			});
+			//	this.doRoute("VehicleDetails",selectedvin);
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			oRouter.navTo("VehicleDetails",{vguid:selectedvin});
+			oRouter.navTo("VehicleDetails", {
+				vguid: selectedvin
+			});
 		},
-		
-		onMyReservationPress: function (oEvent){
-		//	this.doReserveRoute("Reservation",false);
+
+		onMyReservationPress: function (oEvent) {
+			//	this.doReserveRoute("Reservation",false);
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			oRouter.navTo("Reservation", {admin:false});
+			oRouter.navTo("Reservation", {
+				admin: false
+			});
 		},
-		onAllReservationPress: function (oEvent){
-		//	this.doReserveRoute("Reservation",true);
+		onAllReservationPress: function (oEvent) {
+			//	this.doReserveRoute("Reservation",true);
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			oRouter.navTo("Reservation", {admin:true});
+			oRouter.navTo("Reservation", {
+				admin: true
+			});
 		},
-		onUpdateFinished: function(oEvent) {
+		onUpdateFinished: function (oEvent) {
 			// count and display number of nominations in Table Header title
 			var sTitle, oTable = this.getView().byId("idMyReservationsTable");
 			var title = this.getView().byId("tabTitle");
 			sTitle = "Vehicle List";
 			var lengthTotal = oTable.getBinding("items").getLength();
-			title.setText(sTitle + " ("+lengthTotal+")");
+			title.setText(sTitle + " (" + lengthTotal + ")");
 		},
-		onSearch: function (oEvent){
+		onSearch: function (oEvent) {
 			var zoneFilter = this.getView().byId("zoneFilter").getSelectedKey();
 			var seriesFilter = this.getView().byId("seriesFilter").getSelectedKey();
 			var suffixFilter = this.getView().byId("suffixFilter").getSelectedKey();
@@ -58,9 +66,9 @@ sap.ui.define([
 			var vinFilter = this.getView().byId("vinFilter").getValue().toUpperCase();
 			var inpStatus = this.getView().byId("inpStatus").getValue();
 			var ReserverFilter = this.getView().byId("ReserverFilter").getValue().toUpperCase();
-			
-			if(inpStatus ==="All"){ // If Status selected All, send blank value in filter
-				inpStatus="";
+
+			if (inpStatus === "All") { // If Status selected All, send blank value in filter
+				inpStatus = "";
 			}
 
 			var aFilters = [];
@@ -92,13 +100,13 @@ sap.ui.define([
 			binding.filter(finalFilter, "Application");
 
 		},
-		
-		populateYear: function(){
+
+		populateYear: function () {
 			var yearFilter = new sap.ui.model.json.JSONModel();
 			var today = new Date();
 			var currYear = today.getFullYear();
-			currYear = currYear -1;
-			var a_moreFilter =[];
+			currYear = currYear - 1;
+			var a_moreFilter = [];
 			for (var i = 0; i < 3; i++) {
 				var oNewFilter = {
 					dkey: currYear,
@@ -108,10 +116,60 @@ sap.ui.define([
 				currYear++;
 			}
 			yearFilter.setData(a_moreFilter);
-			this.getView().byId("yearFilter").setModel(yearFilter,"YearModel");
+			this.getView().byId("yearFilter").setModel(yearFilter, "YearModel");
 		},
-		
-		handleModelValueHelp : function (oEvent) {
+
+		handleSuffixValueHelp: function (oEvent) {
+			var sInputValue = oEvent.getSource().getValue();
+
+			this.inputId = oEvent.getSource().getId();
+			// create value help dialog
+			if (!this._valueHelpDialog) {
+				this._valueHelpDialog = sap.ui.xmlfragment(
+					"ca.toyota.demoreservation.demoreservation.fragments.SuffixSearch",
+					this
+				);
+				this.getView().addDependent(this._valueHelpDialog);
+			}
+			// create a filter for the binding
+			var aFilters = [];
+			var series = new sap.ui.model.Filter("tci_series", sap.ui.model.FilterOperator.EQ, this.getView().byId("seriesFilter").getSelectedKey());
+			var year = new sap.ui.model.Filter("model_year", sap.ui.model.FilterOperator.EQ, this.getView().byId("yearFilter").getValue());
+			var Model = new sap.ui.model.Filter("model", sap.ui.model.FilterOperator.EQ, this.getView().byId("suffixFilter").getValue());
+			aFilters = [
+				series,
+				year,
+				Model
+			];
+			var finalFilter = new sap.ui.model.Filter({
+				filters: aFilters,
+				and: true
+			});
+			this._valueHelpDialog.getBinding("items").filter(finalFilter, "Application");
+
+			// open value help dialog filtered by the input value
+			this._valueHelpDialog.open(sInputValue);
+		},
+		_handleValueHelpSearchSuf: function (evt) {
+			var sValue = evt.getParameter("value");
+			var oFilter = new Filter(
+				"suffix",
+				sap.ui.model.FilterOperator.Contains, sValue
+			);
+			evt.getSource().getBinding("items").filter([oFilter]);
+		},
+
+		_handleValueHelpCloseSuf: function (evt) {
+			var oSelectedItem = evt.getParameter("selectedItem");
+			if (oSelectedItem) {
+				var suffixInput = this.byId(this.inputId),
+					sDescription = oSelectedItem.getDescription();
+				suffixInput.setValue(sDescription);
+			}
+			evt.getSource().getBinding("items").filter([]);
+		},
+
+		handleModelValueHelp: function (oEvent) {
 			var sInputValue = oEvent.getSource().getValue();
 
 			this.inputId = oEvent.getSource().getId();
@@ -127,7 +185,7 @@ sap.ui.define([
 			var aFilters = [];
 			var series = new sap.ui.model.Filter("tci_series", sap.ui.model.FilterOperator.EQ, this.getView().byId("seriesFilter").getSelectedKey());
 			var year = new sap.ui.model.Filter("model_year", sap.ui.model.FilterOperator.EQ, this.getView().byId("yearFilter").getValue());
-				aFilters = [
+			aFilters = [
 				series,
 				year
 			];
@@ -140,8 +198,8 @@ sap.ui.define([
 			// open value help dialog filtered by the input value
 			this._valueHelpDialog.open(sInputValue);
 		},
-		
-		_handleValueHelpSearch : function (evt) {
+
+		_handleValueHelpSearch: function (evt) {
 			var sValue = evt.getParameter("value");
 			var oFilter = new Filter(
 				"model",
@@ -150,11 +208,11 @@ sap.ui.define([
 			evt.getSource().getBinding("items").filter([oFilter]);
 		},
 
-		_handleValueHelpClose : function (evt) {
+		_handleValueHelpClose: function (evt) {
 			var oSelectedItem = evt.getParameter("selectedItem");
 			if (oSelectedItem) {
 				var modelInput = this.byId(this.inputId),
-				sDescription = oSelectedItem.getDescription();
+					sDescription = oSelectedItem.getDescription();
 				modelInput.setValue(sDescription);
 			}
 			evt.getSource().getBinding("items").filter([]);
@@ -164,7 +222,7 @@ sap.ui.define([
 			var oItem = evt.getParameter('selectedItem'),
 				sKey = oItem ? oItem.getKey() : '';
 		},
-		
+
 		handleSortButtonPressed: function () {
 			if (!this._sortDialog) {
 				this._sortDialog = sap.ui.xmlfragment(
@@ -191,29 +249,29 @@ sap.ui.define([
 			oBinding.sort(aSorters);
 		},
 		formatRepair: function (value) {
-			if (value ==="N") {
+			if (value === "N") {
 				value = "No";
-			}else{
-				value="Yes";
+			} else {
+				value = "Yes";
 			}
 			return value;
 		},
-		
-		initSecurity:function(){
+
+		initSecurity: function () {
 			this.UserData = new sap.ui.model.json.JSONModel();
 			this.getView().setModel(this.UserData, "UserDataModel");
 			sap.ui.getCore().setModel(this.UserData, "UserDataModel");
 			var that = this;
-				$.ajax({
+			$.ajax({
 				dataType: "json",
 				url: "/demoreservation-node/userDetails/attributes",
 				type: "GET",
 				success: function (userAttributes) {
-					that.UserData.setProperty("/FirstName",userAttributes.samlAttributes.FirstName);
-					that.UserData.setProperty("/LastName",userAttributes.samlAttributes.LastName);
-					that.UserData.setProperty("/Email",userAttributes.samlAttributes.Email);
-					that.UserData.setProperty("/Userid",userAttributes.userProfile.id);
-				//	sap.ui.core.BusyIndicator.hide();
+					that.UserData.setProperty("/FirstName", userAttributes.samlAttributes.FirstName);
+					that.UserData.setProperty("/LastName", userAttributes.samlAttributes.LastName);
+					that.UserData.setProperty("/Email", userAttributes.samlAttributes.Email);
+					that.UserData.setProperty("/Userid", userAttributes.userProfile.id);
+					//	sap.ui.core.BusyIndicator.hide();
 					that.UserData.updateBindings(true);
 					that.UserData.refresh(true);
 				},
@@ -221,27 +279,27 @@ sap.ui.define([
 					console.log("Error in fetching user details from LDAP", oError);
 				}
 			});
-			
+
 			// Current user scope
-				$.ajax({
+			$.ajax({
 				dataType: "json",
 				url: "/demoreservation-node/userDetails/currentScopesForUser",
 				type: "GET",
 				success: function (scopesData) {
 					var type = scopesData.loggedUserType[0];
 					// testing
-				//	type="TCI_Admin";
-					that.UserData.setProperty("/Type",type);
-					if(type === "TCI_Admin"){
-						that.UserData.setProperty("/AdminVisible",true);
-					}else{
-						that.UserData.setProperty("/AdminVisible",false);
+					//	type="TCI_Admin";
+					that.UserData.setProperty("/Type", type);
+					if (type === "TCI_Admin") {
+						that.UserData.setProperty("/AdminVisible", true);
+					} else {
+						that.UserData.setProperty("/AdminVisible", false);
 					}
 				},
 				error: function (oError) {
 					console.log("Error in fetching user details from LDAP", oError);
-					that.UserData.setProperty("/Type","TCI_User");
-					that.UserData.setProperty("/AdminVisible",false);
+					that.UserData.setProperty("/Type", "TCI_User");
+					that.UserData.setProperty("/AdminVisible", false);
 				}
 			});
 		}
