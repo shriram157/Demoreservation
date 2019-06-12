@@ -124,31 +124,31 @@ sap.ui.define([
 
 			this.inputId = oEvent.getSource().getId();
 			// create value help dialog
-			if (!this._valueHelpDialog) {
-				this._valueHelpDialog = sap.ui.xmlfragment(
+			if (!this._valueHelpDialogSuf) {
+				this._valueHelpDialogSuf = sap.ui.xmlfragment(
 					"ca.toyota.demoreservation.demoreservation.fragments.SuffixSearch",
 					this
 				);
-				this.getView().addDependent(this._valueHelpDialog);
+				this.getView().addDependent(this._valueHelpDialogSuf);
 			}
 			// create a filter for the binding
 			var aFilters = [];
 			var series = new sap.ui.model.Filter("tci_series", sap.ui.model.FilterOperator.EQ, this.getView().byId("seriesFilter").getSelectedKey());
 			var year = new sap.ui.model.Filter("model_year", sap.ui.model.FilterOperator.EQ, this.getView().byId("yearFilter").getValue());
-			var Model = new sap.ui.model.Filter("model", sap.ui.model.FilterOperator.EQ, this.getView().byId("suffixFilter").getValue());
+			var model = new sap.ui.model.Filter("model", sap.ui.model.FilterOperator.EQ, this.getView().byId("modelFilter").getValue());
 			aFilters = [
 				series,
 				year,
-				Model
+				model
 			];
 			var finalFilter = new sap.ui.model.Filter({
 				filters: aFilters,
 				and: true
 			});
-			this._valueHelpDialog.getBinding("items").filter(finalFilter, "Application");
+			this._valueHelpDialogSuf.getBinding("items").filter(finalFilter, "Application");
 
 			// open value help dialog filtered by the input value
-			this._valueHelpDialog.open(sInputValue);
+			this._valueHelpDialogSuf.open(sInputValue);
 		},
 		_handleValueHelpSearchSuf: function (evt) {
 			var sValue = evt.getParameter("value");
@@ -167,6 +167,7 @@ sap.ui.define([
 				suffixInput.setValue(sDescription);
 			}
 			evt.getSource().getBinding("items").filter([]);
+			// this.destroy();
 		},
 
 		handleModelValueHelp: function (oEvent) {
@@ -216,6 +217,7 @@ sap.ui.define([
 				modelInput.setValue(sDescription);
 			}
 			evt.getSource().getBinding("items").filter([]);
+			// this.destroy();
 		},
 
 		suggestionItemSelected: function (evt) {
