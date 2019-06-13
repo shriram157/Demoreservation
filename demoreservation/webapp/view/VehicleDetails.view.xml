@@ -273,7 +273,7 @@
                                     </form:Form>
                                 </layout:content>
                             </layout:Grid>
-                            <Button text="Edit Reservation" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onEditPress" id="btnEdit"/>
+                            <Button text="Edit Reservation" type="Default" iconFirst="true" width="auto" enabled="{LocalModel>/enableEditBtn}" visible="true" iconDensityAware="false" press="_onEditPress" id="btnEdit"/>
                         </uxap:blocks>
                     </uxap:ObjectPageSubSection>
                 </uxap:subSections>
