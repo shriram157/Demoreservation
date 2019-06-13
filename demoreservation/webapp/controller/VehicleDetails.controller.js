@@ -11,7 +11,7 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 			var oArgs;
 			oArgs = oEvent.getParameter("arguments");
 			var oLocalModel = new sap.ui.model.json.JSONModel({
-				"enableEditBtn": false
+				enableEditBtn: false
 			});
 			this.getView().setModel(oLocalModel, "LocalModel");
 			this.getVehicleData(oArgs.vguid);
