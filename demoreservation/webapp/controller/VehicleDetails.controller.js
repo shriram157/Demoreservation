@@ -54,7 +54,7 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 				method: "GET",
 				success: function (oData, oResponse) {
 					var oJSONModel = new sap.ui.model.json.JSONModel();
-					if (oData.No_edit === "") {
+					if (oData.No_edit != "X") {
 						that.getView().getModel("LocalModel").setProperty("enableEditBtn", true);
 					} else {
 						that.getView().getModel("LocalModel").setProperty("enableEditBtn", false);
