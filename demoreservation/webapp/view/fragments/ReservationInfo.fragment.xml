@@ -197,7 +197,7 @@
 	    <Button xmlns="sap.m" text="Cancel" id="btnCan" press="onCloseDialog"/>
 	    <!--<Button xmlns="sap.m" text="Edit Reservation" id="btnEdit" visible="{= ${VehicleInfo>/StatusCode} === 'PA' ? ${UserModel>/admin} : false }" press="_onEditPress"/>-->
 		<!--<Button xmlns="sap.m" text="Edit Reservation" id="btnEdit" visible="{= ${VehicleInfo>/StatusCode} === 'PA' ? true : false }" press="_onEditPress"/>-->
-		<Button xmlns="sap.m" text="Edit Reservation" id="btnEdit" visible="{=${UserModel>/admin} ? ${VehicleInfo>/StatusCode} === 'PA' || ${VehicleInfo>/StatusCode} === 'AP' : ${VehicleInfo>/StatusCode} === 'PA'}" press="_onEditPress"/>
+		<Button xmlns="sap.m" text="Edit Reservation" id="btnEdit" visible="{=${UserModel>/admin} ? ${VehicleInfo>/StatusCode} === 'PA' || ${VehicleInfo>/StatusCode} === 'AP'|| ${VehicleInfo>/StatusCode} === 'WL' : ${VehicleInfo>/StatusCode} === 'PA'|| ${VehicleInfo>/StatusCode} === 'WL'}" press="_onEditPress"/>
 	</buttons>
 	</Dialog>
 </core:FragmentDefinition>
