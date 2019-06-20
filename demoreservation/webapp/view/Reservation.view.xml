@@ -51,7 +51,7 @@
 						<content>
 							<Title textAlign="Begin" id="tabTitle"/>
 							<ToolbarSpacer/>
-							<Button icon="sap-icon://excel-attachment" type="Emphasized" press="handleExcelPressed">
+							<Button icon="sap-icon://excel-attachment" type="Emphasized" press="handleExcelPressed" visible="{LocalModel>/enableExportBtn}">
 								<layoutData>
 									<OverflowToolbarLayoutData/>
 								</layoutData>

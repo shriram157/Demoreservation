@@ -84,7 +84,7 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 					if (oData.ZRESREQ === "") {
 						// Reservation request not exists for this vehicle, so enable "Reserve" button
 						that.byId("btnReserve").setVisible(true);
-						that.byId("btnEdit").setVisible(false);
+						// that.byId("btnEdit").setVisible(false);
 						// no reservation exists
 						that.byId("pageReservation").setVisible(false);
 						that.byId("pageReservation").setTitle("No reservation exists");

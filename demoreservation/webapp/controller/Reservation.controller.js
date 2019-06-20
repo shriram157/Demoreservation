@@ -22,6 +22,11 @@ sap.ui.define([
 			var	oArgs = oEvent.getParameter("arguments");
 			var allClicked = oArgs.admin, email, admin;
 			
+			var oLocalModel = new sap.ui.model.json.JSONModel({
+				enableExportBtn: false
+			});
+			this.getView().setModel(oLocalModel, "LocalModel");
+			
 			if(sap.ui.getCore().getModel("UserDataModel") !== undefined){
 				email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
 				admin = sap.ui.getCore().getModel("UserDataModel").getData().AdminVisible;
@@ -51,6 +56,13 @@ sap.ui.define([
 			};
 			userModel.setData(data);
 			this.getView().setModel(userModel,"UserModel");
+			
+			if(sap.ui.getCore().getModel("UserDataModel").getData().Type === "TCI_User"){
+				this.getView().getModel("LocalModel").setProperty("/enableExportBtn", false);
+			}
+			else{
+				this.getView().getModel("LocalModel").setProperty("/enableExportBtn", true);
+			}
 			
 		},
 		populateYear: function(){
