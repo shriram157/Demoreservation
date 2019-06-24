@@ -13,12 +13,25 @@ module.exports = function (req, res, next) {
 		var session = Object.assign({
 			id: req.session.id
 		}, req.session);
-		var uaaRedirect = req.query["uaa-redirect"] === "true" || false;
+
+		// Default is to redirect to UAA
+		var uaaRedirect = true;
+		if (req.query["uaa-redirect"] === "false") {
+			uaaRedirect = false;
+		}
+
 		logoutProvider.callBackendLogoutPaths(req, app.get("mainRouterConfig"), session);
 		logoutProvider.callServiceLogoutPaths(session);
 		app.approuter.emit("logout", session);
 		req.session.destroy();
 		res.removeHeader("set-cookie");
+
+		// Clear SMADSESSION cookie, which is used by SiteMinder Federation to keep track of session, as a workaround to
+		// invalidating SAML session without SAML SLO. The assumption is that the cookie is always named SMADESSION, and
+		// that it is assigned to the .toyota.ca domain so that this code, which runs at the .scp.toyota.ca custom
+		// domain, can overwrite it. If the app is in the default *.ondemand.com domain, this will NOT work!
+		res.setHeader("Set-Cookie", "SMADSESSION=LOGGEDOFF; path=/; HttpOnly; domain=.toyota.ca; expires=Thu, 01 Jan 1970 00:00:00 GMT");
+
 		if (uaaRedirect) {
 			logoutProvider.triggerUAARedirect(req, res, function (err) {
 				if (err) {
