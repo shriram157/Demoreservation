@@ -43,7 +43,7 @@ modules:
                }
              ],
              "allowedCredentials": true,
-             "uriPattern": "^/custom/do/logout$"
+             "uriPattern": "^/custom/do/logout"
            }
          ]
       OPTIMIZE_MEMORY: true
