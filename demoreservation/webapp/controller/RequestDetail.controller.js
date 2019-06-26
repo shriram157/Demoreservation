@@ -37,7 +37,7 @@ sap.ui.define([
 			this.getVehicleData(oArgs.vhvin);
 
 			var oLocalModel = new sap.ui.model.json.JSONModel({
-				enableSubmitBtn: false
+				enableSubmitBtn: true
 			});
 			this.getView().setModel(oLocalModel, "LocalModel");
 
