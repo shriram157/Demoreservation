@@ -162,7 +162,7 @@
 					<uxap:ObjectPageSubSection title="Pricing Disclaimer">
 						<uxap:blocks>
 							<FormattedText
-								htmlText="&lt;p&gt;&lt;!-- x-tinymce/html --&gt;&lt;span style=&quot;color: #ff0000; font-family: 'Arial',sans-serif; font-size: 10pt;&quot;&gt;The estimated prices displayed are based on 7000 kms and 4 months on the road. The actual price will be determined at time of sale. &lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;color: #ff0000; font-family: 'Arial',sans-serif; font-size: 10pt;&quot;&gt;Note: PDI &amp;amp; accessories  may not be listed under under &amp;ldquo;Dealer Options&amp;rdquo; and the price could be substantially higher depending on the number of accessories being added.&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;color: #ff0000; font-family: 'Arial',sans-serif; font-size: 10pt;&quot;&gt;Please check again in a few weeks.&lt;/span&gt;&lt;/p&gt;"
+								htmlText="&lt;p&gt;&lt;!-- x-tinymce/html --&gt;&lt;span style=&quot;color: #ff0000; font-family: 'Arial',sans-serif; font-size: 10pt;&quot;&gt;The estimated prices displayed are based on 7000 kms and 4 months on the road. The actual price will be determined at time of sale. &lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;color: #ff0000; font-family: 'Arial',sans-serif; font-size: 10pt;&quot;&gt;Note: PDI &amp;amp; accessories  may not be listed under under &amp;ldquo;Dealer Options&amp;rdquo; and the price could be substantially higher depending on the number of accessories being added.&lt;/span&gt;&lt;br /&gt;&lt;/p&gt;"
 								width="auto" visible="true"/>
 						</uxap:blocks>
 					</uxap:ObjectPageSubSection>
