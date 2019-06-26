@@ -4,7 +4,7 @@
 			<f:DynamicPageHeader pinnable="false">
 				<f:content>
 					<Button icon="sap-icon://home" class="mCustomIcon" type="Transparent" press="onNavButtonPress"/>
-					<filterbar:FilterBar id="ListReportFilterBar" useToolbar="false" showGoOnFB="true" searchEnabled="true" search="onSearch">
+					<filterbar:FilterBar id="ListReportFilterBar" useToolbar="false" showGoOnFB="true" searchEnabled="true" search="onSearch" showRestoreOnFB="true" showFilterConfiguration="false" deltaVariantMode ="false" reset="onReset">
 						<filterbar:filterItems>
 							<filterbar:FilterItem label="{i18n>lblReqStatus}" name="Fiori_ListReport_ListReport_0-filterBars-Fiori_ListReport_FilterBar-1-filters-sap_ui_comp_filterbar_FilterItem-1537538709735---0">
 								<filterbar:control>
@@ -135,7 +135,7 @@
 							<Text text="{DemoOdataModel>VHVIN}" width="9rem"/>
 							<Text text="{DemoOdataModel>Purchaser}" />
 							<Text text="{DemoOdataModel>Driver}" />
-							<Text text="{DemoOdataModel>Price}" />
+							<Text text="{path:'DemoOdataModel>Price',formatter:'.amountFormatter'}" />
 							<Text text="{DemoOdataModel>EndDate}" />
 							<Button icon="sap-icon://hint" press="onReservationInfoPress"/>
 							<Button text="{i18n>btnApprove}" press="onApprovePress" visible="{= ${DemoOdataModel>StatusCode} === 'PA'}"/>

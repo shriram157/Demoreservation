@@ -6,7 +6,7 @@ sap.ui.define([
 	"use strict";
 	return BaseController.extend("ca.toyota.demoreservation.demoreservation.controller.RequestDetail", {
 		onInit: function () {
-		//	this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
+			//	this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.getRoute("RequestDetail").attachMatched(this.onRouteMatched, this);
 
@@ -30,11 +30,17 @@ sap.ui.define([
 				that.action = "U";
 				// Make Delete button visible
 				that.byId("btnDelete").setVisible(true);
-			}else if (oArgs.Zresreq === "C"){
+			} else if (oArgs.Zresreq === "C") {
 				that.action = "C";
 				that.byId("idHboxCheqDate").setVisible(false);
 			}
 			this.getVehicleData(oArgs.vhvin);
+
+			var oLocalModel = new sap.ui.model.json.JSONModel({
+				enableSubmitBtn: false
+			});
+			this.getView().setModel(oLocalModel, "LocalModel");
+
 			// On employee login, fill details
 			var type = sap.ui.getCore().getModel("UserDataModel").getData().Type;
 			var userid = sap.ui.getCore().getModel("UserDataModel").getData().Userid;
@@ -47,7 +53,7 @@ sap.ui.define([
 				that.byId("idEmail").setValue(sap.ui.getCore().getModel("UserDataModel").getData().Email);
 				that.byId("h_department").setVisible(false);
 				that.byId("idHboxCheqDate").setVisible(false);
-				var dept = that.getEmployeeData("E","")[0];
+				var dept = that.getEmployeeData("E", "")[0];
 				that.byId("idDept").setValue(dept);
 			}
 		},
@@ -55,10 +61,23 @@ sap.ui.define([
 			this.byId("h_onbehalf").setVisible(true);
 			this.byId("h_department").setVisible(true);
 		},
+
+		validateEmail: function (oEmailVal) {
+			// var mailregex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+			// var mailregex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+			// var mailregex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+			// if (mailregex.test(oEmailVal) == false) {
+			// 	MessageBox.show("Please enter valid Email address", MessageBox.Icon.ERROR, "Error",
+			// 		MessageBox.Action.OK, null, null);
+			// 	this.getView().getModel("LocalModel").setProperty("/enableSubmitBtn", false);
+			// } else {
+			// 	this.getView().getModel("LocalModel").setProperty("/enableSubmitBtn", true);
+			// }
+		},
 		getVehicleData: function (VHVIN) {
 			var that = this,
-			sPath = "/vehicleListSet('" + VHVIN + "')",
-			oDetailModel = that.getOwnerComponent().getModel("DemoOdataModel");
+				sPath = "/vehicleListSet('" + VHVIN + "')",
+				oDetailModel = that.getOwnerComponent().getModel("DemoOdataModel");
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
 			// read OData model data into local JSON model 
@@ -82,8 +101,8 @@ sap.ui.define([
 		},
 		getReservationData: function (resreq) {
 			var sPath = "/zc_demo_reservationSet('" + resreq + "')",
-			that = this,
-			oDetailModel = that.getOwnerComponent().getModel("DemoOdataModel");
+				that = this,
+				oDetailModel = that.getOwnerComponent().getModel("DemoOdataModel");
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
 			// read OData model data into local JSON model 
@@ -93,10 +112,10 @@ sap.ui.define([
 					var oJSONModel = new sap.ui.model.json.JSONModel();
 					oJSONModel.setData(oData);
 					that.getView().setModel(oJSONModel, "Reservation");
-					if (oData.ZREQTYP === "E" || oData.ZREQTYP === "C" || oData.ZREQTYP === "R"|| oData.ZREQTYP === "T") {
+					if (oData.ZREQTYP === "E" || oData.ZREQTYP === "C" || oData.ZREQTYP === "R" || oData.ZREQTYP === "T") {
 						that.byId("h_onbehalf").setVisible(true);
 						that.byId("h_department").setVisible(false);
-						that.getEmployeeData(oData.ZREQTYP,"");
+						that.getEmployeeData(oData.ZREQTYP, "");
 					} else {
 						that.byId("h_onbehalf").setVisible(false);
 						that.byId("h_department").setVisible(true);
@@ -121,8 +140,8 @@ sap.ui.define([
 		},
 		getDepartmentData: function () {
 			var sPath = "/ZC_DEPT",
-			that = this,
-			oDetailModel = that.getOwnerComponent().getModel("DemoOdataModel");
+				that = this,
+				oDetailModel = that.getOwnerComponent().getModel("DemoOdataModel");
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
 			// read OData model data into local JSON model 
@@ -143,20 +162,20 @@ sap.ui.define([
 				}
 			});
 		},
-		getEmployeeData: function (reqtype,userid) {
+		getEmployeeData: function (reqtype, userid) {
 			var persg;
 			var that = this;
 			var email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
 			this.logiEmpDept = "";
-			this.logiEmpDeptText="";
-			var retData=[];
+			this.logiEmpDeptText = "";
+			var retData = [];
 			if (reqtype === "E") {
 				persg = "1";
 			} else {
 				persg = "2";
 			}
 			var curr_datetime = this.getCurrentDate();
-				var sPath = "/ZC_EMP_DETAILS(datetime'" + curr_datetime + "')/Set",
+			var sPath = "/ZC_EMP_DETAILS(datetime'" + curr_datetime + "')/Set",
 				oDetailModel = that.getOwnerComponent().getModel("DemoOdataModel");
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
@@ -175,15 +194,15 @@ sap.ui.define([
 						if (oData.results[i].usrid_long === email) {
 							that.logiEmpDept = oData.results[i].orgeh;
 							that.logiEmpDeptText = oData.results[i].orgtx;
-							retData[0]= that.logiEmpDeptText;
-							retData[1]= oData.results[i].usrid_long;
+							retData[0] = that.logiEmpDeptText;
+							retData[1] = oData.results[i].usrid_long;
 						}
-						if(userid!==""){
+						if (userid !== "") {
 							if (oData.results[i].usrid === userid) {
 								that.logiEmpDept = oData.results[i].orgeh;
 								that.logiEmpDeptText = oData.results[i].orgtx;
-								retData[0]= that.logiEmpDeptText;
-								retData[1]= oData.results[i].usrid_long;
+								retData[0] = that.logiEmpDeptText;
+								retData[1] = oData.results[i].usrid_long;
 							}
 						}
 					}
@@ -239,11 +258,11 @@ sap.ui.define([
 			var type = sap.ui.getCore().getModel("UserDataModel").getData().Type;
 			if (type !== "TCI_User") {
 				var reqtype = this.byId("reqtype").getSelectedKey();
-				if (reqtype === "E" || reqtype === "C" || reqtype === "R"|| reqtype === "T") {
+				if (reqtype === "E" || reqtype === "C" || reqtype === "R" || reqtype === "T") {
 					this.byId("h_onbehalf").setVisible(true);
 					this.byId("h_department").setVisible(false);
 					that.byId("idDeptName").setSelectedKey("");
-					that.getEmployeeData(reqtype,"");
+					that.getEmployeeData(reqtype, "");
 				} else {
 					this.byId("h_onbehalf").setVisible(false);
 					this.byId("h_department").setVisible(true);
@@ -319,14 +338,14 @@ sap.ui.define([
 				"Vehicleidentnumb": headerModel.getProperty("/VehicleDetailSet/VHVIN")
 			};
 			var sPath = "/zc_demo_reservationSet('" + resModel.getProperty("/Zresreq") + "')",
-			oModifyModel = that.getOwnerComponent().getModel("DemoOdataModel");
+				oModifyModel = that.getOwnerComponent().getModel("DemoOdataModel");
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
 			// Set busy indicator
 			oModifyModel.update(sPath, data, {
 				success: function (oData, oResponse) {
 					// release busy indicator
-					sap.m.MessageBox.show("Reservation request updated -"+resModel.getProperty("/Zresreq"), {
+					sap.m.MessageBox.show("Reservation request updated -" + resModel.getProperty("/Zresreq"), {
 						icon: sap.m.MessageBox.Icon.SUCCESS,
 						title: "Success",
 						actions: [sap.m.MessageBox.Action.OK],
@@ -338,8 +357,8 @@ sap.ui.define([
 				},
 				error: function (e) {
 					var obj = JSON.parse(e.responseText),
-					errMsg = obj.error.message.value;
-					sap.m.MessageBox.show("Reservation request update failed. "+errMsg, {
+						errMsg = obj.error.message.value;
+					sap.m.MessageBox.show("Reservation request update failed. " + errMsg, {
 						icon: sap.m.MessageBox.Icon.ERROR,
 						title: "Error",
 						actions: [sap.m.MessageBox.Action.OK],
@@ -388,9 +407,9 @@ sap.ui.define([
 				"Vehiclenumber": headerModel.getProperty("/VehicleDetailSet/Vehiclenumber"),
 				"Vehicleidentnumb": headerModel.getProperty("/VehicleDetailSet/VHVIN")
 			};
-				var sPath = "/zc_demo_reservationSet",
+			var sPath = "/zc_demo_reservationSet",
 				oModifyModel = that.getOwnerComponent().getModel("DemoOdataModel");
-				
+
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
 			// Set busy indicator
@@ -424,11 +443,11 @@ sap.ui.define([
 				error: function (e) {
 					var obj = JSON.parse(e.responseText),
 						errMsg = obj.error.message.value;
-					sap.m.MessageBox.show("Reservation request creation failed. "+errMsg, {
+					sap.m.MessageBox.show("Reservation request creation failed. " + errMsg, {
 						icon: sap.m.MessageBox.Icon.ERROR,
 						title: "Error",
 						actions: [sap.m.MessageBox.Action.OK],
-					//	details: e.response.body,
+						//	details: e.response.body,
 						onClose: function (oAction) {
 							that.navigateBack();
 						}
@@ -486,12 +505,12 @@ sap.ui.define([
 			that.byId("idPurName").setValue("");
 			that.byId("idPurchDate").setValue("");
 			this.byId("idDept").setValue("");
-			
+
 			that.byId("ipOthers").setSelected(false);
 			that.byId("h_purchtype").setVisible(false);
 			that.byId("h_purchname").setVisible(false);
 			that.byId("noteOthers").setVisible(false);
-			
+
 			that.byId("reqtype").setValueState(sap.ui.core.ValueState.None);
 			that.byId("idDeptName").setValueState(sap.ui.core.ValueState.None);
 			that.byId("onBehalf").setValueState(sap.ui.core.ValueState.None);
@@ -503,14 +522,16 @@ sap.ui.define([
 		navigateBack: function () {
 			var oHistory = History.getInstance();
 			var sPreviousHash = oHistory.getPreviousHash();
-			
+
 			if (sPreviousHash !== undefined) {
 				window.history.go(-1);
 			} else {
 				var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-				oRouter.navTo("Reservation", {admin:true});
+				oRouter.navTo("Reservation", {
+					admin: true
+				});
 			}
-			
+
 			// var headerModel = this.getView().getModel("Header");
 			// this.doRoute("VehicleDetails", headerModel.getProperty("/VehicleDetailSet/VHVIN"));
 			this.clearScreen();
@@ -557,7 +578,7 @@ sap.ui.define([
 					} else {
 						that.byId("onBehalf").setValueState(sap.ui.core.ValueState.None);
 					}
-					
+
 					var email = that.byId("idEmail").getValue();
 					if (email === "") {
 						msg = oBundle.getText("errEmpEmailBlankValidation");
@@ -568,16 +589,16 @@ sap.ui.define([
 						that.byId("idEmail").setValueState(sap.ui.core.ValueState.None);
 					}
 				}
-			}else{
-					var email = that.byId("idEmail").getValue();
-					if (email === "") {
-						msg = oBundle.getText("errEmpEmailBlankValidation");
-						that.byId("idEmail").setValueState(sap.ui.core.ValueState.Error);
-						that.byId("idEmail").setValueStateText(msg);
-						return false;
-					} else {
-						that.byId("idEmail").setValueState(sap.ui.core.ValueState.None);
-					}
+			} else {
+				var email = that.byId("idEmail").getValue();
+				if (email === "") {
+					msg = oBundle.getText("errEmpEmailBlankValidation");
+					that.byId("idEmail").setValueState(sap.ui.core.ValueState.Error);
+					that.byId("idEmail").setValueStateText(msg);
+					return false;
+				} else {
+					that.byId("idEmail").setValueState(sap.ui.core.ValueState.None);
+				}
 			}
 			// if (ZPURDT === "") {     // Ideal Purchase date is not mandatory - UAT
 			// 	// // Purchase date can't be blank
@@ -621,21 +642,21 @@ sap.ui.define([
 		selectRequestOther: function (oEvent) {
 			var selected = oEvent.getParameter("selected");
 			// If requested for others, purchase type and name visible	
-			if(selected){
+			if (selected) {
 				this.byId("h_purchtype").setVisible(true);
 				this.byId("h_purchname").setVisible(true);
-			}else{
+			} else {
 				this.byId("h_purchtype").setVisible(false);
 				this.byId("h_purchname").setVisible(false);
 				this.byId("purtype").setSelectedKey("");
 				this.byId("idPurName").setValue("");
-			}	
+			}
 		},
 		onSelectPurTypeChange: function (oEvent) {
 			var purtype = this.byId("purtype").getSelectedKey();
-			if(purtype ==="O"){
+			if (purtype === "O") {
 				this.byId("noteOthers").setVisible(true);
-			}else{
+			} else {
 				this.byId("noteOthers").setVisible(false);
 			}
 		},
@@ -643,87 +664,93 @@ sap.ui.define([
 			var that = this;
 			var inputuser = "";
 			inputuser = that.byId("onBehalf").getValue();
-			if(inputuser ===""){
-				
-			}else{
-					var reqData = {"uid":inputuser};
-						$.ajax({
-						dataType: "json",
-						url: "/demoreservation-node/node/tci/internal/api/v1.0/security/ldap/rest/getUserByUID",
-						type: "POST",
-						data: JSON.stringify(reqData),
-						headers: {
-					      'Accept': 'application/json',
-					      'Content-Type' : 'application/json'
-					    },
-						success: function (respdata) {
-							if(respdata.errorCode ==="ERROR_USER_NOT_FOUND"){
-								that.byId("idFirstName").setValue("");
-								that.byId("idLastName").setValue("");
-		
-								sap.m.MessageBox.show(respdata.errorMessage, {
+			if (inputuser === "") {
+
+			} else {
+				var reqData = {
+					"uid": inputuser
+				};
+				$.ajax({
+					dataType: "json",
+					url: "/demoreservation-node/node/tci/internal/api/v1.0/security/ldap/rest/getUserByUID",
+					type: "POST",
+					data: JSON.stringify(reqData),
+					headers: {
+						'Accept': 'application/json',
+						'Content-Type': 'application/json'
+					},
+					success: function (respdata) {
+						if (respdata.errorCode === "ERROR_USER_NOT_FOUND") {
+							that.byId("idFirstName").setValue("");
+							that.byId("idLastName").setValue("");
+
+							sap.m.MessageBox.show(respdata.errorMessage, {
 								icon: sap.m.MessageBox.Icon.ERROR,
 								title: "Error",
 								actions: [sap.m.MessageBox.Action.OK],
-								onClose: function (oAction) {
-								}
-								});
-							}else{
-								var firstName = respdata.tciUser.firstName;
-								var lastName = respdata.tciUser.lastName;
-								that.byId("idFirstName").setValue(firstName);
-								that.byId("idLastName").setValue(lastName);
-								that.byId("idDept").setValue(that.getEmployeeData("",inputuser)[0]);
-								that.byId("idEmail").setValue(that.getEmployeeData("",inputuser)[1]);
-							}
-						},
-						error: function (oError) {
-							
-								sap.m.MessageBox.show("Error is fetching user data from LDAP.", {
-								icon: sap.m.MessageBox.Icon.ERROR,
-								title: "Error",
-								actions: [sap.m.MessageBox.Action.OK],
-								details: oError.response.body,
-								onClose: function (oAction) {
-								}
+								onClose: function (oAction) {}
 							});
+						} else {
+							var firstName = respdata.tciUser.firstName;
+							var lastName = respdata.tciUser.lastName;
+							that.byId("idFirstName").setValue(firstName);
+							that.byId("idLastName").setValue(lastName);
+							that.byId("idDept").setValue(that.getEmployeeData("", inputuser)[0]);
+							that.byId("idEmail").setValue(that.getEmployeeData("", inputuser)[1]);
 						}
-					});
+					},
+					error: function (oError) {
+
+						sap.m.MessageBox.show("Error is fetching user data from LDAP.", {
+							icon: sap.m.MessageBox.Icon.ERROR,
+							title: "Error",
+							actions: [sap.m.MessageBox.Action.OK],
+							details: oError.response.body,
+							onClose: function (oAction) {}
+						});
+					}
+				});
 			}
 		},
-		
-		onSelectDate: function(oEvent){
+
+		onSelectDate: function (oEvent) {
 			var dateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
 				pattern: "yyyyMMdd"
 			});
-			var msg, that = this, oBundle = this.getView().getModel("i18n").getResourceBundle();
-			var today = dateFormat.format(new Date()), selectedPurchaseDate;
-			
-			if(this.byId("idPurchDate").getDateValue() !=="" && this.byId("idPurchDate").getDateValue() !== null){
+			var msg, that = this,
+				oBundle = this.getView().getModel("i18n").getResourceBundle();
+			var today = dateFormat.format(new Date()),
+				selectedPurchaseDate;
+
+			if (this.byId("idPurchDate").getDateValue() !== "" && this.byId("idPurchDate").getDateValue() !== null) {
 				selectedPurchaseDate = dateFormat.format(this.byId("idPurchDate").getDateValue());
-				if(selectedPurchaseDate<today){
-				// error
+				if (selectedPurchaseDate < today) {
+					// error
 					msg = oBundle.getText("errBackdateValidation");
 					that.byId("idPurchDate").setValueState(sap.ui.core.ValueState.Error);
 					that.byId("idPurchDate").setValueStateText(msg);
 					return false;
-				}else {
-						that.byId("idPurchDate").setValueState(sap.ui.core.ValueState.None);
+				} else {
+					that.byId("idPurchDate").setValueState(sap.ui.core.ValueState.None);
 				}
 			}
-			if(this.byId("idCheqRecDate").getDateValue() !=="" && this.byId("idCheqRecDate").getDateValue() !== null){
+			if (this.byId("idCheqRecDate").getDateValue() !== "" && this.byId("idCheqRecDate").getDateValue() !== null) {
 				selectedPurchaseDate = dateFormat.format(this.byId("idCheqRecDate").getDateValue());
-				if(selectedPurchaseDate<today){
-				// error
+				if (selectedPurchaseDate < today) {
+					// error
 					msg = oBundle.getText("errBackdateValidation");
 					that.byId("idCheqRecDate").setValueState(sap.ui.core.ValueState.Error);
 					that.byId("idCheqRecDate").setValueStateText(msg);
 					return false;
-				}else {
-						that.byId("idCheqRecDate").setValueState(sap.ui.core.ValueState.None);
+				} else {
+					that.byId("idCheqRecDate").setValueState(sap.ui.core.ValueState.None);
 				}
 			}
 			return true;
+		},
+
+		onExit: function () {
+			this.destroy();
 		}
 	});
 });

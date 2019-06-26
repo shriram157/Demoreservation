@@ -71,7 +71,7 @@
 					</HBox>
 					<HBox width="80%">
 						<Label width="12rem" class="sapUiSmallMarginTop" text="Email Address : " required="true"/>
-						<Input width="20rem" placeholder="Enter Text ..." id="idEmail" editable="true" value="{Reservation>/ZEMAIL} "/>
+						<Input type="Email" width="20rem" placeholder="Enter Text ..." id="idEmail" editable="true" value="{Reservation>/ZEMAIL}" change="validateEmail"/>
 					</HBox>
 					<HBox width="80%">
 						<Label width="12rem" class="sapUiSmallMarginTop" text="Department : " visible="false"/>
@@ -134,7 +134,7 @@
 			</HBox>	
 		</content>
 		<footer>
-			<OverflowToolbar width="100%" height="auto" design="Auto" enabled="true" visible="true">
+			<OverflowToolbar width="100%" height="auto" design="Auto" enabled="{LocalModel>/enableSubmitBtn}" visible="true">
 				<content>
 					<ToolbarSpacer/>
 					<Button text="Submit" type="Emphasized" iconFirst="true" width="86.63750457763672px" enabled="true" visible="true" iconDensityAware="false" press="onSubmitPress"/>

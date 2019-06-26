@@ -35,7 +35,15 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 					Zresreq: Zresreq
 				});
 			}
+		},
 
+		amountFormatter: function (val) {
+			if (val !== "" && val !== null && val != undefined) {
+				val = val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+				return "$" + val;
+			} else {
+				return "";
+			}
 		},
 		getVehicleData: function (VHVIN) {
 			var email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
@@ -59,6 +67,9 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 					} else {
 						that.getView().getModel("LocalModel").setProperty("/enableEditBtn", false);
 					}
+					
+					oData.EstAssPrice = that.amountFormatter(oData.EstAssPrice);
+					oData.NonAssPrice = that.amountFormatter(oData.NonAssPrice);
 
 					// extract Requestor type text
 					var mod = that.getOwnerComponent().getModel("vehicles"),
@@ -81,14 +92,14 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 					oJSONModel.setData({
 						VehicleDetailSet: oData
 					});
-					if (oData.ZRESREQ == "" && oData.StatusCode !== "WL") {
+					if (oData.ZRESREQ == "") {
 						// Reservation request not exists for this vehicle, so enable "Reserve" button
 						that.byId("btnReserve").setVisible(true);
 						that.byId("btnEdit").setVisible(false);
 						// no reservation exists
 						that.byId("pageReservation").setVisible(false);
 						that.byId("pageReservation").setTitle("No reservation exists");
-					} else if(oData.ZRESREQ !== "" && oData.StatusCode == "WL"){
+					} else {
 						// Reservation request exists for this vehicle, so enable "Edit" button
 						that.byId("btnReserve").setVisible(false);
 						that.byId("btnEdit").setVisible(true);
@@ -120,6 +131,10 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 				Zresreq: "C"
 			});
 
+		},
+
+		onExit: function () {
+			this.destroy();
 		}
 	});
 });

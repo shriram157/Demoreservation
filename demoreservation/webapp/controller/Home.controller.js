@@ -8,12 +8,22 @@ sap.ui.define([
 	return BaseController.extend("ca.toyota.demoreservation.demoreservation.controller.Home", {
 
 		onInit: function () {
+			// debugger;
 			this.populateYear();
 			//	this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
 			this.initialFilter();
 			this.initSecurity();
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.getRoute("Home").attachMatched(this.onRouteMatched, this);
+
+		},
+		amountFormatter: function (val) {
+			if (val !== "" && val !== null && val != undefined) {
+				val = val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+				return "$" + val;
+			} else {
+				return "";
+			}
 		},
 		initialFilter: function () {
 			this.getView().byId("zoneFilter").setSelectedKey("3000");
@@ -23,7 +33,7 @@ sap.ui.define([
 		},
 
 		onListItemPress: function (oEvent) {
-			var listItemContext = oEvent.getSource().getBindingContext("DemoOdataModel");
+			var listItemContext = oEvent.getSource().getBindingContext("DemoModel");
 			var selectedvin = listItemContext.getProperty("VHVIN");
 			this.getView().getModel("localDataModel").setProperty("/Screen1", {
 				"VHVIN": selectedvin
@@ -57,6 +67,21 @@ sap.ui.define([
 			var lengthTotal = oTable.getBinding("items").getLength();
 			title.setText(sTitle + " (" + lengthTotal + ")");
 		},
+		onReset: function (oEvent) {
+			this.getView().byId("seriesFilter").setSelectedKey();
+			this.getView().byId("suffixFilter").setValue();
+			this.getView().byId("modelFilter").setValue();
+			this.getView().byId("yearFilter").setValue();
+			this.getView().byId("vinFilter").setValue();
+			this.getView().byId("inpStatus").setValue();
+			this.getView().byId("ReserverFilter").setValue();
+			var aFilters = [];
+			aFilters = new sap.ui.model.Filter(aFilters, true);
+			// // update list binding
+			var list = this.getView().byId("idMyReservationsTable");
+			var binding = list.getBinding("items");
+			binding.filter(aFilters, "Application");
+		},
 		onSearch: function (oEvent) {
 			var zoneFilter = this.getView().byId("zoneFilter").getSelectedKey();
 			var seriesFilter = this.getView().byId("seriesFilter").getSelectedKey();
@@ -72,14 +97,14 @@ sap.ui.define([
 			}
 
 			var aFilters = [];
-			var ZZZONE = new sap.ui.model.Filter("ZZZONE", sap.ui.model.FilterOperator.EQ, zoneFilter);
-			var ZZSERIES = new sap.ui.model.Filter("ZZSERIES", sap.ui.model.FilterOperator.EQ, seriesFilter);
-			var MATNR = new sap.ui.model.Filter("MATNR", sap.ui.model.FilterOperator.EQ, modelFilter);
-			var ZZMOYR = new sap.ui.model.Filter("ZZMOYR", sap.ui.model.FilterOperator.EQ, yearFilter);
-			var VHVIN = new sap.ui.model.Filter("VHVIN", sap.ui.model.FilterOperator.Contains, vinFilter);
-			var Status = new sap.ui.model.Filter("Status", sap.ui.model.FilterOperator.EQ, inpStatus);
-			var ZZSUFFIX = new sap.ui.model.Filter("ZZSUFFIX", sap.ui.model.FilterOperator.EQ, suffixFilter);
-			var Reserver = new sap.ui.model.Filter("Reserver", sap.ui.model.FilterOperator.EQ, ReserverFilter);
+			var ZZZONE = new sap.ui.model.Filter("ZZZONE", sap.ui.model.FilterOperator.EQ, zoneFilter, true);
+			var ZZSERIES = new sap.ui.model.Filter("ZZSERIES", sap.ui.model.FilterOperator.EQ, seriesFilter, true);
+			var MATNR = new sap.ui.model.Filter("MATNR", sap.ui.model.FilterOperator.EQ, modelFilter, true);
+			var ZZMOYR = new sap.ui.model.Filter("ZZMOYR", sap.ui.model.FilterOperator.EQ, yearFilter, true);
+			var VHVIN = new sap.ui.model.Filter("VHVIN", sap.ui.model.FilterOperator.Contains, vinFilter, true);
+			var Status = new sap.ui.model.Filter("Status", sap.ui.model.FilterOperator.EQ, inpStatus, true);
+			var ZZSUFFIX = new sap.ui.model.Filter("ZZSUFFIX", sap.ui.model.FilterOperator.EQ, suffixFilter, true);
+			var Reserver = new sap.ui.model.Filter("Reserver", sap.ui.model.FilterOperator.EQ, ReserverFilter, true);
 			aFilters = [
 				ZZZONE,
 				ZZSERIES,
@@ -90,15 +115,17 @@ sap.ui.define([
 				ZZSUFFIX,
 				Reserver
 			];
-			var finalFilter = new sap.ui.model.Filter({
-				filters: aFilters,
-				and: true
+			// $.each(aFilters, function (key, value) {
+			aFilters = aFilters.filter(function (val) {
+				return val.oValue1 !== "";
 			});
+
+			// });
+			aFilters = new sap.ui.model.Filter(aFilters, true);
 			// // update list binding
 			var list = this.getView().byId("idMyReservationsTable");
 			var binding = list.getBinding("items");
-			binding.filter(finalFilter, "Application");
-
+			binding.filter(aFilters, "Application");
 		},
 
 		populateYear: function () {
@@ -297,6 +324,36 @@ sap.ui.define([
 					} else {
 						that.UserData.setProperty("/AdminVisible", false);
 					}
+					that.UserData.setProperty("/Type", "TCI_User"); //remove once local testing done
+					var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/";
+					var sPath;
+
+					if (that.UserData.getProperty("/Type") == "TCI_User") {
+						sPath = "/vehicleListSet?$filter=Emp eq 'E'";
+					} else {
+						sPath = "/vehicleListSet?$filter=Emp eq ''";
+					}
+					$.ajax({
+						dataType: "json",
+						url: uri + sPath,
+						type: "GET",
+						success: function (vehicleData) {
+							console.log("vehicleData", vehicleData);
+							that.DemoModel = new sap.ui.model.json.JSONModel();
+							that.getView().setModel(that.DemoModel, "DemoModel");
+							var obj = {
+								vehicleListSet: []
+							};
+							obj.vehicleListSet = vehicleData.d.results.filter(function (val) {
+								return val.ZZZONE == "3000";
+							});
+							console.log(vehicleData.d.results);
+							that.DemoModel.setData(obj);
+							that.DemoModel.updateBindings(true);
+							console.log(that.DemoModel)
+						},
+						error: function (oError) {}
+					});
 				},
 				error: function (oError) {
 					console.log("Error in fetching user details from LDAP", oError);
@@ -304,6 +361,9 @@ sap.ui.define([
 					that.UserData.setProperty("/AdminVisible", false);
 				}
 			});
+		},
+		onExit: function () {
+			this.destroy();
 		}
 	});
 

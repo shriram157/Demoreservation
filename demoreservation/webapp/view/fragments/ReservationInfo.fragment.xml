@@ -44,7 +44,7 @@
 							<items>
 								<Label text="Est. Assoc Price"/>
 								<Label text=":" class="sapUiTinyMarginEnd"/>
-								<Label text="{VehicleInfo>/EstAssPrice}" design="Bold"/>
+								<Label text="{path:'VehicleInfo>/EstAssPrice',formatter:'.amountFormatter'}" design="Bold"/>
 							</items>
 						</HBox>
 						<HBox class="sapUiTinyMargin">
@@ -111,7 +111,7 @@
 							<items>
 								<Label text="Est. Non Assoc. Price"/>
 								<Label text=":" class="sapUiTinyMarginEnd"/>
-								<Label text="{VehicleInfo>/NonAssPrice}" design="Bold"/>
+								<Label text="{path:'VehicleInfo>/NonAssPrice',formatter:'.amountFormatter'}" design="Bold"/>
 							</items>
 						</HBox>
 						<HBox class="sapUiTinyMargin">
