@@ -324,7 +324,7 @@ sap.ui.define([
 					} else {
 						that.UserData.setProperty("/AdminVisible", false);
 					}
-					that.UserData.setProperty("/Type", "TCI_User"); //remove once local testing done
+					// that.UserData.setProperty("/Type", "TCI_User"); //remove once local testing done
 					var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/";
 					var sPath;
 
@@ -344,9 +344,11 @@ sap.ui.define([
 							var obj = {
 								vehicleListSet: []
 							};
-							obj.vehicleListSet = vehicleData.d.results.filter(function (val) {
-								return val.ZZZONE == "3000";
-							});
+							obj.vehicleListSet = vehicleData.d.results;
+							// .filter(function (val) {
+							// 	return val.ZZZONE == "3000";
+							// });
+							// that.getView().byId("zoneFilter").setSelectedKey("3000");
 							console.log(vehicleData.d.results);
 							that.DemoModel.setData(obj);
 							that.DemoModel.updateBindings(true);
