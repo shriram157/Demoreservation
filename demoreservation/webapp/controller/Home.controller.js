@@ -66,6 +66,7 @@ sap.ui.define([
 			sTitle = "Vehicle List";
 			var lengthTotal = oTable.getBinding("items").getLength();
 			title.setText(sTitle + " (" + lengthTotal + ")");
+			this.onSearch(oEvent);
 		},
 		onReset: function (oEvent) {
 			this.getView().byId("seriesFilter").setSelectedKey();
