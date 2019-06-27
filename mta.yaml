@@ -14,7 +14,7 @@ modules:
       NODE_TLS_REJECT_UNAUTHORIZED: 0
       OPTIMIZE_MEMORY: true
       UPS_NAME: DEMO_RESERVATION_APIM_CUPS
-      XS_APP_LOG_LEVEL: info
+      XS_APP_LOG_LEVEL: error
       XS_LOG_CONNECTION_DATA: true
       XS_LOG_REFERER: true
       XS_LOG_USER: true
@@ -48,7 +48,7 @@ modules:
          ]
       OPTIMIZE_MEMORY: true
       SESSION_TIMEOUT: 60
-      XS_APP_LOG_LEVEL: info
+      XS_APP_LOG_LEVEL: error
    build-parameters:
       builder: grunt
       build-result: dist
