@@ -41,7 +41,7 @@
 								<fb:control>
 									<Input xmlns="sap.m" type="Text" id="modelFilter" placeholder="{i18n>plModel}" suggestionItems="{DemoOdataModel>/ZC_MODEL_YEAR}"
 										suggestionItemSelected="suggestionItemSelected" valueHelpRequest="handleModelValueHelp" showValueHelp="true" showSuggestion="true"
-										textFormatMode="KeyValue">
+										textFormatMode="KeyValue" change="onSelectChange">
 										<suggestionItems>
 											<core:ListItem xmlns:core="sap.ui.core" key="{DemoOdataModel>model}" text="{DemoOdataModel>model_desc_en}"/>
 										</suggestionItems>
@@ -52,7 +52,7 @@
 								<fb:control>
 									<Input xmlns="sap.m" type="Text" id="suffixFilter" placeholder="{i18n>plSuffix}" suggestionItems="{ path: 'DemoOdataModel>/ZC_MODEL_YEAR'}"
 										suggestionItemSelected="suggestionItemSelected" valueHelpRequest="handleSuffixValueHelp" showValueHelp="true" showSuggestion="true"
-										textFormatMode="KeyValue">
+										textFormatMode="KeyValue" change="onSelectChange">
 										<suggestionItems>
 											<core:ListItem xmlns:core="sap.ui.core" key="{DemoOdataModel>suffix}" text="{DemoOdataModel>suffix}"/>
 										</suggestionItems>
@@ -75,7 +75,7 @@
 							</fb:FilterItem>
 							<fb:FilterItem label="{i18n>lblReserver}" name="RI" visible="{= ${UserDataModel>/AdminVisible} === true ? false : true }">
 								<fb:control>
-									<Input xmlns="sap.m" id="ReserverFilter" placeholder="{i18n>plReserver}"/>
+									<Input xmlns="sap.m" id="ReserverFilter" placeholder="{i18n>plReserver}" change="onSelectChange"/>
 								</fb:control>
 							</fb:FilterItem>
 						</fb:filterItems>

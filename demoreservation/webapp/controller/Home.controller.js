@@ -66,7 +66,16 @@ sap.ui.define([
 			sTitle = "Vehicle List";
 			var lengthTotal = oTable.getBinding("items").getLength();
 			title.setText(sTitle + " (" + lengthTotal + ")");
-			this.onSearch(oEvent);
+			// 
+		},
+
+		onSelectChange: function (oEvent) {
+			// debugger;
+			if (oEvent.getParameters().newValue != "") {
+				this.onSearch(oEvent);
+			} else {
+				this.onReset(oEvent);
+			}
 		},
 		onReset: function (oEvent) {
 			this.getView().byId("seriesFilter").setSelectedKey();
@@ -251,6 +260,7 @@ sap.ui.define([
 		suggestionItemSelected: function (evt) {
 			var oItem = evt.getParameter('selectedItem'),
 				sKey = oItem ? oItem.getKey() : '';
+			// this.onSearch(evt);
 		},
 
 		handleSortButtonPressed: function () {
