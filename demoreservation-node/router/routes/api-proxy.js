@@ -89,7 +89,7 @@ module.exports = function (appContext) {
 
 			// Pass through x-csrf-token from request to proxied request to S4/HANA
 			// This requires manual handling of CSRF tokens from the front-end
-			// Note: req.get() will get header in a case-insensitive manner 
+			// Note: req.get() will get header in a case-insensitive manner
 			var csrfTokenHeaderValue = req.get("X-Csrf-Token");
 			proxiedReqHeaders["X-Csrf-Token"] = csrfTokenHeaderValue;
 
@@ -111,9 +111,27 @@ module.exports = function (appContext) {
 				method: proxiedMethod,
 				url: proxiedUrl
 			});
+
+			// Remove MYSAPSSO2 cookie before making the proxied request, so that it does not override basic auth when APIM
+			// proxies the request to SAP Gateway
+			if ("cookie" in req.headers) {
+				tracer.debug("Original cookies: %s", req.headers.cookie);
+				var cookies = req.headers.cookie.split(";");
+				var filteredCookies = "";
+				cookies.forEach(cookie => {
+					var sepIndex = cookie.indexOf("=");
+					var cookieName = cookie.substring(0, sepIndex).trim();
+					var cookieValue = cookie.substring(sepIndex + 1).trim();
+					if (cookieName !== "MYSAPSSO2") {
+						filteredCookies += (filteredCookies.length > 0 ? "; " : "") + cookieName + "=" + cookieValue;
+					}
+				});
+				tracer.debug("Filtered cookies: %s", filteredCookies);
+				req.headers.cookie = filteredCookies;
+			}
 			req.pipe(proxiedReq);
 			proxiedReq.on("response", proxiedRes => {
-				tracer.info("Proxied call %s %s successful.", proxiedMethod, proxiedUrl);
+				tracer.debug("Proxied call %s %s successful.", proxiedMethod, proxiedUrl);
 				delete proxiedRes.headers.cookie;
 
 				proxiedReq.pipe(res);
