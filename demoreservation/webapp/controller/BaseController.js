@@ -1,13 +1,15 @@
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
-	"sap/ui/core/UIComponent"
-], function (Controller, UIComponent) {
+	"sap/ui/core/UIComponent",
+	"sap/ui/model/json/JSONModel"
+], function (Controller, UIComponent, JSONModel) {
 	"use strict";
 
 	return Controller.extend("ca.toyota.demoreservation.demoreservation.controller.BaseController", {
 
-		onInit: function () {},
-
+		onInit: function () {
+			this.initSecurity();
+		},
 		/* 
 		 * Abstract Method - Will be implemented in SubClasses 
 		 */
@@ -36,19 +38,26 @@ sap.ui.define([
 		 * @returns {undefined}
 		 */
 
-		doRoute: function (routerName,param) {
+		doRoute: function (routerName, param) {
 			this._oRouter = this.getRouter();
-			this._oRouter.navTo(routerName,{vguid:param});
-		//	this._oRouter.navTo(routerName,param);
+			this._oRouter.navTo(routerName, {
+				vguid: param
+			});
+			//	this._oRouter.navTo(routerName,param);
 		},
-		doReqRoute: function (routerName,param1,param2) {
+		doReqRoute: function (routerName, param1, param2) {
 			this._oRouter = this.getRouter();
-			this._oRouter.navTo(routerName,{vhvin:param1, Zresreq:param2});
+			this._oRouter.navTo(routerName, {
+				vhvin: param1,
+				Zresreq: param2
+			});
 		},
-		doReserveRoute: function (routerName,param) {
+		doReserveRoute: function (routerName, param) {
 			this._oRouter = this.getRouter();
-			this._oRouter.navTo(routerName,{admin:param});
-		//	this._oRouter.navTo(routerName,param);
-		},
+			this._oRouter.navTo(routerName, {
+				admin: param
+			});
+			//	this._oRouter.navTo(routerName,param);
+		}
 	});
 });

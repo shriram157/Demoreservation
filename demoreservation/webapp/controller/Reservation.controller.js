@@ -266,7 +266,7 @@ sap.ui.define([
 			var msg;
 			var oBundle = this.getView().getModel("i18n").getResourceBundle();
 			var ZCSUDT = Fragment.byId("adminSectionFragment", "ipDateDue").getValue();
-			var ZCREDT = Fragment.byId("adminSectionFragment", "ipDateRec").getValue();
+			// var ZCREDT = Fragment.byId("adminSectionFragment", "ipDateRec").getValue();
 			var chk = Fragment.byId("adminSectionFragment", "ipCheck").getSelected();
 
 			if (chk) {
@@ -279,18 +279,18 @@ sap.ui.define([
 					Fragment.byId("adminSectionFragment", "ipDateDue").setValueState(sap.ui.core.ValueState.None);
 				}
 
-				if (ZCREDT === "") {
-					msg = oBundle.getText("errCheckRecValidation");
-					Fragment.byId("adminSectionFragment", "ipDateRec").setValueState(sap.ui.core.ValueState.Error);
-					Fragment.byId("adminSectionFragment", "ipDateRec").setValueStateText(msg);
-					return false;
-				} else {
-					Fragment.byId("adminSectionFragment", "ipDateRec").setValueState(sap.ui.core.ValueState.None);
-				}
+				// if (ZCREDT === "") {
+				// 	msg = oBundle.getText("errCheckRecValidation");
+				// 	Fragment.byId("adminSectionFragment", "ipDateRec").setValueState(sap.ui.core.ValueState.Error);
+				// 	Fragment.byId("adminSectionFragment", "ipDateRec").setValueStateText(msg);
+				// 	return false;
+				// } else {
+				// 	Fragment.byId("adminSectionFragment", "ipDateRec").setValueState(sap.ui.core.ValueState.None);
+				// }
 				return true;
 			} else {
 				Fragment.byId("adminSectionFragment", "ipDateDue").setValueState(sap.ui.core.ValueState.None);
-				Fragment.byId("adminSectionFragment", "ipDateRec").setValueState(sap.ui.core.ValueState.None);
+				// Fragment.byId("adminSectionFragment", "ipDateRec").setValueState(sap.ui.core.ValueState.None);
 				return true;
 			}
 		},

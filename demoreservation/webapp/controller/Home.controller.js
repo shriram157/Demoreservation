@@ -1,8 +1,9 @@
 sap.ui.define([
 	"ca/toyota/demoreservation/demoreservation/controller/BaseController",
 	"sap/ui/model/Filter",
-	"sap/ui/model/Sorter"
-], function (BaseController, Filter, Sorter) {
+	"sap/ui/model/Sorter",
+	"sap/ui/model/json/JSONModel"
+], function (BaseController, Filter, Sorter, JSONModel) {
 	"use strict";
 
 	return BaseController.extend("ca.toyota.demoreservation.demoreservation.controller.Home", {
@@ -16,6 +17,55 @@ sap.ui.define([
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.getRoute("Home").attachMatched(this.onRouteMatched, this);
 
+		},
+
+		getAllVehicleData: function (callback) {
+			var that = this;
+			var skip = 0;
+			var results = [];
+
+			function processPages(retItems) {
+				if (!retItems || retItems.length <= 0) {
+					callback(results);
+				} else {
+					results = results.concat(retItems);
+					that.getVehiclesStream(results.length, processPages);
+				}
+			}
+
+			that.getVehiclesStream(skip, processPages);
+		},
+		getVehiclesStream: function (skip, callback) {
+			var that = this,
+				uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
+				sPath;
+
+			if (that.UserData.getProperty("/Type") == "TCI_User") {
+				sPath = "/vehicleListSet?$filter=Emp eq 'E'";
+			} else {
+				sPath = "/vehicleListSet?$filter=Emp eq ''";
+			}
+			var oBusyDialog = new sap.m.BusyDialog();
+			oBusyDialog.open();
+			var oDetailModel = new sap.ui.model.odata.ODataModel(uri, true);
+			oDetailModel.read(sPath, {
+				urlParameters: {
+					"$skip": skip,
+					"$top": 10
+				},
+				success: function (oData, oResponse) {
+					oBusyDialog.close();
+					if (!!oData && !!oData.results) {
+						callback(oData.results);
+					} else {
+						callback([]);
+					}
+				},
+				error: function (err) {
+					oBusyDialog.close();
+					callback([]);
+				}
+			});
 		},
 		amountFormatter: function (val) {
 			if (val !== "" && val !== null && val != undefined) {
@@ -66,7 +116,6 @@ sap.ui.define([
 			sTitle = "Vehicle List";
 			var lengthTotal = oTable.getBinding("items").getLength();
 			title.setText(sTitle + " (" + lengthTotal + ")");
-			// 
 		},
 
 		onSelectChange: function (oEvent) {
@@ -316,7 +365,7 @@ sap.ui.define([
 					that.UserData.refresh(true);
 				},
 				error: function (oError) {
-					console.log("Error in fetching user details from LDAP", oError);
+					// console.log("Error in fetching user details from LDAP", oError);
 				}
 			});
 
@@ -328,45 +377,52 @@ sap.ui.define([
 				success: function (scopesData) {
 					var type = scopesData.loggedUserType[0];
 					// testing
-					//	type="TCI_Admin";
+					// var type="TCI_Admin";
 					that.UserData.setProperty("/Type", type);
 					if (type === "TCI_Admin") {
 						that.UserData.setProperty("/AdminVisible", true);
 					} else {
 						that.UserData.setProperty("/AdminVisible", false);
 					}
-					// that.UserData.setProperty("/Type", "TCI_User"); //remove once local testing done
-					var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/";
-					var sPath;
+					var DemoModel = new JSONModel();
+					that.getView().setModel(DemoModel, "DemoModel");
 
-					if (that.UserData.getProperty("/Type") == "TCI_User") {
-						sPath = "/vehicleListSet?$filter=Emp eq 'E'";
-					} else {
-						sPath = "/vehicleListSet?$filter=Emp eq ''";
-					}
-					$.ajax({
-						dataType: "json",
-						url: uri + sPath,
-						type: "GET",
-						success: function (vehicleData) {
-							console.log("vehicleData", vehicleData);
-							that.DemoModel = new sap.ui.model.json.JSONModel();
-							that.getView().setModel(that.DemoModel, "DemoModel");
-							var obj = {
-								vehicleListSet: []
-							};
-							obj.vehicleListSet = vehicleData.d.results;
-							// .filter(function (val) {
-							// 	return val.ZZZONE == "3000";
-							// });
-							// that.getView().byId("zoneFilter").setSelectedKey("3000");
-							console.log(vehicleData.d.results);
-							that.DemoModel.setData(obj);
-							that.DemoModel.updateBindings(true);
-							console.log(that.DemoModel)
-						},
-						error: function (oError) {}
+					that.getAllVehicleData(function (rItems) {
+						DemoModel.setProperty("/vehicleListSet", rItems);
+						DemoModel.updateBindings(true);
 					});
+					// that.UserData.setProperty("/Type", "TCI_User"); //remove once local testing done
+					// var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/";
+					// var sPath;
+
+					// if (that.UserData.getProperty("/Type") == "TCI_User") {
+					// 	sPath = "/vehicleListSet?$filter=Emp eq 'E'";
+					// } else {
+					// 	sPath = "/vehicleListSet?$filter=Emp eq ''";
+					// }
+					// $.ajax({
+					// 	dataType: "json",
+					// 	url: uri + sPath,
+					// 	type: "GET",
+					// 	success: function (vehicleData) {
+					// 		console.log("vehicleData", vehicleData);
+					// 		that.DemoModel = new sap.ui.model.json.JSONModel();
+					// 		that.getView().setModel(that.DemoModel, "DemoModel");
+					// 		var obj = {
+					// 			vehicleListSet: []
+					// 		};
+					// 		obj.vehicleListSet = vehicleData.d.results;
+					// 		// .filter(function (val) {
+					// 		// 	return val.ZZZONE == "3000";
+					// 		// });
+					// 		// that.getView().byId("zoneFilter").setSelectedKey("3000");
+					// 		console.log(vehicleData.d.results);
+					// 		that.DemoModel.setData(obj);
+					// 		that.DemoModel.updateBindings(true);
+					// 		console.log(that.DemoModel)
+					// 	},
+					// 	error: function (oError) {}
+					// });
 				},
 				error: function (oError) {
 					console.log("Error in fetching user details from LDAP", oError);
