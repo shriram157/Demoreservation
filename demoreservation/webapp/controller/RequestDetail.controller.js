@@ -175,7 +175,7 @@ sap.ui.define([
 				persg = "2";
 			}
 			var curr_datetime = this.getCurrentDate();
-			var sPath = "/ZC_EMP_DETAILS(datetime'" + curr_datetime + "')/Set",
+			var sPath = "/ZC_EMP_DETAILS(datetime'" + encodeURIComponent(curr_datetime) + "')/Set",
 				oDetailModel = that.getOwnerComponent().getModel("DemoOdataModel");
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
