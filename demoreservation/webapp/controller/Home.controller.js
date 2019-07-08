@@ -405,17 +405,14 @@ sap.ui.define([
 						url: uri + sPath,
 						type: "GET",
 						success: function (vehicleData) {
-							console.log("vehicleData", vehicleData);
 							that.DemoModel = new sap.ui.model.json.JSONModel();
 							that.getView().setModel(that.DemoModel, "DemoModel");
 							var obj = {
 								vehicleListSet: []
 							};
 							obj.vehicleListSet = vehicleData.d.results;
-							console.log(vehicleData.d.results);
 							that.DemoModel.setData(obj);
 							that.DemoModel.updateBindings(true);
-							console.log(that.DemoModel)
 						},
 						error: function (oError) {}
 					});
