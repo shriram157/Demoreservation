@@ -70,6 +70,13 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 					
 					oData.EstAssPrice = that.amountFormatter(oData.EstAssPrice);
 					oData.NonAssPrice = that.amountFormatter(oData.NonAssPrice);
+					
+			/////Added bby Pradeep		
+					if(oData.NonAssPrice === "$0.00 "){
+						oData.NonAssPrice = "N/A";
+					}
+			////end of addition		
+				
 
 					// extract Requestor type text
 					var mod = that.getOwnerComponent().getModel("vehicles"),

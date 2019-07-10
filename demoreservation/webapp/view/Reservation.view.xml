@@ -39,6 +39,15 @@
 									<Input xmlns="sap.m" id="ReserverFilter" placeholder="{i18n>plReserver}"/>
 								</filterbar:control>
 							</filterbar:FilterItem>
+							
+							<filterbar:FilterItem label="{i18n>lblRqstTyp}" name="RT" visible="{UserModel>/admin}"> 
+								<filterbar:control>
+								<ComboBox id="RequesterTypeFilter" change="onSelectReqTypeChange" items="{path: 'vehicles>/FilterData/RequestorType'}" placeholder="Select Requestor Type" width="20rem" selectedKey="{Reservation>/ZREQTYP}">
+								<core:Item key="{vehicles>key}" text="{vehicles>name}"/>
+							</ComboBox>
+								</filterbar:control>
+							</filterbar:FilterItem>
+							
 						</filterbar:filterItems>
 					</filterbar:FilterBar>
 				</f:content>
@@ -65,17 +74,17 @@
 							<Text text="{i18n>lblStatus}"/>
 						</header>
 					</Column>
-					<Column width="13rem" hAlign="Center">
+					<Column width="5rem" hAlign="Center">
 						<header>
 							<Text text="{i18n>lblModel}"/>
 						</header>
 					</Column>
-					<Column width="auto" hAlign="Center">
+					<Column width="2rem" hAlign="Center">
 						<header>
 							<Text text="{i18n>lblModYear}"/>
 						</header>
 					</Column>
-					<Column width="auto" hAlign="Center">
+					<Column width="2rem" hAlign="Center">
 						<header>
 							<Text text="{i18n>lblColour}"/>
 						</header>
@@ -110,6 +119,17 @@
 							<Text text="{i18n>lblAsPrice}"/>
 						</header>
 					</Column>
+					
+					
+					<Column width="auto" hAlign="Center" visible="{UserModel>/admin}">
+						<header>
+							<Text text="{i18n>lblRqstTyp}"  />
+						</header>
+					</Column>
+					
+					
+					
+					
 					<Column width="auto" hAlign="Center">
 						<header>
 							<Text text="{i18n>lblEndDate}"/>
@@ -122,20 +142,23 @@
 					</Column>
 					<Column width="5%" visible="{UserModel>/admin}"/>
 					<Column width="5%" visible="{UserModel>/admin}"/>
+					
+					
 				</columns>
 				<items>
 					<ColumnListItem selected="true" type="Active">
 						<cells>
 							<Text text="{DemoOdataModel>Status}" />
-							<Text text="{DemoOdataModel>ModelDesc}" width="12rem"/>
-							<Text text="{DemoOdataModel>ZZMOYR}"/>
-							<Text text="{DemoOdataModel>ColorDesc}" />
-							<Text text="{DemoOdataModel>RequestDate}" />
+							<Text text="{DemoOdataModel>ModelDesc}" width="5rem"/>
+							<Text text="{DemoOdataModel>ZZMOYR}" width="2rem"   />
+							<Text text="{DemoOdataModel>ColorDesc}" width="6rem" />
+							<Text text="{DemoOdataModel>RequestDate}"/>
 							<Text text="{DemoOdataModel>Reserver}" />
 							<Text text="{DemoOdataModel>VHVIN}" width="9rem"/>
 							<Text text="{DemoOdataModel>Purchaser}" />
 							<Text text="{DemoOdataModel>Driver}" />
 							<Text text="{path:'DemoOdataModel>Price',formatter:'.amountFormatter'}" />
+							<Text text="{DemoOdataModel>ZREQDES}"  width="6rem"/>
 							<Text text="{DemoOdataModel>EndDate}" />
 							<Button icon="sap-icon://hint" press="onReservationInfoPress"/>
 							<Button text="{i18n>btnApprove}" press="onApprovePress" visible="{= ${DemoOdataModel>StatusCode} === 'PA'}"/>

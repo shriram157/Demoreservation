@@ -73,11 +73,21 @@
 									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
-							<fb:FilterItem label="{i18n>lblReserver}" name="RI" visible="{= ${UserDataModel>/AdminVisible} === true ? false : true }">
+							<!--Commented by Pradeep Sharma<fb:FilterItem label="{i18n>lblReserver}" name="RI" visible="{= ${UserDataModel>/AdminVisible} === true ? false : true }">-->
+								<fb:FilterItem label="{i18n>lblReserver}" name="RI" > 
 								<fb:control>
 									<Input xmlns="sap.m" id="ReserverFilter" placeholder="{i18n>plReserver}" change="onSelectChange"/>
 								</fb:control>
 							</fb:FilterItem>
+							<!--Added by Pradeep Sharma-->
+							<!--<fb:FilterItem label="{i18n>lblDriver}" name="DR" visible="{= ${UserDataModel>/AdminVisible} === true ? false : true }">-->
+								<fb:FilterItem label="{i18n>lblDriver}" name="DR">
+								<fb:control>
+								<Input xmlns="sap.m" id="DriverFilter" placeholder="{i18n>plDriver}" change="onSelectChange"/>
+								</fb:control>
+							</fb:FilterItem>
+							
+							
 						</fb:filterItems>
 					</fb:FilterBar>
 				</f:content>
@@ -90,7 +100,8 @@
 					<VBox>
 						<Button type="Default" id="MyResButton" text="{i18n>btnMyResrv}" enabled="true" width="auto" visible="true" press="onMyReservationPress"
 							iconDensityAware="false" iconFirst="true"/>
-						<Button type="Default" id="AllResButton" text="{i18n>btnAllResrv}" enabled="true" width="auto" visible="{UserDataModel>/AdminVisible}"
+						<Button type="Default" id="AllResButton" text="{i18n>btnAllResrv}" enabled="true" width="auto" 
+					       visible="{UserDataModel>/AdminVisible}"
 							press="onAllReservationPress" iconDensityAware="false" iconFirst="true"/>
 					</VBox>
 					<Table id="idMyReservationsTable"
@@ -100,6 +111,10 @@
 							<Toolbar>
 								<Title id="tabTitle" level="H2"/>
 								<ToolbarSpacer/>
+								
+							<Button icon="sap-icon://excel-attachment" type="Emphasized" press="handleExcelPressed" visible="{UserDataModel>/AdminVisible}"/>
+							<!--<Button icon="sap-icon://excel-attachment" type="Emphasized" press="handleExcelPressed"/>-->
+							
 								<Button class="sapMBtnIconSort" tooltip="{i18n>tooltipSort}" icon="sap-icon://sort" press="handleSortButtonPressed"/>
 							</Toolbar>
 						</headerToolbar>

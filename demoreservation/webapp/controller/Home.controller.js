@@ -107,6 +107,8 @@ sap.ui.define([
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.navTo("Reservation", {
 				admin: true
+				
+				
 			});
 		},
 		onUpdateFinished: function (oEvent) {
@@ -134,6 +136,7 @@ sap.ui.define([
 			this.getView().byId("vinFilter").setValue();
 			this.getView().byId("inpStatus").setValue();
 			this.getView().byId("ReserverFilter").setValue();
+		    this.getView().byId("ReserverFilter").setValue();
 			var aFilters = [];
 			aFilters = new sap.ui.model.Filter(aFilters, true);
 			// // update list binding
@@ -150,6 +153,9 @@ sap.ui.define([
 			var vinFilter = this.getView().byId("vinFilter").getValue().toUpperCase();
 			var inpStatus = this.getView().byId("inpStatus").getValue();
 			var ReserverFilter = this.getView().byId("ReserverFilter").getValue().toUpperCase();
+			///////Added by Pradeep Sharma
+			var DriverFilter = this.getView().byId("DriverFilter").getValue().toUpperCase();
+			//////
 
 			if (inpStatus === "All") { // If Status selected All, send blank value in filter
 				inpStatus = "";
@@ -164,6 +170,7 @@ sap.ui.define([
 			var Status = new sap.ui.model.Filter("Status", sap.ui.model.FilterOperator.EQ, inpStatus, true);
 			var ZZSUFFIX = new sap.ui.model.Filter("ZZSUFFIX", sap.ui.model.FilterOperator.EQ, suffixFilter, true);
 			var Reserver = new sap.ui.model.Filter("Reserver", sap.ui.model.FilterOperator.EQ, ReserverFilter, true);
+			var Driver = new sap.ui.model.Filter("Driver", sap.ui.model.FilterOperator.EQ, DriverFilter, true);
 			aFilters = [
 				ZZZONE,
 				ZZSERIES,
@@ -172,7 +179,8 @@ sap.ui.define([
 				VHVIN,
 				Status,
 				ZZSUFFIX,
-				Reserver
+				Reserver,
+				Driver
 			];
 			// $.each(aFilters, function (key, value) {
 			aFilters = aFilters.filter(function (val) {
@@ -344,6 +352,12 @@ sap.ui.define([
 				value = "Yes";
 			}
 			return value;
+		},
+		
+		handleExcelPressed: function (oEvent) {
+			var sUrl = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/vehicleListSet?$format=xlsx";
+			var encodeUrl = encodeURI(sUrl);
+			window.open(encodeUrl);
 		},
 
 		initSecurity: function () {

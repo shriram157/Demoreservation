@@ -130,6 +130,7 @@
 							<Label text="Est. Non Assoc. Price"/>
 							<Label text=":" class="sapUiTinyMarginEnd"/>
 							<Label design="Bold" text="{/VehicleDetailSet/NonAssPrice}"/>
+								
 						</items>
 					</HBox>
 					<HBox>

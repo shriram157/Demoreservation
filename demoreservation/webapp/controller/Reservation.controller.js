@@ -379,6 +379,7 @@ sap.ui.define([
 			this.getView().byId("vinFilter").setValue();
 			this.getView().byId("inpStatus").setSelectedKey();
 			this.getView().byId("ReserverFilter").setValue();
+			this.getView().byId("RequesterTypeFilter").setValue();
 			var aFilters = [];
 			aFilters = new sap.ui.model.Filter(aFilters, true);
 			// // update list binding
@@ -402,6 +403,7 @@ sap.ui.define([
 			var vinFilter = this.getView().byId("vinFilter").getValue().toUpperCase();
 			var inpStatus = this.getView().byId("inpStatus").getSelectedKey();
 			var ReserverFilter = this.getView().byId("ReserverFilter").getValue().toUpperCase();
+			var RequesterTypeFilter = this.getView().byId("RequesterTypeFilter").getSelectedKey().toUpperCase();
 
 			var aFilters = [];
 			var MATNR = new sap.ui.model.Filter("MATNR", sap.ui.model.FilterOperator.EQ, modelFilter);
@@ -411,6 +413,7 @@ sap.ui.define([
 			//		var Admin = new sap.ui.model.Filter("Admin", sap.ui.model.FilterOperator.EQ, admin);
 			var Email = new sap.ui.model.Filter("Email", sap.ui.model.FilterOperator.EQ, email);
 			var Reserver = new sap.ui.model.Filter("Reserver", sap.ui.model.FilterOperator.EQ, ReserverFilter);
+			var RequesterType = new sap.ui.model.Filter("ZREQTYP", sap.ui.model.FilterOperator.EQ, RequesterTypeFilter);
 
 			aFilters = [
 				MATNR,
@@ -419,7 +422,8 @@ sap.ui.define([
 				StatusCode,
 				//		Admin,
 				Email,
-				Reserver
+				Reserver,
+				RequesterType
 			];
 			var finalFilter = new sap.ui.model.Filter({
 				filters: aFilters,
