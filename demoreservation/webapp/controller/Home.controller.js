@@ -76,7 +76,7 @@ sap.ui.define([
 			}
 		},
 		initialFilter: function () {
-			this.getView().byId("zoneFilter").setSelectedKey("3000");
+		//	this.getView().byId("zoneFilter").setSelectedKey("3000");
 		},
 		onRouteMatched: function (oEvent) {
 			//	this.getView().byId("idMyReservationsTable").getModel().refresh(true);
