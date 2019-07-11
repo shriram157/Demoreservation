@@ -33,7 +33,7 @@ sap.ui.define([
 			var locale = jQuery.sap.getUriParameters().get('Language');
 			var bundle = !locale ? ResourceBundle.create({
 				url: './i18n/i18n.properties'
-			}) : ResourceBundle.create({
+			}): ResourceBundle.create({
 				url: './i18n/i18n.properties',
 				locale: locale
 			});
@@ -59,54 +59,6 @@ sap.ui.define([
 				});
 				origOpen.apply(this, arguments);
 			};
-
-			this._initUserDataModel();
-		},
-
-		_initUserDataModel: function () {
-			this.UserData = new sap.ui.model.json.JSONModel();
-			sap.ui.getCore().setModel(this.UserData, "UserDataModel");
-			var that = this;
-			$.ajax({
-				dataType: "json",
-				url: "/demoreservation-node/userDetails/attributes",
-				type: "GET",
-				success: function (userAttributes) {
-					that.UserData.setProperty("/FirstName", userAttributes.samlAttributes.FirstName);
-					that.UserData.setProperty("/LastName", userAttributes.samlAttributes.LastName);
-					that.UserData.setProperty("/Email", userAttributes.samlAttributes.Email);
-					that.UserData.setProperty("/Userid", userAttributes.userProfile.id);
-					//	sap.ui.core.BusyIndicator.hide();
-					that.UserData.updateBindings(true);
-					that.UserData.refresh(true);
-				},
-				error: function (oError) {
-					// console.log("Error in fetching user details from LDAP", oError);
-				}
-			});
-
-			// Current user scope
-			$.ajax({
-				dataType: "json",
-				url: "/demoreservation-node/userDetails/currentScopesForUser",
-				type: "GET",
-				success: function (scopesData) {
-					var type = scopesData.loggedUserType[0];
-					// testing
-					// var type="TCI_Admin";
-					that.UserData.setProperty("/Type", type);
-					if (type === "TCI_Admin") {
-						that.UserData.setProperty("/AdminVisible", true);
-					} else {
-						that.UserData.setProperty("/AdminVisible", false);
-					}
-				},
-				error: function (oError) {
-					console.log("Error in fetching user details from LDAP", oError);
-					that.UserData.setProperty("/Type", "TCI_User");
-					that.UserData.setProperty("/AdminVisible", false);
-				}
-			});
 		}
 	});
 });
