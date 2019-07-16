@@ -31,7 +31,7 @@
 								<fb:control>
 									<ComboBox xmlns="sap.m" id="seriesFilter" placeholder="{i18n>plSeries}"
 										items="{ path: 'DemoOdataModel>/ZC_SERIES', sorter : {path : 'TCISeriesDescriptionEN'}, filters: [{path: 'zzzadddata2',operator: 'EQ',value1: 'X'}, {path: 'ModelSeriesNo',operator: 'NE',value1: 'L/C'}, {path: 'zzzadddata4',operator: 'NE',value1: '0'}]}"
-										change="onSelectChange" filterSecondaryValues="true" showSecondaryValues="true">
+										 filterSecondaryValues="true" showSecondaryValues="true">
 										<core:ListItem xmlns:core="sap.ui.core" text="{DemoOdataModel>TCISeriesDescriptionEN}" key="{DemoOdataModel>ModelSeriesNo}"
 											additionalText="{DemoOdataModel>ModelSeriesNo}"/>
 									</ComboBox>
@@ -166,7 +166,7 @@
 								<cells>
 												
 							<core1:Icon size="1.5rem" 
-                                 src="sap-icon://circle-task" color="red" visible="{= ${DemoModel>SDSTA} === 'E100'}" /> 
+                                 src="sap-icon://circle-task" color="red" visible="{= ${DemoModel>SDSTA} === 'E120'}"   /> 
 						
 									<Text text="{DemoModel>ZZSERIES}" width="3rem" textDirection="LTR"/>
 									<Text text="{DemoModel>ModelDesc}" width="13rem" textDirection="LTR"/>
