@@ -1,4 +1,4 @@
-<mvc:View xmlns:mvc="sap.ui.core.mvc" controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" height="100%">
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns:core1="sap.ui.core" controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" height="100%">
 	<f:DynamicPage xmlns:f="sap.f" id="dynamicPageId" headerExpanded="{/headerExpanded}">
 		<f:header>
 			<f:DynamicPageHeader pinnable="false">
@@ -119,6 +119,11 @@
 							</Toolbar>
 						</headerToolbar>
 						<columns>
+							
+								<Column width="3rem" hAlign="Center">
+								<Text text="" width="auto" visible="{UserDataModel>/AdminVisible}"/>
+							</Column>
+					
 							<Column width="3rem" hAlign="Center">
 								<Text text="{i18n>lblSeries}" width="auto"/>
 							</Column>
@@ -159,6 +164,10 @@
 						<items>
 							<ColumnListItem type="Navigation" press="onListItemPress" vAlign="Middle">
 								<cells>
+												
+							<core1:Icon size="1.5rem" 
+                                 src="sap-icon://circle-task" color="red" visible="{= ${DemoModel>SDSTA} === 'E100'}" /> 
+						
 									<Text text="{DemoModel>ZZSERIES}" width="3rem" textDirection="LTR"/>
 									<Text text="{DemoModel>ModelDesc}" width="13rem" textDirection="LTR"/>
 									<Text text="{DemoModel>ZoneDesc}" width="8rem" textDirection="LTR"/>
