@@ -15,14 +15,14 @@
 								<fb:control>
 									<ComboBox xmlns="sap.m" id="zoneFilter" placeholder="{i18n>plZone}"
 										items="{ path: 'DemoOdataModel>/ZC_ZONES', filters: {path: 'spras',operator: 'EQ',value1: 'E'}, sorter : {path : 'bezei'} }"
-										change="onSelectChange">
+										>
 										<core:Item xmlns:core="sap.ui.core" text="{DemoOdataModel>bezei}" key="{DemoOdataModel>vkbur}"/>
 									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<fb:FilterItem label="{i18n>lblYear}" name="D">
 								<fb:control>
-									<ComboBox xmlns="sap.m" id="yearFilter" placeholder="{i18n>plYear}" items="{YearModel>/}" change="onSelectChange">
+									<ComboBox xmlns="sap.m" id="yearFilter" placeholder="{i18n>plYear}" items="{YearModel>/}" >
 										<core:Item xmlns:core="sap.ui.core" text="{YearModel>dtext}" key="{YearModel>dkey}"/>
 									</ComboBox>
 								</fb:control>
@@ -41,7 +41,7 @@
 								<fb:control>
 									<Input xmlns="sap.m" type="Text" id="modelFilter" placeholder="{i18n>plModel}" suggestionItems="{DemoOdataModel>/ZC_MODEL_YEAR}"
 										suggestionItemSelected="suggestionItemSelected" valueHelpRequest="handleModelValueHelp" showValueHelp="true" showSuggestion="true"
-										textFormatMode="KeyValue" change="onSelectChange">
+										textFormatMode="KeyValue" >
 										<suggestionItems>
 											<core:ListItem xmlns:core="sap.ui.core" key="{DemoOdataModel>model}" text="{DemoOdataModel>model_desc_en}"/>
 										</suggestionItems>
@@ -52,7 +52,7 @@
 								<fb:control>
 									<Input xmlns="sap.m" type="Text" id="suffixFilter" placeholder="{i18n>plSuffix}" suggestionItems="{ path: 'DemoOdataModel>/ZC_MODEL_YEAR'}"
 										suggestionItemSelected="suggestionItemSelected" valueHelpRequest="handleSuffixValueHelp" showValueHelp="true" showSuggestion="true"
-										textFormatMode="KeyValue" change="onSelectChange">
+										textFormatMode="KeyValue" >
 										<suggestionItems>
 											<core:ListItem xmlns:core="sap.ui.core" key="{DemoOdataModel>suffix}" text="{DemoOdataModel>suffix}"/>
 										</suggestionItems>
@@ -68,7 +68,7 @@
 								<fb:control>
 									<!--<Input id="inpStatus" placeholder="Enter Status"/>-->
 									<ComboBox xmlns="sap.m" id="inpStatus" placeholder="{i18n>plStatus}" items="{path: 'vehicles>/FilterData/ReservationStatus'}"
-										change="onSelectChange">
+										>
 										<core:Item xmlns:core="sap.ui.core" text="{vehicles>name}" key="{vehicles>key}"/>
 									</ComboBox>
 								</fb:control>
@@ -130,7 +130,7 @@
 							<Column width="13rem" hAlign="Center">
 								<Text text="{i18n>lblModel}" width="auto"/>
 							</Column>
-							<Column width="8rem" hAlign="Center">
+							<Column width="5rem" hAlign="Center">
 								<Text text="{i18n>lblZone}" width="auto"/>
 							</Column>
 							<Column width="7rem" hAlign="Center">
@@ -139,7 +139,7 @@
 							<Column width="8rem" hAlign="Center">
 								<Text text="{i18n>lblEndDate}" width="auto"/>
 							</Column>
-							<Column width="5rem" hAlign="Center">
+							<Column width="3rem" hAlign="Center">
 								<Text text="{i18n>lblYear}" width="auto"/>
 							</Column>
 							<Column width="8rem" hAlign="Center">
@@ -166,14 +166,14 @@
 								<cells>
 												
 							<core1:Icon size="1.5rem" 
-                                 src="sap-icon://circle-task" color="red" visible="{= ${DemoModel>SDSTA} === 'E120'}"   /> 
+                                 src="sap-icon://circle-task" color="green" visible="{= ${DemoModel>SDSTA} === 'E100'}"   /> 
 						
 									<Text text="{DemoModel>ZZSERIES}" width="3rem" textDirection="LTR"/>
 									<Text text="{DemoModel>ModelDesc}" width="13rem" textDirection="LTR"/>
-									<Text text="{DemoModel>ZoneDesc}" width="8rem" textDirection="LTR"/>
+									<Text text="{DemoModel>ZoneDesc}" width="5rem" textDirection="LTR"/>
 									<Text text="{path:'DemoModel>Price',formatter:'.amountFormatter'}" width="7rem" textDirection="LTR"/>
 									<Text text="{DemoModel>EndDate}" width="8rem" textDirection="LTR"/>
-									<Text text="{DemoModel>ZZMOYR}" width="5rem" textDirection="LTR"/>
+									<Text text="{DemoModel>ZZMOYR}" width="3rem" textDirection="LTR"/>
 									<Text text="{DemoModel>ColorDesc}" width="8rem" textDirection="LTR"/>
 									<Text text="{DemoModel>Driver}" width="7rem" textDirection="LTR"/>
 									<Text text="{DemoModel>Reserver}" width="7rem" textDirection="LTR"/>
