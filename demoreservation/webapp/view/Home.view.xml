@@ -76,14 +76,14 @@
 							<!--Commented by Pradeep Sharma<fb:FilterItem label="{i18n>lblReserver}" name="RI" visible="{= ${UserDataModel>/AdminVisible} === true ? false : true }">-->
 								<fb:FilterItem label="{i18n>lblReserver}" name="RI" > 
 								<fb:control>
-									<Input xmlns="sap.m" id="ReserverFilter" placeholder="{i18n>plReserver}" change="onSelectChange"/>
+									<Input xmlns="sap.m" id="ReserverFilter" placeholder="{i18n>plReserver}" />
 								</fb:control>
 							</fb:FilterItem>
 							<!--Added by Pradeep Sharma-->
 							<!--<fb:FilterItem label="{i18n>lblDriver}" name="DR" visible="{= ${UserDataModel>/AdminVisible} === true ? false : true }">-->
 								<fb:FilterItem label="{i18n>lblDriver}" name="DR">
 								<fb:control>
-								<Input xmlns="sap.m" id="DriverFilter" placeholder="{i18n>plDriver}" change="onSelectChange"/>
+								<Input xmlns="sap.m" id="DriverFilter" placeholder="{i18n>plDriver}" />
 								</fb:control>
 							</fb:FilterItem>
 							
