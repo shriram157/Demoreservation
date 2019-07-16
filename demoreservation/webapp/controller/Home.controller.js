@@ -170,7 +170,7 @@ sap.ui.define([
 			var Status = new sap.ui.model.Filter("Status", sap.ui.model.FilterOperator.EQ, inpStatus, true);
 			var ZZSUFFIX = new sap.ui.model.Filter("ZZSUFFIX", sap.ui.model.FilterOperator.EQ, suffixFilter, true);
 			var Reserver = new sap.ui.model.Filter("Reserver", sap.ui.model.FilterOperator.EQ, ReserverFilter, true);
-			var Driver = new sap.ui.model.Filter("Driver", sap.ui.model.FilterOperator.EQ, DriverFilter, true);
+			var Driver = new sap.ui.model.Filter("Driver", sap.ui.model.FilterOperator.Contains, DriverFilter, true);
 			aFilters = [
 				ZZZONE,
 				ZZSERIES,
