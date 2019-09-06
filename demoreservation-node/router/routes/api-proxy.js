@@ -66,6 +66,12 @@ module.exports = function (appContext) {
 				method: proxiedMethod,
 				url: proxiedUrl
 			});
+
+			// Delete all headers (incl. cookies) from original request before making the proxied request, so to avoid
+			// downstream system request header size limits. Only the headers identified as required for the proxied
+			// request should be included - all other inherited headers should be ignored.
+			delete req.headers;
+
 			req.pipe(proxiedReq);
 			proxiedReq.on("response", proxiedRes => {
 				tracer.info("Proxied call %s %s successful.", proxiedMethod, proxiedUrl);
@@ -129,6 +135,7 @@ module.exports = function (appContext) {
 				tracer.debug("Filtered cookies: %s", filteredCookies);
 				req.headers.cookie = filteredCookies;
 			}
+
 			req.pipe(proxiedReq);
 			proxiedReq.on("response", proxiedRes => {
 				tracer.debug("Proxied call %s %s successful.", proxiedMethod, proxiedUrl);
