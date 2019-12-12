@@ -21,7 +21,7 @@ var app = express();
 var appContext = logging.createAppContext();
 app.use(logging.middleware({
 	appContext: appContext,
-	logNetwork: true
+	logNetwork: process.env.XS_LOG_NETWORK === "true"
 }));
 var logger = appContext.createLogContext().getLogger("/Application/Server");
 
