@@ -3,9 +3,19 @@
 
 "use strict";
 
-var approuter = require("@sap/approuter");
+const approuter = require("@sap/approuter");
 
-approuter().start({
+let instance = approuter();
+
+let logNetwork = (process.env.XS_LOG_NETWORK === "true");
+instance.first.use((req, res, next) => {
+	if (logNetwork && req.loggingContext) {
+		req.loggingContext.enableNetworkLog(res);
+	}
+	next();
+});
+
+instance.start({
 	extensions: [
 		require("./lib/extensions.js")
 	]
