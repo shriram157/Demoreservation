@@ -70,7 +70,7 @@ module.exports = function (appContext) {
 			// Delete all headers (incl. cookies) from original request before making the proxied request, so to avoid
 			// downstream system request header size limits. Only the headers identified as required for the proxied
 			// request should be included - all other inherited headers should be ignored.
-			delete req.headers;
+			req.headers = {};
 
 			req.pipe(proxiedReq);
 			proxiedReq.on("response", proxiedRes => {
