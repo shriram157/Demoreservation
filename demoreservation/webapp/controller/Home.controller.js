@@ -410,9 +410,9 @@ sap.ui.define([
 					var sPath;
 
 					if (that.UserData.getProperty("/Type") == "TCI_User") {
-						sPath = "/vehicleListSet?$filter=Emp eq 'E'";
+						sPath = "/vehicleListSet?$format=json&$filter=Emp eq 'E'";
 					} else {
-						sPath = "/vehicleListSet?$filter=Emp eq ''";
+						sPath = "/vehicleListSet?$format=json&$filter=Emp eq ''";
 					}
 					$.ajax({
 						dataType: "json",
