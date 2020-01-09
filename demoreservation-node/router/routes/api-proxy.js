@@ -3,151 +3,714 @@
 
 "use strict";
 
-module.exports = function (appContext) {
-	var express = require("express");
-	var request = require("request");
-	var {
-		URL
-	} = require("url");
-	var xsenv = require("@sap/xsenv");
+const bodyParser = require("body-parser");
+// See https://www.npmjs.com/package/dicer
+const dicer = require("dicer");
+const express = require("express");
+const jsonPathPlus = require("jsonpath-plus");
+const odataParser = require("odata-parser");
+const request = require("request");
+const stream = require("stream");
+const urlLib = require("url");
+const utils = require("../../utils");
+const xsenv = require("@sap/xsenv");
 
-	var router = express.Router();
+const DEFAULT_ENCODING = "utf-8";
+const LOGGER_NAME = "/Application/Route/APIProxy";
+const PROXIED_REQ_HEADER_EXCLUDES = [
+  "authorization",
+  "b3",
+  "cookie",
+  "host",
+  "referer",
+  "user-agent",
+  "x-b3-.+",
+  "x-cf-.+",
+  "x-correlationid",
+  "x-forwarded-.+",
+  "x-ibm-client-*",
+  "x-request-.+",
+  "x-scp-.+",
+  "x-vcap-.+"
+];
+const REGEX_PARAM = /([A-Za-z_][0-9A-Za-z_]*)=([^',]+|'(([^']|'')+)')(,?)/g;
 
-	// Get UPS name from env var UPS_NAME
-	var apimServiceName = process.env.UPS_NAME;
-	var options = {};
-	options = Object.assign(options, xsenv.getServices({
-		apim: {
-			name: apimServiceName
-		}
-	}));
+let apiProxySecJson = null;
+let roleMappingsJson = null;
 
-	var apimUrl = options.apim.host;
-	if (apimUrl.endsWith("/")) {
-		apimUrl = apimUrl.slice(0, -1);
-	}
-	var APIKey = options.apim.APIKey;
-	var s4Client = options.apim.client;
-	var s4User = options.apim.user;
-	var s4Password = options.apim.password;
-	var apicClientId = options.apim.apicClientId;
-	var apicClientSecret = options.apim.apicClientSecret;
+let apimService = getApimService();
 
-	router.all("/*", function (req, res, next) {
-		var logger = req.loggingContext.getLogger("/Application/Route/APIProxy");
-		var tracer = req.loggingContext.getTracer(__filename);
-		var proxiedMethod = req.method;
-		var proxiedReqHeaders = {
-			"APIKey": APIKey,
-			"Content-Type": req.get("Content-Type")
-		};
-		var proxiedUrl = apimUrl + req.url;
+let router = express.Router();
 
-		// Proxied call is to IBM APIC
-		if (req.url.startsWith("/tci/internal")) {
-			proxiedReqHeaders["x-ibm-client-id"] = apicClientId;
-			proxiedReqHeaders["x-ibm-client-secret"] = apicClientSecret;
+function handleRequest(req, res, next) {
+  let logger = req.loggingContext.getLogger(LOGGER_NAME);
+  let tracer = req.loggingContext.getTracer(__filename);
+  if (req.path.endsWith("$batch")) {
+    handleBatchRequest(logger, tracer, req, res, next);
+  } else {
+    handleNonBatchRequest(logger, tracer, req, res, next);
+  }
+}
 
-			// Redact security-sensitive header values before writing to trace log
-			var traceProxiedReqHeaders = JSON.parse(JSON.stringify(proxiedReqHeaders));
-			var secSensitiveHeaderNames = ["authorization", "apikey", "x-csrf-token", "x-ibm-client-id", "x-ibm-client-secret"];
-			Object.keys(traceProxiedReqHeaders).forEach(key => {
-				if (secSensitiveHeaderNames.includes(key.toLowerCase())) {
-					traceProxiedReqHeaders[key] = "REDACTED";
-				}
-			});
+function handleBatchRequest(logger, tracer, req, res, next) {
+  if (req.method !== "POST") {
+    res.status(400).send("Invalid HTTP method.");
+    return;
+  }
+  let nextSlashIndex = req.path.indexOf("/", 1);
+  if (nextSlashIndex === -1) {
+    res.status(400).send("Invalid URL.");
+    return;
+  }
+  let servicePathPrefix = req.path.substring(0, nextSlashIndex);
+  let batchBoundary = utils.parseBoundary(req.get("content-type"));
+  let batchDicer = new dicer({ boundary: batchBoundary });
+  let batchPartPromises = [];
+  let batchPartCount = 0;
+  batchDicer.on("part", batchPartStream => {
+    let batchPartPromise = new Promise((batchPartResolve, batchPartReject) => {
+      let batchPartIndex = ++batchPartCount;
+      batchPartStream.on("header", batchPartHeaders => {
+        if (utils.headersValidForOp(batchPartHeaders)) {
+          batchPartStream.on("data", batchPartData => {
+            let reqOpStr = batchPartData.toString(
+              DEFAULT_ENCODING,
+              0,
+              batchPartData.indexOf("\r\n")
+            );
+            let reqOp = utils.parseReqOp(reqOpStr);
+            if (!reqOp) {
+              batchPartReject({
+                httpCode: 400,
+                message:
+                  "Could not parse HTTP request operation info in batch part " +
+                  batchPartIndex +
+                  "."
+              });
+              return;
+            }
+            let body = null;
+            if (batchPartData.indexOf("\r\n\r\n") !== -1) {
+              body = batchPartData.toString(
+                DEFAULT_ENCODING,
+                batchPartData.indexOf("\r\n\r\n") + 4
+              );
+            } else {
+              batchPartReject({
+                httpCode: 400,
+                message:
+                  "Could not parse body in batch part " + batchPartIndex + "."
+              });
+              return;
+            }
 
-			tracer.debug("Proxied Method: %s", proxiedMethod);
-			tracer.debug("Proxied request headers: %s", JSON.stringify(traceProxiedReqHeaders));
-			tracer.debug("Proxied URL: %s", proxiedUrl);
+            validateRequest(
+              logger,
+              tracer,
+              req.authInfo,
+              reqOp.method,
+              servicePathPrefix + "/" + reqOp.path,
+              body
+            )
+              .then(() => {
+                batchPartResolve();
+              })
+              .catch(error => {
+                batchPartReject({
+                  httpCode: 400,
+                  message:
+                    "Request for batch part " +
+                    batchPartIndex +
+                    " failed validation with the following error: " +
+                    error
+                });
+              });
+          });
+        } else if (utils.headersValidForChangeSet(batchPartHeaders)) {
+          batchPartStream.on("data", batchPartData => {
+            let changeSetBoundary = utils.parseBoundary(
+              batchPartHeaders["content-type"]
+            );
+            validateChangeSet(
+              logger,
+              tracer,
+              req.authInfo,
+              batchPartIndex,
+              servicePathPrefix,
+              batchPartData,
+              changeSetBoundary
+            )
+              .then(() => {
+                batchPartResolve();
+              })
+              .catch(error => {
+                batchPartReject(error);
+              });
+          });
+        } else {
+          // Data event handling is required, otherwise Dicer will hang and throw UnhandledPromiseRejectionWarning
+          batchPartStream.on("data", () => {
+            batchPartReject({
+              httpCode: 400,
+              message: "Invalid headers in batch part " + batchPartIndex + "."
+            });
+          });
+        }
+      });
+      batchPartStream.on("error", error => {
+        batchPartReject({
+          httpCode: 400,
+          message:
+            "Error parsing batch part" + batchPartIndex + ": " + error.message
+        });
+      });
+    });
+    batchPartPromises.push(batchPartPromise);
+  });
+  batchDicer.on("finish", () => {
+    Promise.all(batchPartPromises)
+      .then(() => {
+        // headersSent check is needed since "finish" event will always fire even after an "error"
+        if (!res.headersSent) {
+          handleProxiedRequest(logger, tracer, req, res, next);
+        }
+      })
+      .catch(error => {
+        // TODO find a better way to handle errors from handleProxiedRequest()
+        if (!res.headersSent) {
+          res
+            .status(error.httpCode || 500)
+            .send(
+              error.message !== null && error.message !== undefined
+                ? error.message
+                : error
+            );
+        }
+      });
+  });
+  batchDicer.on("error", error => {
+    if (!res.headersSent) {
+      res.status(400).send({
+        httpCode: 400,
+        message: "Error parsing batch request: " + error.message
+      });
+    }
+  });
 
-			let proxiedReq = request({
-				headers: proxiedReqHeaders,
-				method: proxiedMethod,
-				url: proxiedUrl
-			});
+  // Instead of piping the req object, need to pass body instead so that the req stream is not consumed
+  let bodyReadable = new stream.Readable();
+  bodyReadable._read = () => {}; // Noop
+  bodyReadable.push(req.body);
+  bodyReadable.pipe(batchDicer);
+}
 
-			// Delete all headers (incl. cookies) from original request before making the proxied request, so to avoid
-			// downstream system request header size limits. Only the headers identified as required for the proxied
-			// request should be included - all other inherited headers should be ignored.
-			req.headers = {};
+function handleNonBatchRequest(logger, tracer, req, res, next) {
+  // TODO Need to distinguish validation errors from 500 errors here
+  validateRequest(
+    logger,
+    tracer,
+    req.authInfo,
+    req.method,
+    req.originalUrl.substring(
+      req.originalUrl.indexOf(req.baseUrl) + req.baseUrl.length
+    ),
+    req.body
+  )
+    .then(() => {
+      handleProxiedRequest(logger, tracer, req, res, next);
+    })
+    .catch(error => {
+      res
+        .status(500)
+        .send(
+          error.message !== null && error.message !== undefined
+            ? error.message
+            : error
+        );
+    });
+}
 
-			req.pipe(proxiedReq);
-			proxiedReq.on("response", proxiedRes => {
-				tracer.info("Proxied call %s %s successful.", proxiedMethod, proxiedUrl);
-				delete proxiedRes.headers.cookie;
-				proxiedReq.pipe(res);
-			}).on("error", error => {
-				logger.error("Proxied call %s %s FAILED: %s", proxiedMethod, proxiedUrl, error);
-				next(error);
-			});
-		}
+function getApimService() {
+  let options = {};
+  options = Object.assign(
+    options,
+    xsenv.getServices({
+      apim: {
+        // Get UPS name from env var UPS_NAME
+        name: process.env.UPS_NAME
+      }
+    })
+  );
+  if (options.apim.host.endsWith("/")) {
+    options.apim.host.slice(0, -1);
+  }
+  return options.apim;
+}
 
-		// Proxied call is to S4/HANA
-		else {
-			// Add/update sap-client query parameter with UPS value in the proxied URL
-			var proxiedUrlObj = new URL(proxiedUrl);
-			proxiedUrlObj.searchParams.delete("sap-client");
-			proxiedUrlObj.searchParams.set("sap-client", s4Client);
-			proxiedUrl = proxiedUrlObj.href;
+// There could be unhandled errors in this function
+function handleProxiedRequest(logger, tracer, req, res, next) {
+  let proxiedMethod = req.method;
+  let proxiedReqHeaders = {
+    APIKey: apimService.APIKey,
+    "Content-Type": req.get("Content-Type")
+  };
+  let proxiedUrl = apimService.host + req.url;
 
-			proxiedReqHeaders.Authorization = "Basic " + new Buffer(s4User + ":" + s4Password).toString("base64");
+  // Add non-excluded headers from original request to proxied request
+  Object.keys(req.headers).forEach(key => {
+    if (
+      proxiedReqHeaders[key] === undefined &&
+      !utils.isHeaderExcluded(PROXIED_REQ_HEADER_EXCLUDES, key)
+    ) {
+      proxiedReqHeaders[key] = req.headers[key];
+    }
+  });
 
-			// Pass through x-csrf-token from request to proxied request to S4/HANA
-			// This requires manual handling of CSRF tokens from the front-end
-			// Note: req.get() will get header in a case-insensitive manner
-			var csrfTokenHeaderValue = req.get("X-Csrf-Token");
-			proxiedReqHeaders["X-Csrf-Token"] = csrfTokenHeaderValue;
+  // Proxied call is to IBM APIC
+  if (req.url.startsWith("/tci/internal")) {
+    proxiedReqHeaders["x-ibm-client-id"] = apimService.apicClientId;
+    proxiedReqHeaders["x-ibm-client-secret"] = apimService.apicClientSecret;
 
-			// Redact security-sensitive header values before writing to trace log
-			var traceProxiedReqHeaders = JSON.parse(JSON.stringify(proxiedReqHeaders));
-			var secSensitiveHeaderNames = ["authorization", "apikey", "x-csrf-token"];
-			Object.keys(traceProxiedReqHeaders).forEach(key => {
-				if (secSensitiveHeaderNames.includes(key.toLowerCase())) {
-					traceProxiedReqHeaders[key] = "REDACTED";
-				}
-			});
+    // Redact security-sensitive header values before writing to trace log
+    let traceProxiedReqHeaders = JSON.parse(JSON.stringify(proxiedReqHeaders));
+    let secSensitiveHeaderNames = [
+      "authorization",
+      "apikey",
+      "x-csrf-token",
+      "x-ibm-client-id",
+      "x-ibm-client-secret"
+    ];
+    Object.keys(traceProxiedReqHeaders).forEach(key => {
+      if (secSensitiveHeaderNames.includes(key.toLowerCase())) {
+        traceProxiedReqHeaders[key] = "REDACTED";
+      }
+    });
 
-			tracer.debug("Proxied Method: %s", proxiedMethod);
-			tracer.debug("Proxied request headers: %s", JSON.stringify(traceProxiedReqHeaders));
-			tracer.debug("Proxied URL: %s", proxiedUrl);
+    tracer.debug("Proxied Method: %s", proxiedMethod);
+    tracer.debug(
+      "Proxied request headers: %s",
+      JSON.stringify(traceProxiedReqHeaders)
+    );
+    tracer.debug("Proxied URL: %s", proxiedUrl);
 
-			let proxiedReq = request({
-				headers: proxiedReqHeaders,
-				method: proxiedMethod,
-				url: proxiedUrl
-			});
+    let proxiedReqOptions = {
+      headers: proxiedReqHeaders,
+      method: proxiedMethod,
+      url: proxiedUrl
+    };
+    if (req.body && req.body.length > 0) {
+      proxiedReqOptions.body = req.body;
+    }
+    let proxiedReq = request(proxiedReqOptions);
+    proxiedReq
+      .on("response", proxiedRes => {
+        tracer.info(
+          "Proxied call %s %s successful.",
+          proxiedMethod,
+          proxiedUrl
+        );
+        delete proxiedRes.headers.cookie;
 
-			// Remove MYSAPSSO2 cookie before making the proxied request, so that it does not override basic auth when APIM
-			// proxies the request to SAP Gateway
-			if ("cookie" in req.headers) {
-				tracer.debug("Original cookies: %s", req.headers.cookie);
-				var cookies = req.headers.cookie.split(";");
-				var filteredCookies = "";
-				cookies.forEach(cookie => {
-					var sepIndex = cookie.indexOf("=");
-					var cookieName = cookie.substring(0, sepIndex).trim();
-					var cookieValue = cookie.substring(sepIndex + 1).trim();
-					if (cookieName !== "MYSAPSSO2") {
-						filteredCookies += (filteredCookies.length > 0 ? "; " : "") + cookieName + "=" + cookieValue;
-					}
-				});
-				tracer.debug("Filtered cookies: %s", filteredCookies);
-				req.headers.cookie = filteredCookies;
-			}
+        // Oddly, if I pipe proxiedRes instead of proxiedReq to res, it will not inherit the response headers
+        proxiedReq.pipe(res);
+      })
+      .on("error", error => {
+        logger.error(
+          "Proxied call %s %s FAILED: %s",
+          proxiedMethod,
+          proxiedUrl,
+          error
+        );
+        next(error);
+      });
+  }
 
-			req.pipe(proxiedReq);
-			proxiedReq.on("response", proxiedRes => {
-				tracer.debug("Proxied call %s %s successful.", proxiedMethod, proxiedUrl);
-				delete proxiedRes.headers.cookie;
+  // Proxied call is to S4/HANA
+  else {
+    // Add/update sap-client query parameter with UPS value in the proxied URL
+    let proxiedUrlObj = new urlLib.URL(proxiedUrl);
+    proxiedUrlObj.searchParams.delete("sap-client");
+    proxiedUrlObj.searchParams.set("sap-client", apimService.client);
+    proxiedUrl = proxiedUrlObj.href;
 
-				proxiedReq.pipe(res);
-			}).on("error", error => {
-				logger.error("Proxied call %s %s FAILED: %s", proxiedMethod, proxiedUrl, error);
-				next(error);
-			});
-		}
-	});
+    proxiedReqHeaders.Authorization =
+      "Basic " +
+      new Buffer(apimService.user + ":" + apimService.password).toString(
+        "base64"
+      );
 
-	return router;
+    // Pass through x-csrf-token from request to proxied request to S4/HANA
+    // This requires manual handling of CSRF tokens from the front-end
+    // Note: req.get() will get header in a case-insensitive manner
+    let csrfTokenHeaderValue = req.get("X-Csrf-Token");
+    proxiedReqHeaders["X-Csrf-Token"] = csrfTokenHeaderValue;
+
+    // Redact security-sensitive header values before writing to trace log
+    let traceProxiedReqHeaders = JSON.parse(JSON.stringify(proxiedReqHeaders));
+    let secSensitiveHeaderNames = ["authorization", "apikey", "x-csrf-token"];
+    Object.keys(traceProxiedReqHeaders).forEach(key => {
+      if (secSensitiveHeaderNames.includes(key.toLowerCase())) {
+        traceProxiedReqHeaders[key] = "REDACTED";
+      }
+    });
+
+    tracer.debug("Proxied Method: %s", proxiedMethod);
+    tracer.debug(
+      "Proxied request headers: %s",
+      JSON.stringify(traceProxiedReqHeaders)
+    );
+    tracer.debug("Proxied URL: %s", proxiedUrl);
+
+    // Remove MYSAPSSO2 cookie before making the proxied request, so that it does not override basic auth when APIM
+    // proxies the request to SAP Gateway
+    if ("cookie" in req.headers) {
+      tracer.debug("Original cookies: %s", req.headers.cookie);
+      let cookies = req.headers.cookie.split(";");
+      let filteredCookies = "";
+      cookies.forEach(cookie => {
+        let sepIndex = cookie.indexOf("=");
+        let cookieName = cookie.substring(0, sepIndex).trim();
+        let cookieValue = cookie.substring(sepIndex + 1).trim();
+        if (cookieName !== "MYSAPSSO2") {
+          filteredCookies +=
+            (filteredCookies.length > 0 ? "; " : "") +
+            cookieName +
+            "=" +
+            cookieValue;
+        }
+      });
+      tracer.debug("Filtered cookies: %s", filteredCookies);
+      proxiedReqHeaders.Cookie = filteredCookies;
+    }
+
+    let proxiedReqOptions = {
+      headers: proxiedReqHeaders,
+      method: proxiedMethod,
+      url: proxiedUrl
+    };
+    if (req.body && req.body.length > 0) {
+      proxiedReqOptions.body = req.body;
+    }
+    let proxiedReq = request(proxiedReqOptions);
+    proxiedReq
+      .on("response", proxiedRes => {
+        tracer.debug(
+          "Proxied call %s %s successful.",
+          proxiedMethod,
+          proxiedUrl
+        );
+        delete proxiedRes.headers.cookie;
+
+        // Oddly, if I pipe proxiedRes instead of proxiedReq to res, it will not inherit the response headers
+        proxiedReq.pipe(res);
+      })
+      .on("error", error => {
+        logger.error(
+          "Proxied call %s %s FAILED: %s",
+          proxiedMethod,
+          proxiedUrl,
+          error
+        );
+        next(error);
+      });
+  }
+}
+
+function validateChangeSet(
+  logger,
+  tracer,
+  authInfo,
+  batchPartIndex,
+  servicePathPrefix,
+  changeSetData,
+  changeSetBoundary
+) {
+  return new Promise((resolve, reject) => {
+    let changeSetDicer = new dicer({
+      boundary: changeSetBoundary
+    });
+    let changeSetPromises = [];
+    let changeSetPartCount = 0;
+    changeSetDicer.on("part", changeSetPartStream => {
+      let changeSetPartIndex = ++changeSetPartCount;
+      let changeSetPromise = new Promise(
+        (changeSetPartResolve, changeSetPartReject) => {
+          changeSetPartStream.on("header", changeSetPartHeaders => {
+            if (utils.headersValidForOp(changeSetPartHeaders)) {
+              changeSetPartStream.on("data", changeSetPartData => {
+                let reqOpStr = changeSetPartData.toString(
+                  DEFAULT_ENCODING,
+                  0,
+                  changeSetPartData.indexOf("\r\n")
+                );
+                let reqOp = utils.parseReqOp(reqOpStr);
+                if (!reqOp) {
+                  changeSetPartReject({
+                    httpCode: 400,
+                    message:
+                      "Could not parse HTTP request operation info in changeset part " +
+                      changeSetPartIndex +
+                      " in batch part " +
+                      batchPartIndex +
+                      "."
+                  });
+                  return;
+                }
+                let body = null;
+                if (changeSetPartData.indexOf("\r\n\r\n") !== -1) {
+                  body = changeSetPartData.toString(
+                    DEFAULT_ENCODING,
+                    changeSetPartData.indexOf("\r\n\r\n") + 4
+                  );
+                } else {
+                  changeSetPartReject({
+                    httpCode: 400,
+                    message:
+                      "Could not parse body in changeset part " +
+                      changeSetPartIndex +
+                      " in batch part " +
+                      batchPartIndex +
+                      "."
+                  });
+                  return;
+                }
+
+                validateRequest(
+                  logger,
+                  tracer,
+                  authInfo,
+                  reqOp.method,
+                  servicePathPrefix + "/" + reqOp.path,
+                  body
+                )
+                  .then(() => {
+                    changeSetPartResolve();
+                  })
+                  .catch(error => {
+                    changeSetPartReject({
+                      httpCode: 400,
+                      message:
+                        "Request for changepart part " +
+                        changeSetPartIndex +
+                        " in batch part " +
+                        batchPartIndex +
+                        " failed validation with the following error: " +
+                        error
+                    });
+                  });
+              });
+            } else {
+              // Data event handling is required, otherwise Dicer will hang and throw UnhandledPromiseRejectionWarning
+              changeSetPartStream.on("data", () => {
+                changeSetPartReject({
+                  httpCode: 400,
+                  message:
+                    "Invalid headers in changeset part " +
+                    changeSetPartIndex +
+                    " in batch part " +
+                    batchPartIndex +
+                    "."
+                });
+              });
+            }
+          });
+          changeSetPartStream.on("error", error => {
+            changeSetPartReject({
+              httpCode: 400,
+              message:
+                "Error parsing changeset part " +
+                changeSetPartIndex +
+                " in batch part " +
+                batchPartIndex +
+                ": " +
+                error.message
+            });
+          });
+        }
+      );
+      changeSetPromises.push(changeSetPromise);
+    });
+    changeSetDicer.on("finish", () => {
+      Promise.all(changeSetPromises)
+        .then(() => {
+          resolve("Valid");
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+    changeSetDicer.on("error", error => {
+      reject({
+        httpCode: 400,
+        message:
+          "Error parsing changeset in batch part " +
+          batchPartIndex +
+          ": " +
+          error.message
+      });
+    });
+    changeSetDicer.write(changeSetData.toString());
+    changeSetDicer.end();
+  });
+}
+
+function validateRequest(logger, tracer, authInfo, method, url, body) {
+  return new Promise((resolve, reject) => {
+    let query = urlLib.parse(url, true).query;
+
+    // TODO see if it makes sense to pass if there are no matching filter
+    let valid = true;
+    let failedValidationRules = [];
+    for (let i = 0; i < apiProxySecJson.services.length; i++) {
+      let service = apiProxySecJson.services[i];
+      let servicePrefix = "/" + service.name + "/";
+      if (url.startsWith(servicePrefix)) {
+        let resourcePath = decodeURI(url.substring(servicePrefix.length));
+        for (let j = 0; j < service.resources.length; j++) {
+          let resource = service.resources[j];
+          let resourcePathRegExp = new RegExp(resource.path);
+          let match = resourcePath.match(resourcePathRegExp);
+          if (!!match && method === resource.method) {
+            for (let k = 0; k < resource.validations.length; k++) {
+              let validation = resource.validations[k];
+              if (
+                validation.userType !==
+                utils.getRole(roleMappingsJson, authInfo)
+              ) {
+                continue;
+              }
+              if (validation.mode === "namedAndUnnamedParam") {
+                let paramsRegExp = new RegExp(REGEX_PARAM);
+                let paramKeyValuePair = paramsRegExp.exec(
+                  match[validation.regExpGroup]
+                );
+                if (paramKeyValuePair) {
+                  let hasValidNamedParam = false;
+                  while (paramKeyValuePair) {
+                    let caseSensitive = validation.caseSensitive !== false;
+                    let paramKey = paramKeyValuePair[1];
+                    let paramValue = paramKeyValuePair[2];
+                    if (
+                      paramKey === validation.name &&
+                      ((caseSensitive &&
+                        paramValue ===
+                          utils.replaceVars(validation.value, authInfo)) ||
+                        (!caseSensitive &&
+                          paramValue.toLowerCase() ===
+                            utils
+                              .replaceVars(validation.value, authInfo)
+                              .toLowerCase()))
+                    ) {
+                      hasValidNamedParam = true;
+                      break;
+                    }
+                    paramKeyValuePair = paramsRegExp.exec(
+                      match[validation.regExpGroup]
+                    );
+                  }
+                  if (!hasValidNamedParam) {
+                    failedValidationRules.push(
+                      i + 1 + "-" + (j + 1) + "-" + (k + 1)
+                    );
+                    valid = false;
+                  }
+                } else {
+                  let caseSensitive = validation.caseSensitive !== false;
+                  if (
+                    (caseSensitive &&
+                      match[validation.regExpGroup] !== validation.value) ||
+                    (!caseSensitive &&
+                      match[validation.regExpGroup].toLowerCase() !==
+                        validation.value.toLowerCase())
+                  ) {
+                    failedValidationRules.push(
+                      i + 1 + "-" + (j + 1) + "-" + (k + 1)
+                    );
+                    valid = false;
+                  }
+                }
+              } else if (validation.mode === "filterParam") {
+                let filter = query.$filter;
+                if (filter) {
+                  let filterAst = odataParser.parse("$filter=" + filter);
+                  if (
+                    filterAst.error ||
+                    !utils.hasEqFilter(
+                      filterAst.$filter,
+                      validation.name,
+                      utils.replaceVars(
+                        validation.value,
+                        authInfo,
+                        validation.caseSensitive !== false
+                      )
+                    )
+                  ) {
+                    failedValidationRules.push(
+                      i + 1 + "-" + (j + 1) + "-" + (k + 1)
+                    );
+                    valid = false;
+                  }
+                } else {
+                  failedValidationRules.push(
+                    i + 1 + "-" + (j + 1) + "-" + (k + 1)
+                  );
+                  valid = false;
+                }
+              } else if (validation.mode === "jsonBody") {
+                let jsonBody =
+                  typeof body === "string" || body instanceof String
+                    ? JSON.parse(body)
+                    : body.toJSON();
+
+                // Need to wrap the body JSON with an array to get JSONPath to work properly (it cannot match root elements)
+                let bodyWrapperJson = [jsonBody];
+
+                let jpResult = jsonPathPlus.JSONPath(
+                  utils.replaceVars(validation.jsonPath, authInfo),
+                  bodyWrapperJson
+                );
+                if (jpResult.length === 0) {
+                  failedValidationRules.push(
+                    i + 1 + "-" + (j + 1) + "-" + (k + 1)
+                  );
+                  valid = false;
+                }
+              } else {
+                failedValidationRules.push(
+                  i + 1 + "-" + (j + 1) + "-" + (k + 1)
+                );
+                valid = false;
+              }
+            }
+          }
+        }
+      }
+    }
+    if (valid) {
+      resolve();
+    } else {
+      let failedValidationText =
+        "Request failed validation at rule" +
+        (failedValidationRules.length > 1 ? "s" : "") +
+        " [ " +
+        failedValidationRules.toString().replace(",", ", ") +
+        " ].";
+      reject(failedValidationText);
+    }
+  });
+}
+
+// TODO measure memory usage for body parsing and see if there is room for further tuning
+router.all(
+  "/*",
+  bodyParser.raw({
+    type: "*/*"
+  }),
+  handleRequest
+);
+
+module.exports = (aApiProxySecJson, aRoleMappingsJson) => {
+  apiProxySecJson = aApiProxySecJson;
+  roleMappingsJson = aRoleMappingsJson;
+  return router;
 };

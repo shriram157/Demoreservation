@@ -3,12 +3,12 @@
 
 "use strict";
 
-var apiProxy = require("./routes/api-proxy");
-var appConfig = require("./routes/app-config");
-var userDetails = require("./routes/user-details");
+const apiProxy = require("./routes/api-proxy");
+const appConfig = require("./routes/app-config");
+const userDetails = require("./routes/user-details");
 
-module.exports = (app, appContext) => {
-  app.use("/node", apiProxy(appContext));
+module.exports = (app, apiProxySecJson, roleMappingsJson) => {
+  app.use("/node", apiProxy(apiProxySecJson, roleMappingsJson));
   app.use("/appConfig", appConfig());
-  app.use("/userDetails", userDetails(appContext));
+  app.use("/userDetails", userDetails());
 };

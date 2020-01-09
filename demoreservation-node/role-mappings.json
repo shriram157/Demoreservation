@@ -1,0 +1,19 @@
+{
+  "roles": [
+    {
+      "name": "TCI_Admin",
+      "attributes": {},
+      "scopes": [
+        "$XSAPPNAME.Approve_Reservations",
+        "$XSAPPNAME.Manage_Reservations"
+      ]
+    },
+    {
+      "name": "TCI_User",
+      "attributes": {
+        "UserType": "National"
+      },
+      "scopes": ["$XSAPPNAME.Manage_Reservations"]
+    }
+  ]
+}

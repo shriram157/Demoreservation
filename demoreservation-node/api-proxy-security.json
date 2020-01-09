@@ -1,0 +1,47 @@
+{
+  "services": [
+    {
+      "name": "Z_VEHICLE_DEMO_RESERVATION_SRV_02",
+      "resources": [
+        {
+          "path": "^reservationListSet(/\\$count)?(\\?.+)?$",
+          "method": "GET",
+          "validations": [
+            {
+              "userType": "TCI_User",
+              "mode": "filterParam",
+              "name": "Email",
+              "value": "${userAttributes.Email}"
+            }
+          ]
+        },
+        {
+          "path": "^VehicleDetailSet\\((.+)\\)(\\?.+)?$",
+          "method": "GET",
+          "validations": [
+            {
+              "userType": "TCI_User",
+              "mode": "namedAndUnnamedParam",
+              "regExpGroup": 1,
+              "name": "Email",
+              "value": "'${userAttributes.Email}'",
+              "caseSensitive": false
+            }
+          ]
+        },
+        {
+          "path": "^vehicleListSet?(\\?.+)?$",
+          "method": "GET",
+          "validations": [
+            {
+              "userType": "TCI_User",
+              "mode": "filterParam",
+              "name": "Emp",
+              "value": "E"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

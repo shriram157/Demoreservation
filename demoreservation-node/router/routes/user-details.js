@@ -3,7 +3,7 @@
 
 "use strict";
 
-module.exports = function (appContext) {
+module.exports = function () {
 	var express = require("express");
 	var request = require("request");
 	var xsenv = require("@sap/xsenv");

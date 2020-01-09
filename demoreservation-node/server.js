@@ -3,47 +3,77 @@
 
 "use strict";
 
-var cors = require("cors");
-var express = require("express");
-var https = require("https");
-var logging = require("@sap/logging");
-var passport = require("passport");
-var xsenv = require("@sap/xsenv");
-var xssec = require("@sap/xssec");
+const cors = require("cors");
+const express = require("express");
+const fs = require("fs");
+const http = require("http");
+const logging = require("@sap/logging");
+const passport = require("passport");
+const path = require("path");
+const xsenv = require("@sap/xsenv");
+const xssec = require("@sap/xssec");
 
-var server = require("http").createServer();
-var port = process.env.PORT || 3000;
+const DEFAULT_ENCODING = "utf-8";
+
+const router = require("./router");
+
+const server = http.createServer();
+let port = process.env.PORT || 3000;
 
 // Initialize Express app and set up middleware
-var app = express();
+let app = express();
 
 // Logging
-var appContext = logging.createAppContext();
-app.use(logging.middleware({
-	appContext: appContext,
-	logNetwork: process.env.XS_LOG_NETWORK === "true"
-}));
-var logger = appContext.createLogContext().getLogger("/Application/Server");
+let appContext = logging.createAppContext();
+app.use(
+  logging.middleware({
+    appContext: appContext,
+    logNetwork: process.env.XS_LOG_NETWORK === "true"
+  })
+);
+let logger = appContext.createLogContext().getLogger("/Application/Server");
 
 // XSUAA
-passport.use("JWT", new xssec.JWTStrategy(xsenv.getServices({
-	uaa: {
-		tag: "xsuaa"
-	}
-}).uaa));
+passport.use(
+  "JWT",
+  new xssec.JWTStrategy(
+    xsenv.getServices({
+      uaa: {
+        tag: "xsuaa"
+      }
+    }).uaa
+  )
+);
 app.use(passport.initialize());
-app.use(passport.authenticate("JWT", {
-	session: false
-}));
+app.use(
+  passport.authenticate("JWT", {
+    session: false
+  })
+);
 
 // CORS
 app.use(cors());
 
+// Load configuration files
+let apiProxySecJson = JSON.parse(
+  fs.readFileSync(
+    path.join(process.cwd(), "api-proxy-security.json"),
+    DEFAULT_ENCODING
+  )
+);
+
+let roleMappingsJson = JSON.parse(
+  fs.readFileSync(
+    path.join(process.cwd(), "role-mappings.json"),
+    DEFAULT_ENCODING
+  )
+);
+
 // Router
-var router = require("./router")(app, appContext);
+router(app, apiProxySecJson, roleMappingsJson);
 
 // Start server
 server.on("request", app);
-server.listen(port, function () {
-	logger.info("Server is listening on port %d", port);
+server.listen(port, function() {
+  logger.info("Server is listening on port %d", port);
 });
