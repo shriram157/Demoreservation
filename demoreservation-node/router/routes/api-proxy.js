@@ -4,11 +4,11 @@
 "use strict";
 
 const bodyParser = require("body-parser");
+const ClientOauth2 = require("client-oauth2");
 // See https://www.npmjs.com/package/dicer
 const dicer = require("dicer");
 const express = require("express");
 const jsonPathPlus = require("jsonpath-plus");
-const OAuth2 = require("oauth").OAuth2;
 const odataParser = require("odata-parser");
 const request = require("request");
 const stream = require("stream");
@@ -41,6 +41,8 @@ let roleMappingsJson = null;
 
 let apimService = getApimService();
 let connectivityService = getConnectivityService();
+
+let cachedTokenResp = null;
 
 let router = express.Router();
 
@@ -234,25 +236,27 @@ function handleNonBatchRequest(logger, tracer, req, res, next) {
 
 function getAccessTokenForProxy() {
   return new Promise((resolve, reject) => {
-    let oauth = new OAuth2(
-      connectivityService.clientid,
-      connectivityService.clientsecret,
-      connectivityService.url + "/",
-      null,
-      "oauth/token",
-      null
-    );
-    oauth.getOAuthAccessToken(
-      "",
-      { grant_type: "client_credentials" },
-      (error, accessToken, refreshToken, results) => {
-        if (error) {
+    let oauth2 = new ClientOauth2({
+      clientId: connectivityService.clientid,
+      clientSecret: connectivityService.clientsecret,
+      accessTokenUri: connectivityService.url + "/oauth/token"
+    });
+    if (cachedTokenResp !== null && !cachedTokenResp.expired()) {
+      resolve(cachedTokenResp.accessToken);
+    } else {
+      oauth2.credentials
+        .getToken()
+        .then(tokenResp => {
+          // Check cached token response again in case of async update
+          if (cachedTokenResp === null || cachedTokenResp.expired()) {
+            cachedTokenResp = tokenResp;
+          }
+          resolve(cachedTokenResp.accessToken);
+        })
+        .catch(error => {
           reject(error);
-        } else {
-          resolve(accessToken);
-        }
-      }
-    );
+        });
+    }
   });
 }
 
