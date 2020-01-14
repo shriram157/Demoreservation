@@ -8,6 +8,7 @@
 		"dicer": "^0.3.0",
 		"express": "^4.17.1",
 		"jsonpath-plus": "^2.0.0",
+		"oauth": "^0.9.15",
 		"odata-parser": "^1.4.1",
 		"passport": "^0.4.1"
 	},

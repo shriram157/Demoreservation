@@ -8,6 +8,7 @@ const bodyParser = require("body-parser");
 const dicer = require("dicer");
 const express = require("express");
 const jsonPathPlus = require("jsonpath-plus");
+const OAuth2 = require("oauth").OAuth2;
 const odataParser = require("odata-parser");
 const request = require("request");
 const stream = require("stream");
@@ -39,6 +40,7 @@ let apiProxySecJson = null;
 let roleMappingsJson = null;
 
 let apimService = getApimService();
+let connectivityService = getConnectivityService();
 
 let router = express.Router();
 
@@ -230,6 +232,30 @@ function handleNonBatchRequest(logger, tracer, req, res, next) {
     });
 }
 
+function getAccessTokenForProxy() {
+  return new Promise((resolve, reject) => {
+    let oauth = new OAuth2(
+      connectivityService.clientid,
+      connectivityService.clientsecret,
+      connectivityService.url + "/",
+      null,
+      "oauth/token",
+      null
+    );
+    oauth.getOAuthAccessToken(
+      "",
+      { grant_type: "client_credentials" },
+      (error, accessToken, refreshToken, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(accessToken);
+        }
+      }
+    );
+  });
+}
+
 function getApimService() {
   let options = {};
   options = Object.assign(
@@ -247,173 +273,221 @@ function getApimService() {
   return options.apim;
 }
 
+function getConnectivityService() {
+  let options = {};
+  options = Object.assign(
+    options,
+    xsenv.getServices({
+      connectivity: {
+        tag: "connectivity"
+      }
+    })
+  );
+  return options.connectivity;
+}
+
 // There could be unhandled errors in this function
 function handleProxiedRequest(logger, tracer, req, res, next) {
-  let proxiedMethod = req.method;
-  let proxiedReqHeaders = {
-    APIKey: apimService.APIKey,
-    "Content-Type": req.get("Content-Type")
-  };
-  let proxiedUrl = apimService.host + req.url;
+  getAccessTokenForProxy()
+    .then(accessToken => {
+      let proxiedMethod = req.method;
+      let proxiedReqHeaders = {
+        "Content-Type": req.get("Content-Type"),
+        "Proxy-Authorization": "Bearer " + accessToken,
+        "SAP-Connectivity-Authentication": "Bearer " + req.authInfo.token
+      };
 
-  // Add non-excluded headers from original request to proxied request
-  Object.keys(req.headers).forEach(key => {
-    if (
-      proxiedReqHeaders[key] === undefined &&
-      !utils.isHeaderExcluded(PROXIED_REQ_HEADER_EXCLUDES, key)
-    ) {
-      proxiedReqHeaders[key] = req.headers[key];
-    }
-  });
-
-  // Proxied call is to IBM APIC
-  if (req.url.startsWith("/tci/internal")) {
-    proxiedReqHeaders["x-ibm-client-id"] = apimService.apicClientId;
-    proxiedReqHeaders["x-ibm-client-secret"] = apimService.apicClientSecret;
-
-    // Redact security-sensitive header values before writing to trace log
-    let traceProxiedReqHeaders = JSON.parse(JSON.stringify(proxiedReqHeaders));
-    let secSensitiveHeaderNames = [
-      "authorization",
-      "apikey",
-      "x-csrf-token",
-      "x-ibm-client-id",
-      "x-ibm-client-secret"
-    ];
-    Object.keys(traceProxiedReqHeaders).forEach(key => {
-      if (secSensitiveHeaderNames.includes(key.toLowerCase())) {
-        traceProxiedReqHeaders[key] = "REDACTED";
-      }
-    });
-
-    tracer.debug("Proxied Method: %s", proxiedMethod);
-    tracer.debug(
-      "Proxied request headers: %s",
-      JSON.stringify(traceProxiedReqHeaders)
-    );
-    tracer.debug("Proxied URL: %s", proxiedUrl);
-
-    let proxiedReqOptions = {
-      headers: proxiedReqHeaders,
-      method: proxiedMethod,
-      url: proxiedUrl
-    };
-    if (req.body && req.body.length > 0) {
-      proxiedReqOptions.body = req.body;
-    }
-    let proxiedReq = request(proxiedReqOptions);
-    proxiedReq
-      .on("response", proxiedRes => {
-        tracer.info(
-          "Proxied call %s %s successful.",
-          proxiedMethod,
-          proxiedUrl
-        );
-        delete proxiedRes.headers.cookie;
-
-        // Oddly, if I pipe proxiedRes instead of proxiedReq to res, it will not inherit the response headers
-        proxiedReq.pipe(res);
-      })
-      .on("error", error => {
-        logger.error(
-          "Proxied call %s %s FAILED: %s",
-          proxiedMethod,
-          proxiedUrl,
-          error
-        );
-        next(error);
-      });
-  }
-
-  // Proxied call is to S4/HANA
-  else {
-    // Add/update sap-client query parameter with UPS value in the proxied URL
-    let proxiedUrlObj = new urlLib.URL(proxiedUrl);
-    proxiedUrlObj.searchParams.delete("sap-client");
-    proxiedUrlObj.searchParams.set("sap-client", apimService.client);
-    proxiedUrl = proxiedUrlObj.href;
-
-    proxiedReqHeaders.Authorization =
-      "Basic " +
-      new Buffer(apimService.user + ":" + apimService.password).toString(
-        "base64"
-      );
-
-    // Pass through x-csrf-token from request to proxied request to S4/HANA
-    // This requires manual handling of CSRF tokens from the front-end
-    // Note: req.get() will get header in a case-insensitive manner
-    let csrfTokenHeaderValue = req.get("X-Csrf-Token");
-    proxiedReqHeaders["X-Csrf-Token"] = csrfTokenHeaderValue;
-
-    // Redact security-sensitive header values before writing to trace log
-    let traceProxiedReqHeaders = JSON.parse(JSON.stringify(proxiedReqHeaders));
-    let secSensitiveHeaderNames = ["authorization", "apikey", "x-csrf-token"];
-    Object.keys(traceProxiedReqHeaders).forEach(key => {
-      if (secSensitiveHeaderNames.includes(key.toLowerCase())) {
-        traceProxiedReqHeaders[key] = "REDACTED";
-      }
-    });
-
-    tracer.debug("Proxied Method: %s", proxiedMethod);
-    tracer.debug(
-      "Proxied request headers: %s",
-      JSON.stringify(traceProxiedReqHeaders)
-    );
-    tracer.debug("Proxied URL: %s", proxiedUrl);
-
-    // Remove MYSAPSSO2 cookie before making the proxied request, so that it does not override basic auth when APIM
-    // proxies the request to SAP Gateway
-    if ("cookie" in req.headers) {
-      tracer.debug("Original cookies: %s", req.headers.cookie);
-      let cookies = req.headers.cookie.split(";");
-      let filteredCookies = "";
-      cookies.forEach(cookie => {
-        let sepIndex = cookie.indexOf("=");
-        let cookieName = cookie.substring(0, sepIndex).trim();
-        let cookieValue = cookie.substring(sepIndex + 1).trim();
-        if (cookieName !== "MYSAPSSO2") {
-          filteredCookies +=
-            (filteredCookies.length > 0 ? "; " : "") +
-            cookieName +
-            "=" +
-            cookieValue;
+      // Add non-excluded headers from original request to proxied request
+      Object.keys(req.headers).forEach(key => {
+        if (
+          proxiedReqHeaders[key] === undefined &&
+          !utils.isHeaderExcluded(PROXIED_REQ_HEADER_EXCLUDES, key)
+        ) {
+          proxiedReqHeaders[key] = req.headers[key];
         }
       });
-      tracer.debug("Filtered cookies: %s", filteredCookies);
-      proxiedReqHeaders.Cookie = filteredCookies;
-    }
 
-    let proxiedReqOptions = {
-      headers: proxiedReqHeaders,
-      method: proxiedMethod,
-      url: proxiedUrl
-    };
-    if (req.body && req.body.length > 0) {
-      proxiedReqOptions.body = req.body;
-    }
-    let proxiedReq = request(proxiedReqOptions);
-    proxiedReq
-      .on("response", proxiedRes => {
+      // Proxied call is to IBM APIC
+      if (req.url.startsWith("/tci/internal")) {
+        let proxiedUrl = "https://apic:443" + req.url;
+        proxiedReqHeaders["x-ibm-client-id"] = apimService.apicClientId;
+        proxiedReqHeaders["x-ibm-client-secret"] = apimService.apicClientSecret;
+
+        // Redact security-sensitive header values before writing to trace log
+        let traceProxiedReqHeaders = JSON.parse(
+          JSON.stringify(proxiedReqHeaders)
+        );
+        let secSensitiveHeaderNames = [
+          "authorization",
+          "proxy-authorization",
+          "sap-connectivity-authentication",
+          "x-csrf-token",
+          "x-ibm-client-id",
+          "x-ibm-client-secret"
+        ];
+        Object.keys(traceProxiedReqHeaders).forEach(key => {
+          if (secSensitiveHeaderNames.includes(key.toLowerCase())) {
+            traceProxiedReqHeaders[key] = "REDACTED";
+          }
+        });
+
+        tracer.debug("Proxied Method: %s", proxiedMethod);
         tracer.debug(
-          "Proxied call %s %s successful.",
-          proxiedMethod,
-          proxiedUrl
+          "Proxied request headers: %s",
+          JSON.stringify(traceProxiedReqHeaders)
         );
-        delete proxiedRes.headers.cookie;
+        tracer.debug("Proxied URL: %s", proxiedUrl);
 
-        // Oddly, if I pipe proxiedRes instead of proxiedReq to res, it will not inherit the response headers
-        proxiedReq.pipe(res);
-      })
-      .on("error", error => {
-        logger.error(
-          "Proxied call %s %s FAILED: %s",
-          proxiedMethod,
-          proxiedUrl,
-          error
+        let proxiedReqOptions = {
+          headers: proxiedReqHeaders,
+          method: proxiedMethod,
+          proxy:
+            "http://" +
+            connectivityService.onpremise_proxy_host +
+            ":" +
+            connectivityService.onpremise_proxy_port,
+          tunnel: false,
+          url: proxiedUrl
+        };
+        if (req.body && req.body.length > 0) {
+          proxiedReqOptions.body = req.body;
+        }
+        let proxiedReq = request(proxiedReqOptions);
+        proxiedReq
+          .on("response", proxiedRes => {
+            tracer.info(
+              "Proxied call %s %s successful.",
+              proxiedMethod,
+              proxiedUrl
+            );
+            delete proxiedRes.headers.cookie;
+
+            // Oddly, if I pipe proxiedRes instead of proxiedReq to res, it will not inherit the response headers
+            proxiedReq.pipe(res);
+          })
+          .on("error", error => {
+            logger.error(
+              "Proxied call %s %s FAILED: %s",
+              proxiedMethod,
+              proxiedUrl,
+              error
+            );
+            next(error);
+          });
+      }
+
+      // Proxied call is to S4/HANA
+      else {
+        let proxiedUrl = "https://gw:443/sap/opu/odata/sap" + req.url;
+
+        // Add/update sap-client query parameter with UPS value in the proxied URL
+        let proxiedUrlObj = new urlLib.URL(proxiedUrl);
+        proxiedUrlObj.searchParams.delete("sap-client");
+        proxiedUrlObj.searchParams.set("sap-client", apimService.client);
+        // Need to add port back as URL() removes defualt port
+        proxiedUrl = proxiedUrlObj.href.replace(
+          "https://gw/",
+          "https://gw:443/"
         );
-        next(error);
-      });
-  }
+
+        proxiedReqHeaders.Authorization =
+          "Basic " +
+          new Buffer(apimService.user + ":" + apimService.password).toString(
+            "base64"
+          );
+
+        // Pass through x-csrf-token from request to proxied request to S4/HANA
+        // This requires manual handling of CSRF tokens from the front-end
+        // Note: req.get() will get header in a case-insensitive manner
+        let csrfTokenHeaderValue = req.get("X-Csrf-Token");
+        proxiedReqHeaders["X-Csrf-Token"] = csrfTokenHeaderValue;
+
+        // Redact security-sensitive header values before writing to trace log
+        let traceProxiedReqHeaders = JSON.parse(
+          JSON.stringify(proxiedReqHeaders)
+        );
+        let secSensitiveHeaderNames = [
+          "authorization",
+          "proxy-authorization",
+          "sap-connectivity-authentication",
+          "x-csrf-token"
+        ];
+        Object.keys(traceProxiedReqHeaders).forEach(key => {
+          if (secSensitiveHeaderNames.includes(key.toLowerCase())) {
+            traceProxiedReqHeaders[key] = "REDACTED";
+          }
+        });
+
+        tracer.debug("Proxied Method: %s", proxiedMethod);
+        tracer.debug(
+          "Proxied request headers: %s",
+          JSON.stringify(traceProxiedReqHeaders)
+        );
+        tracer.debug("Proxied URL: %s", proxiedUrl);
+
+        // Remove MYSAPSSO2 cookie before making the proxied request, so that it does not override basic auth when APIM
+        // proxies the request to SAP Gateway
+        if ("cookie" in req.headers) {
+          tracer.debug("Original cookies: %s", req.headers.cookie);
+          let cookies = req.headers.cookie.split(";");
+          let filteredCookies = "";
+          cookies.forEach(cookie => {
+            let sepIndex = cookie.indexOf("=");
+            let cookieName = cookie.substring(0, sepIndex).trim();
+            let cookieValue = cookie.substring(sepIndex + 1).trim();
+            if (cookieName !== "MYSAPSSO2") {
+              filteredCookies +=
+                (filteredCookies.length > 0 ? "; " : "") +
+                cookieName +
+                "=" +
+                cookieValue;
+            }
+          });
+          tracer.debug("Filtered cookies: %s", filteredCookies);
+          proxiedReqHeaders.Cookie = filteredCookies;
+        }
+
+        let proxiedReqOptions = {
+          headers: proxiedReqHeaders,
+          method: proxiedMethod,
+          proxy:
+            "http://" +
+            connectivityService.onpremise_proxy_host +
+            ":" +
+            connectivityService.onpremise_proxy_port,
+          tunnel: false,
+          url: proxiedUrl
+        };
+        if (req.body && req.body.length > 0) {
+          proxiedReqOptions.body = req.body;
+        }
+        let proxiedReq = request(proxiedReqOptions);
+        proxiedReq
+          .on("response", proxiedRes => {
+            tracer.debug(
+              "Proxied call %s %s successful.",
+              proxiedMethod,
+              proxiedUrl
+            );
+            delete proxiedRes.headers.cookie;
+
+            // Oddly, if I pipe proxiedRes instead of proxiedReq to res, it will not inherit the response headers
+            proxiedReq.pipe(res);
+          })
+          .on("error", error => {
+            logger.error(
+              "Proxied call %s %s FAILED: %s",
+              proxiedMethod,
+              proxiedUrl,
+              error
+            );
+            next(error);
+          });
+      }
+    })
+    .catch(error => {
+      next(error);
+    });
 }
 
 function validateChangeSet(

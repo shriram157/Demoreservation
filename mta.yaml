@@ -25,6 +25,7 @@ modules:
          url: ${default-url}
    requires:
     - name: application-logs_demoreservation
+    - name: connectivity_demoreservation
     - name: uaa_demoreservation
     - name: cf-drain
     - name: DEMO_RESERVATION_APIM_CUPS
@@ -75,6 +76,12 @@ resources:
    type: org.cloudfoundry.managed-service
    parameters:
       service: application-logs
+      service-plan: lite
+
+ - name: connectivity_demoreservation
+   type: org.cloudfoundry.managed-service
+   parameters:
+      service: connectivity
       service-plan: lite
 
  - name: uaa_demoreservation
