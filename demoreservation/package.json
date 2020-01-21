@@ -8,7 +8,8 @@
 		"grunt-shell": "^3.0.1"
 	},
 	"dependencies": {
-		"@sap/approuter": "6.7.2"
+		"@sap/approuter": "6.7.2",
+		"ip": "^1.1.5"
 	},
 	"scripts": {
 		"start": "node server.js",

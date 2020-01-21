@@ -3,10 +3,8 @@
 
 "use strict";
 
-var approuter = require("@sap/approuter");
+const approuter = require("@sap/approuter");
 
 approuter().start({
-	extensions: [
-		require("./lib/extensions.js")
-	]
+  extensions: [require("./lib/extensions.js")]
 });

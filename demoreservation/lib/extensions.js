@@ -3,12 +3,20 @@
 
 "use strict";
 
-var customLogoutMiddleware = require("./middleware/custom-logout-middleware.js");
+const customLogoutMiddleware = require("./middleware/custom-logout-middleware.js");
+const ipFilterMiddleware = require("./middleware/ip-filter-middleware.js");
 
 module.exports = {
-	insertMiddleware: {
-		beforeRequestHandler: [{
-			handler: customLogoutMiddleware
-		}]
-	}
+  insertMiddleware: {
+    first: [
+      {
+        handler: ipFilterMiddleware
+      }
+    ],
+    beforeRequestHandler: [
+      {
+        handler: customLogoutMiddleware
+      }
+    ]
+  }
 };
