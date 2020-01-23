@@ -6,12 +6,12 @@
 const xsenv = require("@sap/xsenv");
 
 const RE_BOUNDARY = /^multipart\/.+?(?:;[ ]?boundary=(?:(?:"(.+)")|(?:([^\s]+))))$/i;
-
 const RE_REPL_VAR = /\${(userInfo|userAttributes)\.([^{}]+)}/g;
-
 const RE_REQ_OP = /^(GET|HEAD|POST|PUT|DELETE|CONNECT|OPTIONS|TRACE|PATCH) (.+) (HTTP\/[1-9](.[0-9]+)?)$/i;
 
-exports.getRole = (roleMappingsJson, authInfo) => {
+exports.UNKNOWN_ROLE_NAME = "Unknown";
+
+exports.getRoleName = (roleMappingsJson, authInfo) => {
   let authInfoScopes = authInfo.scopes.filter(e =>
     e.startsWith(authInfo.xsappname + ".")
   );
@@ -36,7 +36,18 @@ exports.getRole = (roleMappingsJson, authInfo) => {
       return role.name;
     }
   }
-  return "Unknown";
+  return null;
+};
+
+exports.getService = query => {
+  let options = {};
+  options = Object.assign(
+    options,
+    xsenv.getServices({
+      service: query
+    })
+  );
+  return options.service;
 };
 
 exports.getService = query => {

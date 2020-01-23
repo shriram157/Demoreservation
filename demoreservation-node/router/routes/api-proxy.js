@@ -1,5 +1,5 @@
-/*eslint new-cap: 0, no-console: 0, no-shadow: 0, no-unused-vars: 0*/
-/*eslint-env es6, node*/
+/* eslint new-cap: 0, no-console: 0, no-use-before-define: ["error", { "functions": false } ] */
+/* eslint-env es6, node */
 
 "use strict";
 
@@ -14,7 +14,6 @@ const request = require("request");
 const stream = require("stream");
 const urlLib = require("url");
 const utils = require("../../utils");
-const xsenv = require("@sap/xsenv");
 
 const DEFAULT_ENCODING = "utf-8";
 const LOGGER_NAME = "/Application/Route/APIProxy";
@@ -36,15 +35,41 @@ const PROXIED_REQ_HEADER_EXCLUDES = [
 ];
 const REGEX_PARAM = /([A-Za-z_][0-9A-Za-z_]*)=([^',]+|'(([^']|'')+)')(,?)/g;
 
+let router = null;
 let apiProxySecJson = null;
 let roleMappingsJson = null;
-
-let apimService = getApimService();
-let connectivityService = getConnectivityService();
-
+let apimService = null;
+let connectivityService = null;
 let cachedTokenResp = null;
 
-let router = express.Router();
+function getRouter(aApiProxySecJson, aRoleMappingsJson) {
+  if (!router) {
+    router = express.Router();
+    apiProxySecJson = aApiProxySecJson;
+    roleMappingsJson = aRoleMappingsJson;
+    apimService = utils.getService({
+      // Get UPS name from env var UPS_NAME
+      name: process.env.UPS_NAME
+    });
+    if (apimService.host.endsWith("/")) {
+      apimService.host.slice(0, -1);
+    }
+
+    connectivityService = utils.getService({
+      tag: "connectivity"
+    });
+
+    // TODO measure memory usage for body parsing and see if there is room for further tuning
+    router.all(
+      "/*",
+      bodyParser.raw({
+        type: "*/*"
+      }),
+      handleRequest
+    );
+  }
+  return router;
+}
 
 function handleRequest(req, res, next) {
   let logger = req.loggingContext.getLogger(LOGGER_NAME);
@@ -258,36 +283,6 @@ function getAccessTokenForProxy() {
         });
     }
   });
-}
-
-function getApimService() {
-  let options = {};
-  options = Object.assign(
-    options,
-    xsenv.getServices({
-      apim: {
-        // Get UPS name from env var UPS_NAME
-        name: process.env.UPS_NAME
-      }
-    })
-  );
-  if (options.apim.host.endsWith("/")) {
-    options.apim.host.slice(0, -1);
-  }
-  return options.apim;
-}
-
-function getConnectivityService() {
-  let options = {};
-  options = Object.assign(
-    options,
-    xsenv.getServices({
-      connectivity: {
-        tag: "connectivity"
-      }
-    })
-  );
-  return options.connectivity;
 }
 
 // There could be unhandled errors in this function
@@ -651,10 +646,8 @@ function validateRequest(logger, tracer, authInfo, method, url, body) {
           if (!!match && method === resource.method) {
             for (let k = 0; k < resource.validations.length; k++) {
               let validation = resource.validations[k];
-              if (
-                validation.userType !==
-                utils.getRole(roleMappingsJson, authInfo)
-              ) {
+              let roleName = utils.getRoleName(roleMappingsJson, authInfo);
+              if (!roleName || validation.userType !== roleName) {
                 continue;
               }
               if (validation.mode === "namedAndUnnamedParam") {
@@ -778,17 +771,6 @@ function validateRequest(logger, tracer, authInfo, method, url, body) {
   });
 }
 
-// TODO measure memory usage for body parsing and see if there is room for further tuning
-router.all(
-  "/*",
-  bodyParser.raw({
-    type: "*/*"
-  }),
-  handleRequest
-);
-
 module.exports = (aApiProxySecJson, aRoleMappingsJson) => {
-  apiProxySecJson = aApiProxySecJson;
-  roleMappingsJson = aRoleMappingsJson;
-  return router;
+  return getRouter(aApiProxySecJson, aRoleMappingsJson);
 };

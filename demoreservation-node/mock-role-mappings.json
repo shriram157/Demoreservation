@@ -1,0 +1,35 @@
+{
+  "mockRoles": [
+    {
+      "name": "Mock_TCI_Admin",
+      "mockData": {
+        "name": "TCI_Admin",
+        "attributes": {
+          "Email": "${userInfo.email}",
+          "FirstName": "${userInfo.givenName}",
+          "Language": "English",
+          "LastName": "${userInfo.familyName}",
+          "UserType": "National"
+        },
+        "scopes": [
+          "$XSAPPNAME.Approve_Reservations",
+          "$XSAPPNAME.Manage_Reservations"
+        ]
+      }
+    },
+    {
+      "name": "Mock_TCI_User",
+      "mockData": {
+        "name": "TCI_User",
+        "attributes": {
+          "Email": "${userInfo.email}",
+          "FirstName": "${userInfo.givenName}",
+          "Language": "English",
+          "LastName": "${userInfo.familyName}",
+          "UserType": "National"
+        },
+        "scopes": ["$XSAPPNAME.Manage_Reservations"]
+      }
+    }
+  ]
+}

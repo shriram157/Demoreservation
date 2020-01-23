@@ -1,5 +1,5 @@
-/*eslint new-cap: 0, no-console: 0, no-shadow: 0, no-unused-vars: 0*/
-/*eslint-env es6, node*/
+/* eslint new-cap: 0, no-console: 0, no-use-before-define: ["error", { "functions": false } ] */
+/* eslint-env es6, node */
 
 "use strict";
 
@@ -62,6 +62,13 @@ let apiProxySecJson = JSON.parse(
   )
 );
 
+let mockRoleMappingsJson = JSON.parse(
+  fs.readFileSync(
+    path.join(process.cwd(), "mock-role-mappings.json"),
+    DEFAULT_ENCODING
+  )
+);
+
 let roleMappingsJson = JSON.parse(
   fs.readFileSync(
     path.join(process.cwd(), "role-mappings.json"),
@@ -70,7 +77,7 @@ let roleMappingsJson = JSON.parse(
 );
 
 // Router
-router(app, apiProxySecJson, roleMappingsJson);
+router(app, apiProxySecJson, mockRoleMappingsJson, roleMappingsJson);
 
 // Start server
 server.on("request", app);
