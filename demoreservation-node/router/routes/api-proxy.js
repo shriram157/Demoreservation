@@ -663,12 +663,14 @@ function validateRequest(logger, tracer, authInfo, method, url, body) {
       let servicePrefix = "/" + service.name + "/";
       if (url.startsWith(servicePrefix)) {
         serviceMatched = true;
+        let resourceMatched = false;
         let resourcePath = decodeURI(url.substring(servicePrefix.length));
         for (let j = 0; j < service.resources.length; j++) {
           let resource = service.resources[j];
           let resourcePathRegExp = new RegExp(resource.path);
           let match = resourcePath.match(resourcePathRegExp);
           if (!!match && method === resource.method) {
+            resourceMatched = true;
             for (let k = 0; k < resource.validations.length; k++) {
               let validation = resource.validations[k];
               let roleName = utils.getRoleName(roleMappingsJson, authInfo);
@@ -779,6 +781,14 @@ function validateRequest(logger, tracer, authInfo, method, url, body) {
               }
             }
           }
+        }
+        if (!service.allowNoMatch && !resourceMatched) {
+          let errorMessage =
+            "Request failed resource access validation at rule [ " +
+            (i + 1) +
+            " ].";
+          reject(createValidationError(errorMessage));
+          return;
         }
       }
     }

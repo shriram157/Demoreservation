@@ -1,8 +1,9 @@
 {
-  "allowNoMatch": true,
+  "allowNoMatch": false,
   "services": [
     {
       "name": "Z_VEHICLE_DEMO_RESERVATION_SRV_02",
+      "allowNoMatch": true,
       "resources": [
         {
           "path": "^reservationListSet(/\\$count)?(\\?.+)?$",
@@ -41,6 +42,17 @@
               "value": "E"
             }
           ]
+        }
+      ]
+    },
+    {
+      "name": "tci/internal/api/v1.0/security/ldap/rest",
+      "allowNoMatch": false,
+      "resources": [
+        {
+          "path": "^getUserByUID$",
+          "method": "POST",
+          "validations": []
         }
       ]
     }
