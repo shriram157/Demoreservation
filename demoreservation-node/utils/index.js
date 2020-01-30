@@ -107,6 +107,21 @@ exports.isHeaderExcluded = (excludes, name) => {
   return false;
 };
 
+exports.normalizeUrl = url => {
+  let normalizedUrl = url;
+  if (normalizedUrl.endsWith("/")) {
+    normalizedUrl = normalizedUrl.slice(0, -1);
+  }
+  if ((normalizedUrl.match(/:/g) || []).length === 1) {
+    if (normalizedUrl.startsWith("http://")) {
+      normalizedUrl += ":80";
+    } else if (normalizedUrl.startsWith("https://")) {
+      normalizedUrl += ":443";
+    }
+  }
+  return normalizedUrl;
+};
+
 exports.parseBoundary = contentType => {
   let result = RE_BOUNDARY.exec(contentType);
   return result ? result[1] || result[2] : null;

@@ -65,9 +65,8 @@ function getRouter(aApiProxySecJson, aRoleMappingsJson) {
       // Get UPS name from env var UPS_NAME
       name: process.env.UPS_NAME
     });
-    if (apimService.host.endsWith("/")) {
-      apimService.host.slice(0, -1);
-    }
+    apimService.sapOdataUrl = utils.normalizeUrl(apimService.sapOdataUrl);
+    apimService.apicUrl = utils.normalizeUrl(apimService.apicUrl);
 
     connectivityService = utils.getService({
       tag: "connectivity"
@@ -312,7 +311,7 @@ function handleProxiedRequest(logger, tracer, req, res, next) {
 
       // Proxied call is to IBM APIC
       if (req.url.startsWith("/tci/internal")) {
-        let proxiedUrl = "https://apic:443" + req.url;
+        let proxiedUrl = apimService.apicUrl + req.url;
         proxiedReqHeaders["x-ibm-client-id"] = apimService.apicClientId;
         proxiedReqHeaders["x-ibm-client-secret"] = apimService.apicClientSecret;
 
@@ -381,23 +380,38 @@ function handleProxiedRequest(logger, tracer, req, res, next) {
 
       // Proxied call is to S4/HANA
       else {
-        let proxiedUrl = "https://gw:443/sap/opu/odata/sap" + req.url;
+        let sapOdataUrl = apimService.sapOdataUrl;
+        let proxiedUrl = sapOdataUrl + "/sap/opu/odata/sap" + req.url;
 
         // Add/update sap-client query parameter with UPS value in the proxied URL
         let proxiedUrlObj = new urlLib.URL(proxiedUrl);
         proxiedUrlObj.searchParams.delete("sap-client");
-        proxiedUrlObj.searchParams.set("sap-client", apimService.client);
-        // Need to add port back as URL() removes defualt port
-        proxiedUrl = proxiedUrlObj.href.replace(
-          "https://gw/",
-          "https://gw:443/"
+        proxiedUrlObj.searchParams.set(
+          "sap-client",
+          apimService.sapOdataClient
         );
+
+        // Need to add default port back as URL() removes defualt port
+        if (sapOdataUrl.startsWith("http://") && sapOdataUrl.endsWith(":80")) {
+          proxiedUrl = proxiedUrlObj.href.replace(
+            sapOdataUrl.replace(":80", ""),
+            sapOdataUrl
+          );
+        } else if (
+          sapOdataUrl.startsWith("https://") &&
+          sapOdataUrl.endsWith(":443")
+        ) {
+          proxiedUrl = proxiedUrlObj.href.replace(
+            sapOdataUrl.replace(":443", ""),
+            sapOdataUrl
+          );
+        }
 
         proxiedReqHeaders.Authorization =
           "Basic " +
-          Buffer.from(apimService.user + ":" + apimService.password).toString(
-            "base64"
-          );
+          Buffer.from(
+            apimService.sapOdataUser + ":" + apimService.sapOdataPassword
+          ).toString("base64");
 
         // Pass through x-csrf-token from request to proxied request to S4/HANA
         // This requires manual handling of CSRF tokens from the front-end
