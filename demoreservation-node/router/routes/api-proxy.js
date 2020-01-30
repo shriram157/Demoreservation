@@ -16,6 +16,7 @@ const urlLib = require("url");
 const utils = require("../../utils");
 
 const DEFAULT_ENCODING = "utf-8";
+const INTERNAL_SERVER_ERROR_NAME = "InternalServerError";
 const LOGGER_NAME = "/Application/Route/APIProxy";
 const PROXIED_REQ_HEADER_EXCLUDES = [
   "authorization",
@@ -34,6 +35,7 @@ const PROXIED_REQ_HEADER_EXCLUDES = [
   "x-vcap-.+"
 ];
 const REGEX_PARAM = /([A-Za-z_][0-9A-Za-z_]*)=([^',]+|'(([^']|'')+)')(,?)/g;
+const VALIDATION_ERROR_NAME = "ValidationError";
 
 let router = null;
 let apiProxySecJson = null;
@@ -41,6 +43,18 @@ let roleMappingsJson = null;
 let apimService = null;
 let connectivityService = null;
 let cachedTokenResp = null;
+
+function createInternalServerError(message) {
+  let error = new Error(message);
+  error.name = INTERNAL_SERVER_ERROR_NAME;
+  return error;
+}
+
+function createValidationError(message) {
+  let error = new Error(message);
+  error.name = VALIDATION_ERROR_NAME;
+  return error;
+}
 
 function getRouter(aApiProxySecJson, aRoleMappingsJson) {
   if (!router) {
@@ -109,13 +123,11 @@ function handleBatchRequest(logger, tracer, req, res, next) {
             );
             let reqOp = utils.parseReqOp(reqOpStr);
             if (!reqOp) {
-              batchPartReject({
-                httpCode: 400,
-                message:
-                  "Could not parse HTTP request operation info in batch part " +
-                  batchPartIndex +
-                  "."
-              });
+              let errorMessage =
+                "Could not parse HTTP request operation info in batch part " +
+                batchPartIndex +
+                ".";
+              batchPartReject(createValidationError(errorMessage));
               return;
             }
             let body = null;
@@ -125,11 +137,9 @@ function handleBatchRequest(logger, tracer, req, res, next) {
                 batchPartData.indexOf("\r\n\r\n") + 4
               );
             } else {
-              batchPartReject({
-                httpCode: 400,
-                message:
-                  "Could not parse body in batch part " + batchPartIndex + "."
-              });
+              let errorMessage =
+                "Could not parse body in batch part " + batchPartIndex + ".";
+              batchPartReject(createValidationError(errorMessage));
               return;
             }
 
@@ -145,14 +155,21 @@ function handleBatchRequest(logger, tracer, req, res, next) {
                 batchPartResolve();
               })
               .catch(error => {
-                batchPartReject({
-                  httpCode: 400,
-                  message:
+                if (isValidationError(error)) {
+                  let errorMessage =
                     "Request for batch part " +
                     batchPartIndex +
                     " failed validation with the following error: " +
-                    error
-                });
+                    error.message;
+                  batchPartReject(createValidationError(errorMessage));
+                } else {
+                  let errorMessage =
+                    "Request for batch part " +
+                    batchPartIndex +
+                    " failed with the following internal server error: " +
+                    (error.message ? error.message : error);
+                  batchPartReject(createInternalServerError(errorMessage));
+                }
               });
           });
         } else if (utils.headersValidForChangeSet(batchPartHeaders)) {
@@ -179,19 +196,19 @@ function handleBatchRequest(logger, tracer, req, res, next) {
         } else {
           // Data event handling is required, otherwise Dicer will hang and throw UnhandledPromiseRejectionWarning
           batchPartStream.on("data", () => {
-            batchPartReject({
-              httpCode: 400,
-              message: "Invalid headers in batch part " + batchPartIndex + "."
-            });
+            let errorMessage =
+              "Invalid headers in batch part " + batchPartIndex + ".";
+            batchPartReject(createValidationError(errorMessage));
           });
         }
       });
       batchPartStream.on("error", error => {
-        batchPartReject({
-          httpCode: 400,
-          message:
-            "Error parsing batch part" + batchPartIndex + ": " + error.message
-        });
+        let errorMessage =
+          "Error parsing batch part" +
+          batchPartIndex +
+          ": " +
+          (error.message ? error.message : error);
+        batchPartReject(createValidationError(errorMessage));
       });
     });
     batchPartPromises.push(batchPartPromise);
@@ -205,24 +222,16 @@ function handleBatchRequest(logger, tracer, req, res, next) {
         }
       })
       .catch(error => {
-        // TODO find a better way to handle errors from handleProxiedRequest()
         if (!res.headersSent) {
           res
-            .status(error.httpCode || 500)
-            .send(
-              error.message !== null && error.message !== undefined
-                ? error.message
-                : error
-            );
+            .status(isValidationError(error) ? 400 : 500)
+            .send(error.message ? error.message : error);
         }
       });
   });
   batchDicer.on("error", error => {
     if (!res.headersSent) {
-      res.status(400).send({
-        httpCode: 400,
-        message: "Error parsing batch request: " + error.message
-      });
+      res.status(400).send("Error parsing batch request: " + error.message);
     }
   });
 
@@ -234,7 +243,6 @@ function handleBatchRequest(logger, tracer, req, res, next) {
 }
 
 function handleNonBatchRequest(logger, tracer, req, res, next) {
-  // TODO Need to distinguish validation errors from 500 errors here
   validateRequest(
     logger,
     tracer,
@@ -250,12 +258,8 @@ function handleNonBatchRequest(logger, tracer, req, res, next) {
     })
     .catch(error => {
       res
-        .status(500)
-        .send(
-          error.message !== null && error.message !== undefined
-            ? error.message
-            : error
-        );
+        .status(isValidationError(error) ? 400 : 500)
+        .send(error.message ? error.message : error);
     });
 }
 
@@ -264,7 +268,7 @@ function getAccessTokenForProxy() {
     let oauth2 = new ClientOauth2({
       clientId: connectivityService.clientid,
       clientSecret: connectivityService.clientsecret,
-      accessTokenUri: connectivityService.url + "/oauth/token"
+      accessTokenUri: connectivityService.token_service_url + "/oauth/token"
     });
     if (cachedTokenResp !== null && !cachedTokenResp.expired()) {
       resolve(cachedTokenResp.accessToken);
@@ -391,7 +395,7 @@ function handleProxiedRequest(logger, tracer, req, res, next) {
 
         proxiedReqHeaders.Authorization =
           "Basic " +
-          new Buffer(apimService.user + ":" + apimService.password).toString(
+          Buffer.from(apimService.user + ":" + apimService.password).toString(
             "base64"
           );
 
@@ -453,7 +457,7 @@ function handleProxiedRequest(logger, tracer, req, res, next) {
             "http://" +
             connectivityService.onpremise_proxy_host +
             ":" +
-            connectivityService.onpremise_proxy_port,
+            connectivityService.onpremise_proxy_http_port,
           tunnel: false,
           url: proxiedUrl
         };
@@ -489,6 +493,10 @@ function handleProxiedRequest(logger, tracer, req, res, next) {
     });
 }
 
+function isValidationError(error) {
+  return error && error.name === VALIDATION_ERROR_NAME;
+}
+
 function validateChangeSet(
   logger,
   tracer,
@@ -518,15 +526,13 @@ function validateChangeSet(
                 );
                 let reqOp = utils.parseReqOp(reqOpStr);
                 if (!reqOp) {
-                  changeSetPartReject({
-                    httpCode: 400,
-                    message:
-                      "Could not parse HTTP request operation info in changeset part " +
-                      changeSetPartIndex +
-                      " in batch part " +
-                      batchPartIndex +
-                      "."
-                  });
+                  let errorMessage =
+                    "Could not parse HTTP request operation info in changeset part " +
+                    changeSetPartIndex +
+                    " in batch part " +
+                    batchPartIndex +
+                    ".";
+                  changeSetPartReject(createValidationError(errorMessage));
                   return;
                 }
                 let body = null;
@@ -536,15 +542,13 @@ function validateChangeSet(
                     changeSetPartData.indexOf("\r\n\r\n") + 4
                   );
                 } else {
-                  changeSetPartReject({
-                    httpCode: 400,
-                    message:
-                      "Could not parse body in changeset part " +
-                      changeSetPartIndex +
-                      " in batch part " +
-                      batchPartIndex +
-                      "."
-                  });
+                  let errorMessage =
+                    "Could not parse body in changeset part " +
+                    changeSetPartIndex +
+                    " in batch part " +
+                    batchPartIndex +
+                    ".";
+                  changeSetPartReject(createValidationError(errorMessage));
                   return;
                 }
 
@@ -560,44 +564,51 @@ function validateChangeSet(
                     changeSetPartResolve();
                   })
                   .catch(error => {
-                    changeSetPartReject({
-                      httpCode: 400,
-                      message:
+                    if (isValidationError(error)) {
+                      let errorMessage =
                         "Request for changepart part " +
                         changeSetPartIndex +
                         " in batch part " +
                         batchPartIndex +
                         " failed validation with the following error: " +
-                        error
-                    });
+                        error.message;
+                      changeSetPartReject(createValidationError(errorMessage));
+                    } else {
+                      let errorMessage =
+                        "Request for changepart part " +
+                        changeSetPartIndex +
+                        " in batch part " +
+                        batchPartIndex +
+                        " failed with the following internal server error: " +
+                        (error.message ? error.message : error);
+                      changeSetPartReject(
+                        createInternalServerError(errorMessage)
+                      );
+                    }
                   });
               });
             } else {
               // Data event handling is required, otherwise Dicer will hang and throw UnhandledPromiseRejectionWarning
               changeSetPartStream.on("data", () => {
-                changeSetPartReject({
-                  httpCode: 400,
-                  message:
-                    "Invalid headers in changeset part " +
-                    changeSetPartIndex +
-                    " in batch part " +
-                    batchPartIndex +
-                    "."
-                });
+                let errorMessage =
+                  "Invalid headers in changeset part " +
+                  changeSetPartIndex +
+                  " in batch part " +
+                  batchPartIndex +
+                  ".";
+                changeSetPartReject(createValidationError(errorMessage));
               });
             }
           });
           changeSetPartStream.on("error", error => {
-            changeSetPartReject({
-              httpCode: 400,
-              message:
-                "Error parsing changeset part " +
-                changeSetPartIndex +
-                " in batch part " +
-                batchPartIndex +
-                ": " +
-                error.message
-            });
+            let errorMessage =
+              "Error parsing changeset part " +
+              changeSetPartIndex +
+              " in batch part " +
+              batchPartIndex +
+              ": " +
+              (error.message ? error.message : error);
+            changeSetPartReject(createValidationError(errorMessage));
           });
         }
       );
@@ -613,14 +624,12 @@ function validateChangeSet(
         });
     });
     changeSetDicer.on("error", error => {
-      reject({
-        httpCode: 400,
-        message:
-          "Error parsing changeset in batch part " +
-          batchPartIndex +
-          ": " +
-          error.message
-      });
+      let errorMessage =
+        "Error parsing changeset in batch part " +
+        batchPartIndex +
+        ": " +
+        (error.message ? error.message : error);
+      reject(createValidationError(errorMessage));
     });
     changeSetDicer.write(changeSetData.toString());
     changeSetDicer.end();
@@ -633,11 +642,13 @@ function validateRequest(logger, tracer, authInfo, method, url, body) {
 
     // TODO see if it makes sense to pass if there are no matching filter
     let valid = true;
+    let serviceMatched = false;
     let failedValidationRules = [];
     for (let i = 0; i < apiProxySecJson.services.length; i++) {
       let service = apiProxySecJson.services[i];
       let servicePrefix = "/" + service.name + "/";
       if (url.startsWith(servicePrefix)) {
+        serviceMatched = true;
         let resourcePath = decodeURI(url.substring(servicePrefix.length));
         for (let j = 0; j < service.resources.length; j++) {
           let resource = service.resources[j];
@@ -757,16 +768,19 @@ function validateRequest(logger, tracer, authInfo, method, url, body) {
         }
       }
     }
-    if (valid) {
+    if (!apiProxySecJson.allowNoMatch && !serviceMatched) {
+      let errorMessage = "Request failed service access validation.";
+      reject(createValidationError(errorMessage));
+    } else if (valid) {
       resolve();
     } else {
-      let failedValidationText =
+      let errorMessage =
         "Request failed validation at rule" +
         (failedValidationRules.length > 1 ? "s" : "") +
         " [ " +
         failedValidationRules.toString().replace(",", ", ") +
         " ].";
-      reject(failedValidationText);
+      reject(createValidationError(errorMessage));
     }
   });
 }
