@@ -37,7 +37,7 @@ sap.ui.define([
 		},
 		getVehiclesStream: function (skip, callback) {
 			var that = this,
-				uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
+				uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02",
 				sPath;
 
 			if (that.UserData.getProperty("/Type") == "TCI_User") {
@@ -406,7 +406,7 @@ sap.ui.define([
 					// 	DemoModel.updateBindings(true);
 					// });
 					// that.UserData.setProperty("/Type", "TCI_User"); //remove once local testing done
-					var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/";
+					var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02";
 					var sPath;
 
 					if (that.UserData.getProperty("/Type") == "TCI_User") {
