@@ -152,7 +152,8 @@
 			<VBox width="30%">
 				<!--OLD CODE <Link href="https://b2eapps.acpt.toyota.ca/DemoVehicleFeederWeb/mvc/init/${/VehicleDetailSet/VHVIN}" text="PAYMENT CALCULATOR" textAlign="Begin" width="165.625px" target="_blank" wrapping="true" enabled="true" visible="true" emphasized="true" subtle="true" class="sapUiMediumMargin hyperlink-font-color"/>-->
 				<!--NEW CODE - Removed $ sign as instructed by Rishi Patel-->
-				<Link href="https://b2eapps.toyota.ca/DemoVehicleFeederWeb/mvc/init/{/VehicleDetailSet/VHVIN}" text="PAYMENT CALCULATOR" textAlign="Begin"
+				<!--https://b2eapps.toyota.ca  Production URL-->
+				<Link href="https://b2eapps.acpt.toyota.ca/DemoVehicleFeederWeb/mvc/init/{/VehicleDetailSet/VHVIN}" text="PAYMENT CALCULATOR" textAlign="Begin"
 					width="165.625px" target="_blank" wrapping="true" enabled="true" visible="true" emphasized="true" subtle="true"
 					class="sapUiMediumMargin hyperlink-font-color"/>
 			</VBox>
