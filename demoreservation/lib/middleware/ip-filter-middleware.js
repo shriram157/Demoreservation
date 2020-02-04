@@ -4,6 +4,7 @@
 "use strict";
 
 const ip = require("ip");
+const URL = require("url");
 
 const ERR_RESP_CODE = 401;
 
@@ -24,6 +25,25 @@ if (process.env.IP_FILTER_WHITELIST) {
 }
 
 module.exports = (req, res, next) => {
+  // Passthrough login callback and logout requests
+  let mainRouterConfig = req.app.get("mainRouterConfig");
+  if (
+    mainRouterConfig &&
+    mainRouterConfig.appConfig.logout &&
+    mainRouterConfig.appConfig.logout.logoutEndpoint
+  ) {
+    let logoutEndpoint = mainRouterConfig.appConfig.logout.logoutEndpoint;
+    let urlPath = URL.parse(req.url).pathname;
+    if (
+      urlPath === "/login/callback" ||
+      urlPath === logoutEndpoint ||
+      urlPath === "/custom" + logoutEndpoint
+    ) {
+      next();
+      return;
+    }
+  }
+
   // Actual client IP is typically the first entry of x-forwarded-for header (from CF gorouter)
   let remoteAddr = req.headers["x-forwarded-for"]
     ? req.headers["x-forwarded-for"].split(",")[0].trim()
