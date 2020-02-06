@@ -1,7 +1,7 @@
 ID: demoreservation
 _schema-version: '3.1'
 description: Demo reservation consolidated app
-version: 2.0.0
+version: 2.1.0
 
 modules:
  - name: demoreservation-node
