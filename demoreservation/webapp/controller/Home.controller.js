@@ -13,6 +13,7 @@ sap.ui.define([
 			this.populateYear();
 			//	this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
 			this.initialFilter();
+			this.initAppConfig();
 			this.initSecurity();
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.getRoute("Home").attachMatched(this.onRouteMatched, this);
@@ -37,7 +38,7 @@ sap.ui.define([
 		},
 		getVehiclesStream: function (skip, callback) {
 			var that = this,
-				uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/",
+				uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02",
 				sPath;
 
 			if (that.UserData.getProperty("/Type") == "TCI_User") {
@@ -359,6 +360,25 @@ sap.ui.define([
 			var encodeUrl = encodeURI(sUrl);
 			window.open(encodeUrl);
 		},
+		
+		initAppConfig: function() {
+			this.AppConfig = new sap.ui.model.json.JSONModel();
+			sap.ui.getCore().setModel(this.AppConfig, "AppConfig");
+			var that = this;
+			$.ajax({
+				dataType: "json",
+				url: "/demoreservation-node/appConfig",
+				type: "GET",
+				success: function (responseData) {
+					that.AppConfig.setData(responseData);
+					that.AppConfig.updateBindings(true);
+					that.AppConfig.refresh(true);
+				},
+				error: function (oError) {
+					// console.log("Error in fetching user details from LDAP", oError);
+				}
+			});
+		},
 
 		initSecurity: function () {
 			this.UserData = new sap.ui.model.json.JSONModel();
@@ -406,13 +426,13 @@ sap.ui.define([
 					// 	DemoModel.updateBindings(true);
 					// });
 					// that.UserData.setProperty("/Type", "TCI_User"); //remove once local testing done
-					var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/";
+					var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02";
 					var sPath;
 
 					if (that.UserData.getProperty("/Type") == "TCI_User") {
-						sPath = "/vehicleListSet?$filter=Emp eq 'E'";
+						sPath = "/vehicleListSet?$format=json&$filter=Emp eq 'E'";
 					} else {
-						sPath = "/vehicleListSet?$filter=Emp eq ''";
+						sPath = "/vehicleListSet?$format=json&$filter=Emp eq ''";
 					}
 					$.ajax({
 						dataType: "json",

@@ -15,6 +15,7 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 			});
 			this.getView().setModel(oLocalModel, "LocalModel");
 			this.getVehicleData(oArgs.vguid);
+			this.getView().setModel(sap.ui.getCore().getModel("AppConfig"), "AppConfig");
 		},
 		onNavButtonPress: function (oEvent) {
 			//	this.doRoute("Home");
@@ -51,7 +52,7 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 			//		email = "anubha_pandey@toyota.ca";
 			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/";
 			var that = this,
-				sPath = "/VehicleDetailSet(VHVIN='" + VHVIN + "',Email='" + email + "')?$expand=NAVFACOPTION,NAVDEALEROPTION",
+				sPath = "/VehicleDetailSet(VHVIN='" + VHVIN + "',Email='" + email + "')?$expand=NAVFACOPTION,NAVDEALEROPTION&$format=json",
 				//	var OrderChangeModel = that.getOwnerComponent().getModel("DemoOdataModel");
 				oDetailModel = new sap.ui.model.odata.ODataModel(uri, true);
 			//	oDetailModel = 	that.getOwnerComponent().getModel("DemoOdataModel");
