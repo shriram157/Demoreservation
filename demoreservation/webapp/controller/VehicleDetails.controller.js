@@ -15,6 +15,7 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 			});
 			this.getView().setModel(oLocalModel, "LocalModel");
 			this.getVehicleData(oArgs.vguid);
+			this.getView().setModel(sap.ui.getCore().getModel("AppConfig"), "AppConfig");
 		},
 		onNavButtonPress: function (oEvent) {
 			//	this.doRoute("Home");

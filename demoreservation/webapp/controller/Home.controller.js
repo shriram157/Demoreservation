@@ -13,6 +13,7 @@ sap.ui.define([
 			this.populateYear();
 			//	this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
 			this.initialFilter();
+			this.initAppConfig();
 			this.initSecurity();
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.getRoute("Home").attachMatched(this.onRouteMatched, this);
@@ -358,6 +359,25 @@ sap.ui.define([
 			var sUrl = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/vehicleListSet?$format=xlsx";
 			var encodeUrl = encodeURI(sUrl);
 			window.open(encodeUrl);
+		},
+		
+		initAppConfig: function() {
+			this.AppConfig = new sap.ui.model.json.JSONModel();
+			sap.ui.getCore().setModel(this.AppConfig, "AppConfig");
+			var that = this;
+			$.ajax({
+				dataType: "json",
+				url: "/demoreservation-node/appConfig",
+				type: "GET",
+				success: function (responseData) {
+					that.AppConfig.setData(responseData);
+					that.AppConfig.updateBindings(true);
+					that.AppConfig.refresh(true);
+				},
+				error: function (oError) {
+					// console.log("Error in fetching user details from LDAP", oError);
+				}
+			});
 		},
 
 		initSecurity: function () {
