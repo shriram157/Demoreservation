@@ -7,7 +7,7 @@ const approuter = require("@sap/approuter");
 
 let instance = approuter();
 
-let logNetwork = (process.env.XS_LOG_NETWORK === "true");
+let logNetwork = process.env.XS_LOG_NETWORK === "true";
 instance.first.use((req, res, next) => {
 	if (logNetwork && req.loggingContext) {
 		req.loggingContext.enableNetworkLog(res);
@@ -16,7 +16,5 @@ instance.first.use((req, res, next) => {
 });
 
 instance.start({
-	extensions: [
-		require("./lib/extensions.js")
-	]
+	extensions: [require("./lib/extensions.js")]
 });
