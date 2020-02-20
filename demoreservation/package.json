@@ -9,9 +9,11 @@
 	},
 	"dependencies": {
 		"@sap/approuter": "6.7.2",
+		"cross-env": "^7.0.0",
 		"ip": "^1.1.5"
 	},
 	"scripts": {
+		"serve": "cross-env PORT=8080 node server.js",
 		"start": "node server.js",
 		"test": "grunt unit_and_integration_tests"
 	},
