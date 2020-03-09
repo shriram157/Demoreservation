@@ -35,6 +35,14 @@ const PROXIED_REQ_HEADER_EXCLUDES = [
   "x-vcap-.+"
 ];
 const REGEX_PARAM = /([A-Za-z_][0-9A-Za-z_]*)=([^',]+|'(([^']|'')+)')(,?)/g;
+const SEC_SENSITIVE_HEADERS = [
+  "authorization",
+  "proxy-authorization",
+  "sap-connectivity-authentication",
+  "x-csrf-token",
+  "x-ibm-client-id",
+  "x-ibm-client-secret"
+];
 const VALIDATION_ERROR_NAME = "ValidationError";
 
 let router = null;
@@ -56,6 +64,32 @@ function createValidationError(message) {
   return error;
 }
 
+function getProxyAccessToken() {
+  return new Promise((resolve, reject) => {
+    let oauth2 = new ClientOauth2({
+      clientId: connectivityService.clientid,
+      clientSecret: connectivityService.clientsecret,
+      accessTokenUri: connectivityService.token_service_url + "/oauth/token"
+    });
+    if (cachedTokenResp !== null && !cachedTokenResp.expired()) {
+      resolve(cachedTokenResp.accessToken);
+    } else {
+      oauth2.credentials
+        .getToken()
+        .then(tokenResp => {
+          // Check cached token response again in case of async update
+          if (cachedTokenResp === null || cachedTokenResp.expired()) {
+            cachedTokenResp = tokenResp;
+          }
+          resolve(cachedTokenResp.accessToken);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    }
+  });
+}
+
 function getRouter(aApiProxySecJson, aRoleMappingsJson) {
   if (!router) {
     router = express.Router();
@@ -67,7 +101,6 @@ function getRouter(aApiProxySecJson, aRoleMappingsJson) {
     });
     apimService.sapOdataUrl = utils.normalizeUrl(apimService.sapOdataUrl);
     apimService.apicUrl = utils.normalizeUrl(apimService.apicUrl);
-
     connectivityService = utils.getService({
       tag: "connectivity"
     });
@@ -141,7 +174,6 @@ function handleBatchRequest(logger, tracer, req, res, next) {
               batchPartReject(createValidationError(errorMessage));
               return;
             }
-
             validateRequest(
               logger,
               tracer,
@@ -262,35 +294,9 @@ function handleNonBatchRequest(logger, tracer, req, res, next) {
     });
 }
 
-function getAccessTokenForProxy() {
-  return new Promise((resolve, reject) => {
-    let oauth2 = new ClientOauth2({
-      clientId: connectivityService.clientid,
-      clientSecret: connectivityService.clientsecret,
-      accessTokenUri: connectivityService.token_service_url + "/oauth/token"
-    });
-    if (cachedTokenResp !== null && !cachedTokenResp.expired()) {
-      resolve(cachedTokenResp.accessToken);
-    } else {
-      oauth2.credentials
-        .getToken()
-        .then(tokenResp => {
-          // Check cached token response again in case of async update
-          if (cachedTokenResp === null || cachedTokenResp.expired()) {
-            cachedTokenResp = tokenResp;
-          }
-          resolve(cachedTokenResp.accessToken);
-        })
-        .catch(error => {
-          reject(error);
-        });
-    }
-  });
-}
-
 // There could be unhandled errors in this function
 function handleProxiedRequest(logger, tracer, req, res, next) {
-  getAccessTokenForProxy()
+  getProxyAccessToken()
     .then(accessToken => {
       let proxiedMethod = req.method;
       let proxiedReqHeaders = {
@@ -319,16 +325,8 @@ function handleProxiedRequest(logger, tracer, req, res, next) {
         let traceProxiedReqHeaders = JSON.parse(
           JSON.stringify(proxiedReqHeaders)
         );
-        let secSensitiveHeaderNames = [
-          "authorization",
-          "proxy-authorization",
-          "sap-connectivity-authentication",
-          "x-csrf-token",
-          "x-ibm-client-id",
-          "x-ibm-client-secret"
-        ];
         Object.keys(traceProxiedReqHeaders).forEach(key => {
-          if (secSensitiveHeaderNames.includes(key.toLowerCase())) {
+          if (SEC_SENSITIVE_HEADERS.includes(key.toLowerCase())) {
             traceProxiedReqHeaders[key] = "REDACTED";
           }
         });
@@ -423,14 +421,8 @@ function handleProxiedRequest(logger, tracer, req, res, next) {
         let traceProxiedReqHeaders = JSON.parse(
           JSON.stringify(proxiedReqHeaders)
         );
-        let secSensitiveHeaderNames = [
-          "authorization",
-          "proxy-authorization",
-          "sap-connectivity-authentication",
-          "x-csrf-token"
-        ];
         Object.keys(traceProxiedReqHeaders).forEach(key => {
-          if (secSensitiveHeaderNames.includes(key.toLowerCase())) {
+          if (SEC_SENSITIVE_HEADERS.includes(key.toLowerCase())) {
             traceProxiedReqHeaders[key] = "REDACTED";
           }
         });
@@ -631,7 +623,7 @@ function validateChangeSet(
     changeSetDicer.on("finish", () => {
       Promise.all(changeSetPromises)
         .then(() => {
-          resolve("Valid");
+          resolve();
         })
         .catch(error => {
           reject(error);
@@ -652,32 +644,124 @@ function validateChangeSet(
 
 function validateRequest(logger, tracer, authInfo, method, url, body) {
   return new Promise((resolve, reject) => {
-    let query = urlLib.parse(url, true).query;
-
-    // TODO see if it makes sense to pass if there are no matching filter
+    let parsedUrl = urlLib.parse(url, true);
+    let pathName = parsedUrl.pathname;
+    let query = parsedUrl.query;
+    let roleName = utils.getRoleName(roleMappingsJson, authInfo);
     let valid = true;
     let serviceMatched = false;
     let failedValidationRules = [];
     for (let i = 0; i < apiProxySecJson.services.length; i++) {
       let service = apiProxySecJson.services[i];
-      let servicePrefix = "/" + service.name + "/";
-      if (url.startsWith(servicePrefix)) {
+      let servicePrefix = "/" + service.name;
+      if (url.startsWith(servicePrefix + "/")) {
         serviceMatched = true;
         let resourceMatched = false;
-        let resourcePath = decodeURI(url.substring(servicePrefix.length));
+
+        // Allow GET and HEAD service root by default
+        if (
+          (method === "GET" || method === "HEAD") &&
+          (pathName === servicePrefix || pathName === servicePrefix + "/")
+        ) {
+          break;
+        }
+
+        // Allow GET $metadata by default
+        if (method === "GET" && pathName === servicePrefix + "/$metadata") {
+          break;
+        }
+
+        let resourcePath = decodeURI(url.substring(servicePrefix.length + 1));
         for (let j = 0; j < service.resources.length; j++) {
           let resource = service.resources[j];
           let resourcePathRegExp = new RegExp(resource.path);
           let match = resourcePath.match(resourcePathRegExp);
-          if (!!match && method === resource.method) {
+
+          // Assume all methods if not configured
+          if (
+            (!!match && resource.methods.includes(method)) ||
+            resource.methods === undefined
+          ) {
             resourceMatched = true;
-            for (let k = 0; k < resource.validations.length; k++) {
-              let validation = resource.validations[k];
-              let roleName = utils.getRoleName(roleMappingsJson, authInfo);
-              if (!roleName || validation.userType !== roleName) {
+            let allowedRoles = resource.allowedRoles;
+
+            // Assume all known roles if not configured
+            if (
+              !roleName ||
+              (allowedRoles !== undefined && !allowedRoles.includes(roleName))
+            ) {
+              let errorMessage =
+                "Request failed resource role access validation.";
+              reject(createValidationError(errorMessage));
+              return;
+            }
+
+            // Assume no resource-level validation if not configured
+            let validations = resource.validations;
+            if (validations === undefined) {
+              validations = [];
+            }
+
+            for (let k = 0; k < validations.length; k++) {
+              let validation = validations[k];
+              let appliesToRoles = validation.appliesToRoles;
+
+              // Assume all known roles if not configured
+              if (
+                !roleName ||
+                (appliesToRoles !== undefined &&
+                  !appliesToRoles.includes(roleName))
+              ) {
                 continue;
               }
-              if (validation.mode === "namedAndUnnamedParam") {
+
+              if (validation.mode === "filterParam") {
+                let filter = query.$filter;
+                if (filter) {
+                  let filterAst = odataParser.parse("$filter=" + filter);
+                  if (
+                    filterAst.error ||
+                    !utils.hasEqFilter(
+                      filterAst.$filter,
+                      validation.name,
+                      utils.replaceVars(
+                        validation.value,
+                        authInfo,
+                        validation.caseSensitive !== false
+                      )
+                    )
+                  ) {
+                    failedValidationRules.push(
+                      i + 1 + "-" + (j + 1) + "-" + (k + 1)
+                    );
+                    valid = false;
+                  }
+                } else {
+                  failedValidationRules.push(
+                    i + 1 + "-" + (j + 1) + "-" + (k + 1)
+                  );
+                  valid = false;
+                }
+              } else if (validation.mode === "jsonBody") {
+                let jsonBody =
+                  typeof body === "string" || body instanceof String
+                    ? JSON.parse(body)
+                    : body.toJSON();
+
+                // Need to wrap the body JSON with an array to get JSONPath to work properly (it cannot match root elements)
+                let bodyWrapperJson = [jsonBody];
+
+                let jpResult = jsonPathPlus.JSONPath(
+                  utils.replaceVars(validation.jsonPath, authInfo),
+                  bodyWrapperJson
+                );
+                if (jpResult.length === 0) {
+                  failedValidationRules.push(
+                    i + 1 + "-" + (j + 1) + "-" + (k + 1)
+                  );
+                  valid = false;
+                }
+              } else if (validation.mode === "namedAndUnnamedParam") {
                 let paramsRegExp = new RegExp(REGEX_PARAM);
                 let paramKeyValuePair = paramsRegExp.exec(
                   match[validation.regExpGroup]
@@ -727,53 +811,8 @@ function validateRequest(logger, tracer, authInfo, method, url, body) {
                     valid = false;
                   }
                 }
-              } else if (validation.mode === "filterParam") {
-                let filter = query.$filter;
-                if (filter) {
-                  let filterAst = odataParser.parse("$filter=" + filter);
-                  if (
-                    filterAst.error ||
-                    !utils.hasEqFilter(
-                      filterAst.$filter,
-                      validation.name,
-                      utils.replaceVars(
-                        validation.value,
-                        authInfo,
-                        validation.caseSensitive !== false
-                      )
-                    )
-                  ) {
-                    failedValidationRules.push(
-                      i + 1 + "-" + (j + 1) + "-" + (k + 1)
-                    );
-                    valid = false;
-                  }
-                } else {
-                  failedValidationRules.push(
-                    i + 1 + "-" + (j + 1) + "-" + (k + 1)
-                  );
-                  valid = false;
-                }
-              } else if (validation.mode === "jsonBody") {
-                let jsonBody =
-                  typeof body === "string" || body instanceof String
-                    ? JSON.parse(body)
-                    : body.toJSON();
-
-                // Need to wrap the body JSON with an array to get JSONPath to work properly (it cannot match root elements)
-                let bodyWrapperJson = [jsonBody];
-
-                let jpResult = jsonPathPlus.JSONPath(
-                  utils.replaceVars(validation.jsonPath, authInfo),
-                  bodyWrapperJson
-                );
-                if (jpResult.length === 0) {
-                  failedValidationRules.push(
-                    i + 1 + "-" + (j + 1) + "-" + (k + 1)
-                  );
-                  valid = false;
-                }
               } else {
+                // Unknown rule
                 failedValidationRules.push(
                   i + 1 + "-" + (j + 1) + "-" + (k + 1)
                 );
