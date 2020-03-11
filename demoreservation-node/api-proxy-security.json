@@ -32,7 +32,7 @@
           ]
         },
         {
-          "path": "^vehicleListSet?(\\?.+)?$",
+          "path": "^vehicleListSet(\\?.+)?$",
           "methods": ["GET"],
           "validations": [
             {

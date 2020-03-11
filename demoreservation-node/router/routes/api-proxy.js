@@ -64,6 +64,56 @@ function createValidationError(message) {
   return error;
 }
 
+function getFilteredApiProxySecJson(authInfo, method, url) {
+  let filteredApiProxySecJson = JSON.parse(JSON.stringify(apiProxySecJson));
+  let roleName = utils.getRoleName(roleMappingsJson, authInfo);
+  filteredApiProxySecJson.services = filteredApiProxySecJson.services
+    .map((service, index) => {
+      service.index = index;
+      return service;
+    })
+    .filter(service => url.startsWith("/" + service.name + "/"));
+  filteredApiProxySecJson.services.forEach(service => {
+    let servicePrefix = "/" + service.name;
+    service.resources = service.resources
+      .map((resource, index) => {
+        resource.index = index;
+        if (resource.methods === undefined) {
+          resource.methods = ["*"];
+        }
+        return resource;
+      })
+      .filter(resource => {
+        let resourcePath = decodeURI(url.substring(servicePrefix.length + 1));
+        let resourcePathRegExp = new RegExp(resource.path);
+        return (
+          !!resourcePath.match(resourcePathRegExp) &&
+          (resource.methods.includes("*") || resource.methods.includes(method))
+        );
+      });
+    service.resources.forEach(resource => {
+      if (resource.validations === undefined) {
+        resource.validations = [];
+      }
+      resource.validations = resource.validations
+        .map((validation, index) => {
+          validation.index = index;
+          if (validation.appliesToRoles === undefined) {
+            validation.appliesToRoles = ["*"];
+          }
+          return validation;
+        })
+        .filter(
+          validation =>
+            roleName &&
+            (validation.appliesToRoles.includes("*") ||
+              validation.appliesToRoles.includes(roleName))
+        );
+    });
+  });
+  return filteredApiProxySecJson;
+}
+
 function getProxyAccessToken() {
   return new Promise((resolve, reject) => {
     let oauth2 = new ClientOauth2({
@@ -182,8 +232,8 @@ function handleBatchRequest(logger, tracer, req, res, next) {
               servicePathPrefix + "/" + reqOp.path,
               body
             )
-              .then(() => {
-                batchPartResolve();
+              .then(validateRes => {
+                batchPartResolve(validateRes);
               })
               .catch(error => {
                 if (isValidationError(error)) {
@@ -217,8 +267,8 @@ function handleBatchRequest(logger, tracer, req, res, next) {
               batchPartData,
               changeSetBoundary
             )
-              .then(() => {
-                batchPartResolve();
+              .then(validateRes => {
+                batchPartResolve(validateRes);
               })
               .catch(error => {
                 batchPartReject(error);
@@ -246,10 +296,11 @@ function handleBatchRequest(logger, tracer, req, res, next) {
   });
   batchDicer.on("finish", () => {
     Promise.all(batchPartPromises)
-      .then(() => {
+      .then(validateResList => {
         // headersSent check is needed since "finish" event will always fire even after an "error"
         if (!res.headersSent) {
-          handleProxiedRequest(logger, tracer, req, res, next);
+          let validateRes = validateResList.every(e => e);
+          handleProxiedRequest(logger, tracer, req, res, next, validateRes);
         }
       })
       .catch(error => {
@@ -274,18 +325,15 @@ function handleBatchRequest(logger, tracer, req, res, next) {
 }
 
 function handleNonBatchRequest(logger, tracer, req, res, next) {
-  validateRequest(
-    logger,
-    tracer,
-    req.authInfo,
-    req.method,
-    req.originalUrl.substring(
-      req.originalUrl.indexOf(req.baseUrl) + req.baseUrl.length
-    ),
-    req.body
-  )
-    .then(() => {
-      handleProxiedRequest(logger, tracer, req, res, next);
+  let authInfo = req.authInfo;
+  let method = req.method;
+  let url = req.originalUrl.substring(
+    req.originalUrl.indexOf(req.baseUrl) + req.baseUrl.length
+  );
+  let body = req.body;
+  validateRequest(logger, tracer, authInfo, method, url, body)
+    .then(validateRes => {
+      handleProxiedRequest(logger, tracer, req, res, next, validateRes);
     })
     .catch(error => {
       res
@@ -295,7 +343,7 @@ function handleNonBatchRequest(logger, tracer, req, res, next) {
 }
 
 // There could be unhandled errors in this function
-function handleProxiedRequest(logger, tracer, req, res, next) {
+function handleProxiedRequest(logger, tracer, req, res, next, validateRes) {
   getProxyAccessToken()
     .then(accessToken => {
       let proxiedMethod = req.method;
@@ -456,6 +504,11 @@ function handleProxiedRequest(logger, tracer, req, res, next) {
           proxiedReqHeaders.Cookie = filteredCookies;
         }
 
+        // Disable gzip encoding if response needs to be validated
+        if (validateRes) {
+          proxiedReqHeaders["accept-encoding"] = null;
+        }
+
         let proxiedReqOptions = {
           headers: proxiedReqHeaders,
           method: proxiedMethod,
@@ -480,8 +533,46 @@ function handleProxiedRequest(logger, tracer, req, res, next) {
             );
             delete proxiedRes.headers.cookie;
 
-            // Oddly, if I pipe proxiedRes instead of proxiedReq to res, it will not inherit the response headers
-            proxiedReq.pipe(res);
+            // Read and validate response body
+            if (validateRes) {
+              if (
+                proxiedRes.headers["content-type"].startsWith(
+                  "application/json"
+                )
+              ) {
+                let chunks = [];
+                proxiedRes.on("data", chunk => {
+                  chunks.push(chunk);
+                });
+                proxiedRes.on("end", () => {
+                  let resBody = Buffer.concat(chunks).toString("utf8");
+                  validateResponse(
+                    logger,
+                    tracer,
+                    req.authInfo,
+                    req.method,
+                    req.url,
+                    resBody
+                  )
+                    .then(() => {
+                      Object.keys(proxiedRes.headers).forEach(key => {
+                        res.setHeader(key, proxiedRes.headers[key]);
+                      });
+                      res.status(proxiedRes.statusCode).send(resBody);
+                    })
+                    .catch(error => {
+                      res
+                        .status(isValidationError(error) ? 400 : 500)
+                        .send(error.message ? error.message : error);
+                    });
+                });
+              } else {
+                proxiedReq.pipe(res);
+              }
+            } else {
+              // Oddly, if I pipe proxiedRes instead of proxiedReq to res, it will not inherit the response headers
+              proxiedReq.pipe(res);
+            }
           })
           .on("error", error => {
             logger.error(
@@ -566,8 +657,8 @@ function validateChangeSet(
                   servicePathPrefix + "/" + reqOp.path,
                   body
                 )
-                  .then(() => {
-                    changeSetPartResolve();
+                  .then(validateRes => {
+                    changeSetPartResolve(validateRes);
                   })
                   .catch(error => {
                     if (isValidationError(error)) {
@@ -622,8 +713,8 @@ function validateChangeSet(
     });
     changeSetDicer.on("finish", () => {
       Promise.all(changeSetPromises)
-        .then(() => {
-          resolve();
+        .then(validateResList => {
+          resolve(validateResList.every(e => e));
         })
         .catch(error => {
           reject(error);
@@ -644,197 +735,232 @@ function validateChangeSet(
 
 function validateRequest(logger, tracer, authInfo, method, url, body) {
   return new Promise((resolve, reject) => {
+    let filteredApiProxySecJson = getFilteredApiProxySecJson(
+      authInfo,
+      method,
+      url
+    );
+    let validateRes = filteredApiProxySecJson.services.some(service =>
+      service.resources.some(resource =>
+        resource.validations.some(validation =>
+          validation.mode.startsWith("res")
+        )
+      )
+    );
+
+    // Handle no service match scenario
+    if (filteredApiProxySecJson.services.length === 0) {
+      if (filteredApiProxySecJson.allowNoMatch) {
+        resolve(validateRes);
+      } else {
+        let errorMessage = "Request failed service access validation.";
+        reject(createValidationError(errorMessage));
+      }
+      return;
+    }
+
     let parsedUrl = urlLib.parse(url, true);
     let pathName = parsedUrl.pathname;
     let query = parsedUrl.query;
-    let roleName = utils.getRoleName(roleMappingsJson, authInfo);
-    let valid = true;
-    let serviceMatched = false;
     let failedValidationRules = [];
-    for (let i = 0; i < apiProxySecJson.services.length; i++) {
-      let service = apiProxySecJson.services[i];
-      let servicePrefix = "/" + service.name;
-      if (url.startsWith(servicePrefix + "/")) {
-        serviceMatched = true;
-        let resourceMatched = false;
 
-        // Allow GET and HEAD service root by default
-        if (
-          (method === "GET" || method === "HEAD") &&
-          (pathName === servicePrefix || pathName === servicePrefix + "/")
-        ) {
-          break;
-        }
+    // Assertion: if there is a service match, it will be only one match
+    let service = filteredApiProxySecJson.services[0];
+    let servicePrefix = "/" + service.name;
 
-        // Allow GET $metadata by default
-        if (method === "GET" && pathName === servicePrefix + "/$metadata") {
-          break;
-        }
+    // Allow GET and HEAD service root by default
+    if (
+      (method === "GET" || method === "HEAD") &&
+      (pathName === servicePrefix || pathName === servicePrefix + "/")
+    ) {
+      resolve(validateRes);
+      return;
+    }
 
-        let resourcePath = decodeURI(url.substring(servicePrefix.length + 1));
-        for (let j = 0; j < service.resources.length; j++) {
-          let resource = service.resources[j];
-          let resourcePathRegExp = new RegExp(resource.path);
-          let match = resourcePath.match(resourcePathRegExp);
+    // Allow GET $metadata by default
+    if (method === "GET" && pathName === servicePrefix + "/$metadata") {
+      resolve(validateRes);
+      return;
+    }
 
-          // Assume all methods if not configured
-          if (
-            (!!match && resource.methods.includes(method)) ||
-            resource.methods === undefined
-          ) {
-            resourceMatched = true;
-            let allowedRoles = resource.allowedRoles;
+    // Handle no resource match scenario
+    if (service.resources.length === 0) {
+      if (service.allowNoMatch) {
+        resolve(validateRes);
+      } else {
+        let errorMessage =
+          "Request failed resource access validation at rule [ " +
+          service.index +
+          " ].";
+        reject(createValidationError(errorMessage));
+      }
+      return;
+    }
 
-            // Assume all known roles if not configured
+    let resourcePath = decodeURI(url.substring(servicePrefix.length + 1));
+    let valid = true;
+    service.resources.forEach(resource => {
+      let resourcePathRegExp = new RegExp(resource.path);
+      let match = resourcePath.match(resourcePathRegExp);
+      resource.validations.forEach(validation => {
+        if (validation.mode === "filterParam") {
+          let filter = query.$filter;
+          if (filter) {
+            let filterAst = odataParser.parse("$filter=" + filter);
             if (
-              !roleName ||
-              (allowedRoles !== undefined && !allowedRoles.includes(roleName))
+              filterAst.error ||
+              !utils.hasEqFilter(
+                filterAst.$filter,
+                validation.mode,
+                utils.replaceVars(
+                  validation.value,
+                  authInfo,
+                  validation.caseSensitive !== false
+                )
+              )
             ) {
-              let errorMessage =
-                "Request failed resource role access validation.";
-              reject(createValidationError(errorMessage));
-              return;
+              failedValidationRules.push(
+                service.index + "-" + resource.index + "-" + validation.index
+              );
+              valid = false;
             }
+          } else {
+            failedValidationRules.push(
+              service.index + "-" + resource.index + "-" + validation.index
+            );
+            valid = false;
+          }
+        } else if (validation.mode === "jsonBody") {
+          let jsonBody =
+            typeof body === "string" || body instanceof String
+              ? JSON.parse(body)
+              : body.toJSON();
 
-            // Assume no resource-level validation if not configured
-            let validations = resource.validations;
-            if (validations === undefined) {
-              validations = [];
-            }
+          // Need to wrap the body JSON with an array to get JSONPath to work properly (it cannot match root elements)
+          let bodyWrapperJson = [jsonBody];
 
-            for (let k = 0; k < validations.length; k++) {
-              let validation = validations[k];
-              let appliesToRoles = validation.appliesToRoles;
-
-              // Assume all known roles if not configured
+          let jpResult = jsonPathPlus.JSONPath(
+            utils.replaceVars(validation.jsonPath, authInfo),
+            bodyWrapperJson
+          );
+          if (jpResult.length === 0) {
+            failedValidationRules.push(
+              service.index + "-" + resource.index + "-" + validation.index
+            );
+            valid = false;
+          }
+        } else if (validation.mode === "namedAndUnnamedParam") {
+          let paramsRegExp = new RegExp(REGEX_PARAM);
+          let paramKeyValuePair = paramsRegExp.exec(
+            match[validation.regExpGroup]
+          );
+          if (paramKeyValuePair) {
+            let hasValidNamedParam = false;
+            while (paramKeyValuePair) {
+              let caseSensitive = validation.caseSensitive !== false;
+              let paramKey = paramKeyValuePair[1];
+              let paramValue = paramKeyValuePair[2];
               if (
-                !roleName ||
-                (appliesToRoles !== undefined &&
-                  !appliesToRoles.includes(roleName))
+                paramKey === validation.mode &&
+                ((caseSensitive &&
+                  paramValue ===
+                    utils.replaceVars(validation.value, authInfo)) ||
+                  (!caseSensitive &&
+                    paramValue.toLowerCase() ===
+                      utils
+                        .replaceVars(validation.value, authInfo)
+                        .toLowerCase()))
               ) {
-                continue;
+                hasValidNamedParam = true;
+                break;
               }
-
-              if (validation.mode === "filterParam") {
-                let filter = query.$filter;
-                if (filter) {
-                  let filterAst = odataParser.parse("$filter=" + filter);
-                  if (
-                    filterAst.error ||
-                    !utils.hasEqFilter(
-                      filterAst.$filter,
-                      validation.name,
-                      utils.replaceVars(
-                        validation.value,
-                        authInfo,
-                        validation.caseSensitive !== false
-                      )
-                    )
-                  ) {
-                    failedValidationRules.push(
-                      i + 1 + "-" + (j + 1) + "-" + (k + 1)
-                    );
-                    valid = false;
-                  }
-                } else {
-                  failedValidationRules.push(
-                    i + 1 + "-" + (j + 1) + "-" + (k + 1)
-                  );
-                  valid = false;
-                }
-              } else if (validation.mode === "jsonBody") {
-                let jsonBody =
-                  typeof body === "string" || body instanceof String
-                    ? JSON.parse(body)
-                    : body.toJSON();
-
-                // Need to wrap the body JSON with an array to get JSONPath to work properly (it cannot match root elements)
-                let bodyWrapperJson = [jsonBody];
-
-                let jpResult = jsonPathPlus.JSONPath(
-                  utils.replaceVars(validation.jsonPath, authInfo),
-                  bodyWrapperJson
-                );
-                if (jpResult.length === 0) {
-                  failedValidationRules.push(
-                    i + 1 + "-" + (j + 1) + "-" + (k + 1)
-                  );
-                  valid = false;
-                }
-              } else if (validation.mode === "namedAndUnnamedParam") {
-                let paramsRegExp = new RegExp(REGEX_PARAM);
-                let paramKeyValuePair = paramsRegExp.exec(
-                  match[validation.regExpGroup]
-                );
-                if (paramKeyValuePair) {
-                  let hasValidNamedParam = false;
-                  while (paramKeyValuePair) {
-                    let caseSensitive = validation.caseSensitive !== false;
-                    let paramKey = paramKeyValuePair[1];
-                    let paramValue = paramKeyValuePair[2];
-                    if (
-                      paramKey === validation.name &&
-                      ((caseSensitive &&
-                        paramValue ===
-                          utils.replaceVars(validation.value, authInfo)) ||
-                        (!caseSensitive &&
-                          paramValue.toLowerCase() ===
-                            utils
-                              .replaceVars(validation.value, authInfo)
-                              .toLowerCase()))
-                    ) {
-                      hasValidNamedParam = true;
-                      break;
-                    }
-                    paramKeyValuePair = paramsRegExp.exec(
-                      match[validation.regExpGroup]
-                    );
-                  }
-                  if (!hasValidNamedParam) {
-                    failedValidationRules.push(
-                      i + 1 + "-" + (j + 1) + "-" + (k + 1)
-                    );
-                    valid = false;
-                  }
-                } else {
-                  let caseSensitive = validation.caseSensitive !== false;
-                  if (
-                    (caseSensitive &&
-                      match[validation.regExpGroup] !== validation.value) ||
-                    (!caseSensitive &&
-                      match[validation.regExpGroup].toLowerCase() !==
-                        validation.value.toLowerCase())
-                  ) {
-                    failedValidationRules.push(
-                      i + 1 + "-" + (j + 1) + "-" + (k + 1)
-                    );
-                    valid = false;
-                  }
-                }
-              } else {
-                // Unknown rule
-                failedValidationRules.push(
-                  i + 1 + "-" + (j + 1) + "-" + (k + 1)
-                );
-                valid = false;
-              }
+              paramKeyValuePair = paramsRegExp.exec(
+                match[validation.regExpGroup]
+              );
+            }
+            if (!hasValidNamedParam) {
+              failedValidationRules.push(
+                service.index + "-" + resource.index + "-" + service.index
+              );
+              valid = false;
+            }
+          } else {
+            let caseSensitive = validation.caseSensitive !== false;
+            if (
+              (caseSensitive &&
+                match[validation.regExpGroup] !== validation.value) ||
+              (!caseSensitive &&
+                match[validation.regExpGroup].toLowerCase() !==
+                  validation.value.toLowerCase())
+            ) {
+              failedValidationRules.push(
+                service.index + "-" + resource.index + "-" + service.index
+              );
+              valid = false;
             }
           }
         }
-        if (!service.allowNoMatch && !resourceMatched) {
-          let errorMessage =
-            "Request failed resource access validation at rule [ " +
-            (i + 1) +
-            " ].";
-          reject(createValidationError(errorMessage));
-          return;
-        }
-      }
-    }
-    if (!apiProxySecJson.allowNoMatch && !serviceMatched) {
-      let errorMessage = "Request failed service access validation.";
+      });
+    });
+    if (valid) {
+      resolve(validateRes);
+    } else {
+      let errorMessage =
+        "Request failed validation at rule" +
+        (failedValidationRules.length > 1 ? "s" : "") +
+        " [ " +
+        failedValidationRules.toString().replace(",", ", ") +
+        " ].";
       reject(createValidationError(errorMessage));
-    } else if (valid) {
+    }
+  });
+}
+
+function validateResponse(logger, tracer, authInfo, method, url, body) {
+  return new Promise((resolve, reject) => {
+    let filteredApiProxySecJson = getFilteredApiProxySecJson(
+      authInfo,
+      method,
+      url
+    );
+    let service = filteredApiProxySecJson.services[0];
+    service.resources = service.resources.filter(
+      resource =>
+        resource.validations.length > 0 &&
+        resource.validations.some(validation =>
+          validation.mode.startsWith("res")
+        )
+    );
+    service.resources.forEach(resource => {
+      resource.validations = resource.validations.filter(validation =>
+        validation.mode.startsWith("res")
+      );
+    });
+    let failedValidationRules = [];
+    let valid = true;
+    service.resources.forEach(resource => {
+      let validations = resource.validations;
+      validations.forEach(validation => {
+        if (validation.mode === "resJsonBody") {
+          let jsonBody =
+            typeof body === "string" || body instanceof String
+              ? JSON.parse(body)
+              : body.toJSON();
+          let jpResult = jsonPathPlus.JSONPath({
+            path: utils.replaceVars(validation.jsonPath, authInfo),
+            json: jsonBody,
+            wrap: false
+          });
+          if (jpResult === undefined) {
+            failedValidationRules.push(
+              service.index + "-" + resource.index + "-" + validation.index
+            );
+            valid = false;
+          }
+        }
+      });
+    });
+    if (valid) {
       resolve();
     } else {
       let errorMessage =
@@ -848,6 +974,5 @@ function validateRequest(logger, tracer, authInfo, method, url, body) {
   });
 }
 
-module.exports = (aApiProxySecJson, aRoleMappingsJson) => {
-  return getRouter(aApiProxySecJson, aRoleMappingsJson);
-};
+module.exports = (aApiProxySecJson, aRoleMappingsJson) =>
+  getRouter(aApiProxySecJson, aRoleMappingsJson);
