@@ -25,10 +25,15 @@
 			},{
 			"key": "T",
 			"name": "TCCI Retiree"
-			}],
+			},{
+			"key": "TE",
+			"name": "TCCI Associate – employee (E )"
+			}
+			
+			],
 		"PurchaserType": [{
 			"key": "S",
-			"name": "TCI Associate/Spouse/Children"
+			"name": "TCI Associate’s Spouse or Child"
 			},{
 			"key": "C",
 			"name": "TCI Contractor"

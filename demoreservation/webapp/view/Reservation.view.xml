@@ -74,6 +74,11 @@
 							<Text text="{i18n>lblStatus}"/>
 						</header>
 					</Column>
+					<Column width="auto" hAlign="Center">
+						<header>
+							<Text text="{i18n>lblwl}"/>
+						</header>
+					</Column>
 					<Column width="5rem" hAlign="Center">
 						<header>
 							<Text text="{i18n>lblModel}"/>
@@ -149,6 +154,7 @@
 					<ColumnListItem selected="true" type="Active">
 						<cells>
 							<Text text="{DemoOdataModel>Status}" />
+							<Text text="{DemoOdataModel>TotalWaitList}" />
 							<Text text="{DemoOdataModel>ModelDesc}" width="5rem"/>
 							<Text text="{DemoOdataModel>ZZMOYR}" width="2rem"   />
 							<Text text="{DemoOdataModel>ColorDesc}" width="6rem" />
@@ -160,6 +166,7 @@
 							<Text text="{path:'DemoOdataModel>Price',formatter:'.amountFormatter'}" />
 							<Text text="{DemoOdataModel>ZREQDES}"  width="6rem"/>
 							<Text text="{DemoOdataModel>EndDate}" />
+							
 							<Button icon="sap-icon://hint" press="onReservationInfoPress"/>
 							<Button text="{i18n>btnApprove}" press="onApprovePress" visible="{= ${DemoOdataModel>StatusCode} === 'PA'}"/>
 							<Button text="{i18n>btnReject}" press="onRejectPress" visible="{= ${DemoOdataModel>StatusCode} === 'AP' || ${DemoOdataModel>StatusCode} === 'PA'}"/>
