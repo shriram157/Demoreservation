@@ -9,15 +9,8 @@ sap.ui.define([
 	return BaseController.extend("ca.toyota.demoreservation.demoreservation.controller.Home", {
 
 		onInit: function () {
-			// debugger;
-			this.populateYear();
-			//	this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
-			this.initialFilter();
-			this.initAppConfig();
-			this.initSecurity();
-			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			oRouter.getRoute("Home").attachMatched(this.onRouteMatched, this);
-
+			
+			this.getOwnerComponent().getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
 		},
 
 		getAllVehicleData: function (callback) {
@@ -80,7 +73,14 @@ sap.ui.define([
 		//	this.getView().byId("zoneFilter").setSelectedKey("3000");
 		},
 		onRouteMatched: function (oEvent) {
-			//	this.getView().byId("idMyReservationsTable").getModel().refresh(true);
+		
+		
+			this.populateYear();
+			//	this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
+			this.initialFilter();
+			this.initAppConfig();
+			this.initSecurity();
+			
 		},
 
 		onListItemPress: function (oEvent) {

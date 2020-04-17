@@ -131,10 +131,6 @@
 							<Text text="{i18n>lblRqstTyp}"  />
 						</header>
 					</Column>
-					
-					
-					
-					
 					<Column width="auto" hAlign="Center">
 						<header>
 							<Text text="{i18n>lblEndDate}"/>
@@ -154,7 +150,7 @@
 					<ColumnListItem selected="true" type="Active">
 						<cells>
 							<Text text="{DemoOdataModel>Status}" />
-							<Text text="{DemoOdataModel>TotalWaitList}" />
+							<Text text="{DemoOdataModel>WaitingNumber}" />
 							<Text text="{DemoOdataModel>ModelDesc}" width="5rem"/>
 							<Text text="{DemoOdataModel>ZZMOYR}" width="2rem"   />
 							<Text text="{DemoOdataModel>ColorDesc}" width="6rem" />
