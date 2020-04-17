@@ -385,6 +385,8 @@ sap.ui.define([
 			this.getView().setModel(this.UserData, "UserDataModel");
 			sap.ui.getCore().setModel(this.UserData, "UserDataModel");
 			var that = this;
+			var oBusyDialog = new sap.m.BusyDialog();
+			oBusyDialog.open();
 			$.ajax({
 				dataType: "json",
 				url: "/demoreservation-node/userDetails/attributes",
@@ -399,6 +401,7 @@ sap.ui.define([
 					that.UserData.refresh(true);
 				},
 				error: function (oError) {
+					oBusyDialog.close();
 					// console.log("Error in fetching user details from LDAP", oError);
 				}
 			});
@@ -447,14 +450,18 @@ sap.ui.define([
 							obj.vehicleListSet = vehicleData.d.results;
 							that.DemoModel.setData(obj);
 							that.DemoModel.updateBindings(true);
+							oBusyDialog.close();
 						},
-						error: function (oError) {}
+						error: function (oError) {
+							oBusyDialog.close();
+						}
 					});
 				},
 				error: function (oError) {
 					console.log("Error in fetching user details from LDAP", oError);
 					that.UserData.setProperty("/Type", "TCI_User");
 					that.UserData.setProperty("/AdminVisible", false);
+					oBusyDialog.close();
 				}
 			});
 		},
