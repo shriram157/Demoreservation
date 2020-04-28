@@ -82,6 +82,14 @@ sap.ui.define([
 			yearFilter.setData(a_moreFilter);
 			this.getView().byId("yearFilter").setModel(yearFilter, "YearModel");
 		},
+		
+		WaitListNumFormattter : function(val){
+			if(val === "N"){
+				return "N/A";
+			}else{
+				return val;
+			}
+		},
 
 		handleModelValueHelp: function (oEvent) {
 			var sInputValue = oEvent.getSource().getValue();

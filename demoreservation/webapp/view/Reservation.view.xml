@@ -150,7 +150,7 @@
 					<ColumnListItem selected="true" type="Active">
 						<cells>
 							<Text text="{DemoOdataModel>Status}" />
-							<Text text="{DemoOdataModel>WaitingNumber}" />
+							<Text text="{path:'DemoOdataModel>WaitingNumber', formatter:'.WaitListNumFormattter' }" />
 							<Text text="{DemoOdataModel>ModelDesc}" width="5rem"/>
 							<Text text="{DemoOdataModel>ZZMOYR}" width="2rem"   />
 							<Text text="{DemoOdataModel>ColorDesc}" width="6rem" />
