@@ -287,17 +287,20 @@ sap.ui.define([
 			var that = this;
 			if (this.isValidateTrue() && this.onSelectDate()) {
 				var oVerb;
+				var resrv;
 				if (oWaitList > 0) {
 					if(oWaitList == 1){
 						oVerb = "is";
+						resrv = "reservation";
 					}else{
 						oVerb = "are";
+						resrv = "reservations";
 					}
 					var dialog = new Dialog({
 						title: "Pending Reservations",
 						type: "Message",
 						content: new Text({
-							text: "Please note there "+oVerb+" currently "+ oWaitList +" pending reservation for this vehicle. Do you still wish to submit?"
+							text: "Please note there "+oVerb+" currently "+ oWaitList +" pending "+resrv+" for this vehicle. Do you still wish to submit?"
 						}),
 
 						buttons: [
