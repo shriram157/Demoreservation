@@ -9,15 +9,8 @@ sap.ui.define([
 	return BaseController.extend("ca.toyota.demoreservation.demoreservation.controller.Home", {
 
 		onInit: function () {
-			// debugger;
-			this.populateYear();
-			//	this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
-			this.initialFilter();
-			this.initAppConfig();
-			this.initSecurity();
-			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			oRouter.getRoute("Home").attachMatched(this.onRouteMatched, this);
-
+			
+			this.getOwnerComponent().getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
 		},
 
 		getAllVehicleData: function (callback) {
@@ -80,7 +73,14 @@ sap.ui.define([
 		//	this.getView().byId("zoneFilter").setSelectedKey("3000");
 		},
 		onRouteMatched: function (oEvent) {
-			//	this.getView().byId("idMyReservationsTable").getModel().refresh(true);
+		
+		
+			this.populateYear();
+			//	this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
+			this.initialFilter();
+			this.initAppConfig();
+			this.initSecurity();
+			
 		},
 
 		onListItemPress: function (oEvent) {
@@ -385,6 +385,8 @@ sap.ui.define([
 			this.getView().setModel(this.UserData, "UserDataModel");
 			sap.ui.getCore().setModel(this.UserData, "UserDataModel");
 			var that = this;
+			var oBusyDialog = new sap.m.BusyDialog();
+			oBusyDialog.open();
 			$.ajax({
 				dataType: "json",
 				url: "/demoreservation-node/userDetails/attributes",
@@ -399,6 +401,7 @@ sap.ui.define([
 					that.UserData.refresh(true);
 				},
 				error: function (oError) {
+					oBusyDialog.close();
 					// console.log("Error in fetching user details from LDAP", oError);
 				}
 			});
@@ -447,14 +450,18 @@ sap.ui.define([
 							obj.vehicleListSet = vehicleData.d.results;
 							that.DemoModel.setData(obj);
 							that.DemoModel.updateBindings(true);
+							oBusyDialog.close();
 						},
-						error: function (oError) {}
+						error: function (oError) {
+							oBusyDialog.close();
+						}
 					});
 				},
 				error: function (oError) {
 					console.log("Error in fetching user details from LDAP", oError);
 					that.UserData.setProperty("/Type", "TCI_User");
 					that.UserData.setProperty("/AdminVisible", false);
+					oBusyDialog.close();
 				}
 			});
 		},

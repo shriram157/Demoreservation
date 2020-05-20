@@ -1,8 +1,12 @@
 sap.ui.define([
 	"ca/toyota/demoreservation/demoreservation/controller/BaseController",
 	"sap/m/MessageBox",
-	"sap/ui/core/routing/History"
-], function (BaseController, MessageBox, History) {
+	"sap/ui/core/routing/History",
+	"sap/m/Dialog",
+	"sap/m/Button",
+	'sap/m/Label',
+	'sap/m/Text'
+], function (BaseController, MessageBox, History, Dialog, Button, Label, Text) {
 	"use strict";
 	return BaseController.extend("ca.toyota.demoreservation.demoreservation.controller.RequestDetail", {
 		onInit: function () {
@@ -277,18 +281,70 @@ sap.ui.define([
 			}
 		},
 		onSubmitPress: function (oEvent) {
+			var headerModel = this.getView().getModel("Header");
+			var oWaitList = headerModel.getProperty("/VehicleDetailSet/WaitList");
+
 			var that = this;
 			if (this.isValidateTrue() && this.onSelectDate()) {
-				if (this.action === "U") {
-					that._saveData("U");
+				var oVerb;
+				var resrv;
+				if (oWaitList > 0) {
+					if(oWaitList == 1){
+						oVerb = "is";
+						resrv = "reservation";
+					}else{
+						oVerb = "are";
+						resrv = "reservations";
+					}
+					var dialog = new Dialog({
+						title: "Pending Reservations",
+						type: "Message",
+						content: new Text({
+							text: "Please note there "+oVerb+" currently "+ oWaitList +" pending "+resrv+" for this vehicle. Do you still wish to submit?"
+						}),
+
+						buttons: [
+							new Button({
+								text: "Yes",
+								press: $.proxy(function () {
+									if (this.action === "U") {
+										that._saveData("U");
+									} else {
+										that._createData();
+									}
+									dialog.close();
+								}, this)
+							}),
+							new Button({
+								text: "No",
+								press: $.proxy(function () {
+
+									dialog.close();
+								}, this)
+							})
+
+						],
+
+						afterClose: function () {
+							dialog.destroy();
+						}
+					});
+
+					dialog.open();
 				} else {
-					that._createData();
+					if (this.action === "U") {
+						that._saveData("U");
+					} else {
+						that._createData();
+					}
 				}
+
 			}
 		},
 		_saveData: function (action) {
 			var that = this;
 			var headerModel = this.getView().getModel("Header");
+
 			var localModel = this.getView().getModel("localDataModel");
 			var resModel = this.getView().getModel("Reservation");
 			var delIndictator = "";

@@ -79,7 +79,7 @@
 			"DemoOdataModel": {
 				"type": "sap.ui.model.odata.v2.ODataModel",
 				"dataSource": "Z_VEHICLE_DEMO_RESERVATION_SRV_02",
-				"preload": true,
+				"preload": false,
 				"settings": {
 					"defaultOperationMode": "Server",
 					"defaultCountMode": "Request",

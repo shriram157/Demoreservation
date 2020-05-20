@@ -151,6 +151,9 @@
 							<Column width="7rem" hAlign="Center">
 								<Text text="{i18n>lblReserver}" width="auto"/>
 							</Column>
+							<Column width="7rem" hAlign="Center">
+								<Text text="{i18n>lblWaitList}" width="auto"/>
+							</Column>
 							<Column width="4rem" hAlign="Center">
 								<Text text="{i18n>lblSuffix}" width="auto"/>
 							</Column>
@@ -177,6 +180,7 @@
 									<Text text="{DemoModel>ColorDesc}" width="8rem" textDirection="LTR"/>
 									<Text text="{DemoModel>Driver}" width="7rem" textDirection="LTR"/>
 									<Text text="{DemoModel>Reserver}" width="7rem" textDirection="LTR"/>
+									<Text text="{DemoModel>WaitList}" width="7rem" textDirection="LTR"/>
 									<Text text="{DemoModel>ZZSUFFIX}" width="4rem" textDirection="LTR"/>
 									<Text text="{path: 'DemoModel>Repair' ,formatter: '.formatRepair'}" width="4rem" textDirection="LTR"/>
 									<Text text="{DemoModel>Status}" width="4rem" textDirection="LTR"/>

@@ -154,7 +154,7 @@
 						<items>
 							<Label text="Ideal Purchase Date"/>
 							<Label text=":" class="sapUiTinyMarginEnd"/>
-							<Label text="{VehicleInfo>/ZZCRETMS}" design="Bold"/>
+							<Label text="{VehicleInfo>/ZPURDT}" design="Bold"/>
 						</items>
 					</HBox>
 					<HBox class="sapUiTinyMargin">
