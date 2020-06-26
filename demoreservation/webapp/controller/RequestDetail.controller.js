@@ -454,7 +454,7 @@ sap.ui.define([
 				"ZREQ_NAME": that.byId("idFirstName").getValue(),
 				"ZREQ_LNAME": that.byId("idLastName").getValue(),
 				"ZDEPT": dept,
-				"ZEMAIL": that.byId("idEmail").getValue(),
+				"ZEMAIL": that.byId("idEmail").getValue().replace(/\//g, ""),
 				"ZOTHERS": that.byId("ipOthers").getSelected(),
 				"ZPURTYP": that.byId("purtype").getSelectedKey(),
 				"ZPUR_NAME": that.byId("idPurName").getValue(),

@@ -141,9 +141,9 @@ sap.ui.define([
 		getVehicleData: function (VHVIN, dialogType, requestorEmail, StatusCode) {
 			//testing
 			//		email = "anubha_pandey@toyota.ca";
-
+			var oEmail = requestorEmail.replace(/\//g, "");
 			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/";
-			var sPath = "VehicleDetailSet(VHVIN='" + VHVIN + "',Email='" + requestorEmail + "')?$expand=NAVFACOPTION,NAVDEALEROPTION&$format=json",
+			var sPath = "VehicleDetailSet(VHVIN='" + VHVIN + "',Email='" + oEmail + "')?$expand=NAVFACOPTION,NAVDEALEROPTION&$format=json",
 				that = this,
 				//	oDetailModel = 	that.getOwnerComponent().getModel("DemoOdataModel");
 				oDetailModel = new sap.ui.model.odata.ODataModel(uri, true);
