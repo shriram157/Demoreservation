@@ -69,14 +69,16 @@ sap.ui.define([
 		validateEmail: function (oEmailVal) {
 			// var mailregex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 			// var mailregex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-			// var mailregex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-			// if (mailregex.test(oEmailVal) == false) {
-			// 	MessageBox.show("Please enter valid Email address", MessageBox.Icon.ERROR, "Error",
-			// 		MessageBox.Action.OK, null, null);
-			// 	this.getView().getModel("LocalModel").setProperty("/enableSubmitBtn", false);
-			// } else {
-			// 	this.getView().getModel("LocalModel").setProperty("/enableSubmitBtn", true);
-			// }
+			
+			var oval = oEmailVal.getParameters().value;
+			var mailregex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+			if (!oval.match(mailregex)) {
+				MessageBox.show("Please enter valid Email address", MessageBox.Icon.ERROR, "Error",
+					MessageBox.Action.OK, null, null);
+				this.getView().getModel("LocalModel").setProperty("/enableSubmitBtn", false);
+			} else {
+				this.getView().getModel("LocalModel").setProperty("/enableSubmitBtn", true);
+			}
 		},
 		getVehicleData: function (VHVIN) {
 			var that = this,
