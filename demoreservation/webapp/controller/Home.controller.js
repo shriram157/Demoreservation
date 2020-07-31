@@ -5,7 +5,6 @@ sap.ui.define([
 	"sap/ui/model/json/JSONModel"
 ], function (BaseController, Filter, Sorter, JSONModel) {
 	"use strict";
-
 	return BaseController.extend("ca.toyota.demoreservation.demoreservation.controller.Home", {
 
 		onInit: function () {
