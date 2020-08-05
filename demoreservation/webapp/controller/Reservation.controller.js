@@ -84,7 +84,7 @@ sap.ui.define([
 		},
 		
 		WaitListNumFormattter : function(val){
-			if(val === "N"){
+			if(val === "N" || val == "0" || val==""){
 				return "N/A";
 			}else{
 				return val;
