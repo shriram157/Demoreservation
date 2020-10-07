@@ -11,14 +11,14 @@ sap.ui.define([
 	return BaseController.extend("ca.toyota.demoreservation.demoreservation.controller.RequestDetail", {
 		onInit: function () {
 			//	this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
-			//var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			this.getOwnerComponent().getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
+			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			oRouter.getRoute("RequestDetail").attachMatched(this.onRouteMatched, this);
 
-		},
-		onRouteMatched: function (oEvent) {
 			this.action = "";
 			this.Zresreq = "";
 			this.vhvin = "";
+		},
+		onRouteMatched: function (oEvent) {
 			this.initPage();
 			var oArgs, oView, sPath, that = this;
 			oArgs = oEvent.getParameter("arguments");
@@ -38,7 +38,7 @@ sap.ui.define([
 				that.action = "C";
 				that.byId("idHboxCheqDate").setVisible(false);
 			}
-			this.getVehicleData(this.vhvin);
+			this.getVehicleData(oArgs.vhvin);
 
 			var oLocalModel = new sap.ui.model.json.JSONModel({
 				enableSubmitBtn: true
@@ -69,29 +69,24 @@ sap.ui.define([
 		validateEmail: function (oEmailVal) {
 			// var mailregex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 			// var mailregex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
-			var oval = oEmailVal.getParameters().value;
-			var mailregex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-			if (!oval.match(mailregex)) {
-				MessageBox.show("Please enter valid Email address", MessageBox.Icon.ERROR, "Error",
-					MessageBox.Action.OK, null, null);
-				this.getView().getModel("LocalModel").setProperty("/enableSubmitBtn", false);
-			} else {
-				this.getView().getModel("LocalModel").setProperty("/enableSubmitBtn", true);
-			}
+			// var mailregex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+			// if (mailregex.test(oEmailVal) == false) {
+			// 	MessageBox.show("Please enter valid Email address", MessageBox.Icon.ERROR, "Error",
+			// 		MessageBox.Action.OK, null, null);
+			// 	this.getView().getModel("LocalModel").setProperty("/enableSubmitBtn", false);
+			// } else {
+			// 	this.getView().getModel("LocalModel").setProperty("/enableSubmitBtn", true);
+			// }
 		},
 		getVehicleData: function (VHVIN) {
 			var that = this,
-			//	sPath = "/vehicleListSet('" + VHVIN + "')",
+				sPath = "/vehicleListSet('" + VHVIN + "')",
 				oDetailModel = that.getOwnerComponent().getModel("DemoOdataModel");
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
 			// read OData model data into local JSON model 
-			oDetailModel.read("/vehicleListSet", {
-
-				urlParameters: {
-					"$filter": "VHVIN eq '" + VHVIN + "'"
-				},
+			oDetailModel.read(sPath, {
+				method: "GET",
 				success: function (oData, oResponse) {
 					var oJSONModel = new sap.ui.model.json.JSONModel();
 					oJSONModel.setData({
@@ -294,10 +289,10 @@ sap.ui.define([
 				var oVerb;
 				var resrv;
 				if (oWaitList > 0) {
-					if (oWaitList == 1) {
+					if(oWaitList == 1){
 						oVerb = "is";
 						resrv = "reservation";
-					} else {
+					}else{
 						oVerb = "are";
 						resrv = "reservations";
 					}
@@ -305,8 +300,7 @@ sap.ui.define([
 						title: "Pending Reservations",
 						type: "Message",
 						content: new Text({
-							text: "Please note there " + oVerb + " currently " + oWaitList + " pending " + resrv +
-								" for this vehicle. Do you still wish to submit?"
+							text: "Please note there "+oVerb+" currently "+ oWaitList +" pending "+resrv+" for this vehicle. Do you still wish to submit?"
 						}),
 
 						buttons: [
@@ -458,7 +452,7 @@ sap.ui.define([
 				"ZREQ_NAME": that.byId("idFirstName").getValue(),
 				"ZREQ_LNAME": that.byId("idLastName").getValue(),
 				"ZDEPT": dept,
-				"ZEMAIL": that.byId("idEmail").getValue().replace(/\//g, ""),
+				"ZEMAIL": that.byId("idEmail").getValue(),
 				"ZOTHERS": that.byId("ipOthers").getSelected(),
 				"ZPURTYP": that.byId("purtype").getSelectedKey(),
 				"ZPUR_NAME": that.byId("idPurName").getValue(),
