@@ -14,11 +14,12 @@ sap.ui.define([
 			//var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			this.getOwnerComponent().getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
 
+			
+		},
+		onRouteMatched: function (oEvent) {
 			this.action = "";
 			this.Zresreq = "";
 			this.vhvin = "";
-		},
-		onRouteMatched: function (oEvent) {
 			this.initPage();
 			var oArgs, oView, sPath, that = this;
 			oArgs = oEvent.getParameter("arguments");
@@ -38,7 +39,7 @@ sap.ui.define([
 				that.action = "C";
 				that.byId("idHboxCheqDate").setVisible(false);
 			}
-			this.getVehicleData(oArgs.vhvin);
+			this.getVehicleData(this.vhvin);
 
 			var oLocalModel = new sap.ui.model.json.JSONModel({
 				enableSubmitBtn: true
