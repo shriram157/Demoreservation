@@ -14,7 +14,6 @@ sap.ui.define([
 			//var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			this.getOwnerComponent().getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
 
-			
 		},
 		onRouteMatched: function (oEvent) {
 			this.action = "";
@@ -70,7 +69,7 @@ sap.ui.define([
 		validateEmail: function (oEmailVal) {
 			// var mailregex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 			// var mailregex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-			
+
 			var oval = oEmailVal.getParameters().value;
 			var mailregex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 			if (!oval.match(mailregex)) {
@@ -83,13 +82,16 @@ sap.ui.define([
 		},
 		getVehicleData: function (VHVIN) {
 			var that = this,
-				sPath = "/vehicleListSet('" + VHVIN + "')",
+			//	sPath = "/vehicleListSet('" + VHVIN + "')",
 				oDetailModel = that.getOwnerComponent().getModel("DemoOdataModel");
 			var oBusyDialog = new sap.m.BusyDialog();
 			oBusyDialog.open();
 			// read OData model data into local JSON model 
-			oDetailModel.read(sPath, {
-				method: "GET",
+			oDetailModel.read("/vehicleListSet", {
+
+				urlParameters: {
+					"$filter": "VHVIN eq '" + VHVIN + "'"
+				},
 				success: function (oData, oResponse) {
 					var oJSONModel = new sap.ui.model.json.JSONModel();
 					oJSONModel.setData({
@@ -292,10 +294,10 @@ sap.ui.define([
 				var oVerb;
 				var resrv;
 				if (oWaitList > 0) {
-					if(oWaitList == 1){
+					if (oWaitList == 1) {
 						oVerb = "is";
 						resrv = "reservation";
-					}else{
+					} else {
 						oVerb = "are";
 						resrv = "reservations";
 					}
@@ -303,7 +305,8 @@ sap.ui.define([
 						title: "Pending Reservations",
 						type: "Message",
 						content: new Text({
-							text: "Please note there "+oVerb+" currently "+ oWaitList +" pending "+resrv+" for this vehicle. Do you still wish to submit?"
+							text: "Please note there " + oVerb + " currently " + oWaitList + " pending " + resrv +
+								" for this vehicle. Do you still wish to submit?"
 						}),
 
 						buttons: [
