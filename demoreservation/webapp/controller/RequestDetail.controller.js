@@ -11,8 +11,8 @@ sap.ui.define([
 	return BaseController.extend("ca.toyota.demoreservation.demoreservation.controller.RequestDetail", {
 		onInit: function () {
 			//	this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
-			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			oRouter.getRoute("RequestDetail").attachMatched(this.onRouteMatched, this);
+			//var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			this.getOwnerComponent().getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
 
 			this.action = "";
 			this.Zresreq = "";
