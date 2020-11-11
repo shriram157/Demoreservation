@@ -90,9 +90,9 @@ sap.ui.define([
 				url: "/demoreservation-node/userDetails/attributes",
 				type: "GET",
 				success: function (userAttributes) {
-					that.UserData.setProperty("/FirstName", userAttributes.samlAttributes.FirstName);
-					that.UserData.setProperty("/LastName", userAttributes.samlAttributes.LastName);
-					that.UserData.setProperty("/Email", userAttributes.samlAttributes.Email);
+					that.UserData.setProperty("/FirstName", userAttributes.samlAttributes.FirstName[0]);
+					that.UserData.setProperty("/LastName", userAttributes.samlAttributes.LastName[0]);
+					that.UserData.setProperty("/Email", userAttributes.samlAttributes.Email[0]);
 					that.UserData.setProperty("/Userid", userAttributes.userProfile.id);
 					//	sap.ui.core.BusyIndicator.hide();
 					that.UserData.updateBindings(true);

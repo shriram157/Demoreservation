@@ -11,7 +11,9 @@ sap.ui.define([
 	return BaseController.extend("ca.toyota.demoreservation.demoreservation.controller.Reservation", {
 
 		onInit: function () {
+			this.initSecurity();
 			this.populateYear();
+			
 			//	this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.getRoute("Reservation").attachMatched(this.onRouteMatched, this);
@@ -19,7 +21,7 @@ sap.ui.define([
 		},
 
 		onRouteMatched:  function (oEvent) {
-			 this.initSecurity();
+			 
 			var oArgs = oEvent.getParameter("arguments");
 			var allClicked = oArgs.admin,
 				email, admin;
