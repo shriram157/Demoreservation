@@ -8,7 +8,7 @@ sap.ui.define([
 	return Controller.extend("ca.toyota.demoreservation.demoreservation.controller.BaseController", {
 
 		onInit: function () {
-			this.initSecurity();
+		
 		},
 		/* 
 		 * Abstract Method - Will be implemented in SubClasses 
@@ -97,6 +97,7 @@ sap.ui.define([
 					//	sap.ui.core.BusyIndicator.hide();
 					that.UserData.updateBindings(true);
 					that.UserData.refresh(true);
+					
 				},
 				error: function (oError) {
 					oBusyDialog.close();

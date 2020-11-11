@@ -11,17 +11,16 @@ sap.ui.define([
 	return BaseController.extend("ca.toyota.demoreservation.demoreservation.controller.Reservation", {
 
 		onInit: function () {
-			this.initSecurity();
 			this.populateYear();
-			
+
 			//	this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.getRoute("Reservation").attachMatched(this.onRouteMatched, this);
 
 		},
 
-		onRouteMatched:  function (oEvent) {
-			 
+		onRouteMatched: function (oEvent) {
+
 			var oArgs = oEvent.getParameter("arguments");
 			var allClicked = oArgs.admin,
 				email, admin;
@@ -35,6 +34,8 @@ sap.ui.define([
 				email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
 				admin = sap.ui.getCore().getModel("UserDataModel").getData().AdminVisible;
 			} else {
+				var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+				oRouter.navTo("Home");
 				email = "";
 				admin = false;
 			}
@@ -473,7 +474,7 @@ sap.ui.define([
 		filterReservationListAdmin: function (admin, email) {
 			//var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			// if (!admin && (email == "" || email == undefined)) {
-				
+
 			// 	sap.m.MessageBox.show("Email is not defined", {
 			// 			icon: sap.m.MessageBox.Icon.ERROR,
 			// 			title: "Error",
@@ -481,19 +482,19 @@ sap.ui.define([
 			// 		});
 			// 	oRouter.navTo("Home");
 			// } else {
-				if (admin) {
-					email = "";
-				}
-				var aFilters = [];
-				var Email = new sap.ui.model.Filter("Email", sap.ui.model.FilterOperator.EQ, email);
-				aFilters = [
-					Email
-				];
-				var finalFilter = new sap.ui.model.Filter({
-					filters: aFilters,
-					and: true
-				});
-				this.getView().byId("tabRservation").getBinding("items").filter(finalFilter, "Application");
+			if (admin) {
+				email = "";
+			}
+			var aFilters = [];
+			var Email = new sap.ui.model.Filter("Email", sap.ui.model.FilterOperator.EQ, email);
+			aFilters = [
+				Email
+			];
+			var finalFilter = new sap.ui.model.Filter({
+				filters: aFilters,
+				and: true
+			});
+			this.getView().byId("tabRservation").getBinding("items").filter(finalFilter, "Application");
 			//}
 
 		},
