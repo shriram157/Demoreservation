@@ -18,7 +18,8 @@ sap.ui.define([
 
 		},
 
-		onRouteMatched: function (oEvent) {
+		onRouteMatched:  function (oEvent) {
+			 this.initSecurity();
 			var oArgs = oEvent.getParameter("arguments");
 			var allClicked = oArgs.admin,
 				email, admin;
@@ -468,16 +469,16 @@ sap.ui.define([
 		},
 
 		filterReservationListAdmin: function (admin, email) {
-			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			if (!admin && (email == "" || email == undefined)) {
+			//var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			// if (!admin && (email == "" || email == undefined)) {
 				
-				sap.m.MessageBox.show("Email is not defined", {
-						icon: sap.m.MessageBox.Icon.ERROR,
-						title: "Error",
-						actions: [sap.m.MessageBox.Action.OK]
-					});
-				oRouter.navTo("Home");
-			} else {
+			// 	sap.m.MessageBox.show("Email is not defined", {
+			// 			icon: sap.m.MessageBox.Icon.ERROR,
+			// 			title: "Error",
+			// 			actions: [sap.m.MessageBox.Action.OK]
+			// 		});
+			// 	oRouter.navTo("Home");
+			// } else {
 				if (admin) {
 					email = "";
 				}
@@ -491,7 +492,7 @@ sap.ui.define([
 					and: true
 				});
 				this.getView().byId("tabRservation").getBinding("items").filter(finalFilter, "Application");
-			}
+			//}
 
 		},
 		_onEditPress: function (oEvent) {
