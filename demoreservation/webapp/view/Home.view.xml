@@ -1,4 +1,6 @@
-<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns:core1="sap.ui.core" controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" height="100%">
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns:core1="sap.ui.core" 
+xmlns="sap.m"
+controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" height="100%">
 	<f:DynamicPage xmlns:f="sap.f" id="dynamicPageId" headerExpanded="{/headerExpanded}">
 		<f:header>
 			<f:DynamicPageHeader pinnable="false">
@@ -95,8 +97,8 @@
 		</f:header>
 		<!-- DynamicPage Content -->
 		<f:content>
-			<FlexBox xmlns="sap.m" alignItems="Start" direction="Column">
-				<items>
+			<!--<FlexBox xmlns="sap.m" alignItems="Start" direction="Column">-->
+			<!--	<items>-->
 					<VBox>
 						<Button type="Default" id="MyResButton" text="{i18n>btnMyResrv}" enabled="true" width="auto" visible="true" press="onMyReservationPress"
 							iconDensityAware="false" iconFirst="true"/>
@@ -104,9 +106,12 @@
 					       visible="{UserDataModel>/AdminVisible}"
 							press="onAllReservationPress" iconDensityAware="false" iconFirst="true"/>
 					</VBox>
-					<Table id="idMyReservationsTable"
+					<!--<ScrollContainer height="{DateModel>/tableHeight}"  width="100%" vertical="true" horizontal="true" focusable="true" class="sapUiLargeMarginBottom">-->
+							
+					<Table id="idMyReservationsTable" class="clColumnBreak"
+					 width="100%"
 						items="{ path: 'DemoModel>/vehicleListSet', sorter : {path : 'SeriesDesc'} }"
-						fixedLayout="false" updateFinished="onUpdateFinished" growing="true">
+						 updateFinished="onUpdateFinished" growing="true">
 						<headerToolbar>
 							<Toolbar>
 								<Title id="tabTitle" level="H2"/>
@@ -120,17 +125,17 @@
 						</headerToolbar>
 						<columns>
 							
-								<Column width="3rem" hAlign="Center">
+							<Column width="3rem" hAlign="Center"  >
 								<Text text="" width="auto" visible="{UserDataModel>/AdminVisible}"/>
 							</Column>
 					
-							<Column width="3rem" hAlign="Center">
+							<Column width="3.5rem" hAlign="Center">
 								<Text text="{i18n>lblSeries}" width="auto"/>
 							</Column>
-							<Column width="13rem" hAlign="Center">
+							<Column width="10rem" hAlign="Center">
 								<Text text="{i18n>lblModel}" width="auto"/>
 							</Column>
-							<Column width="5rem" hAlign="Center">
+							<Column width="6rem" hAlign="Center">
 								<Text text="{i18n>lblZone}" width="auto"/>
 							</Column>
 							<Column width="7rem" hAlign="Center">
@@ -142,25 +147,25 @@
 							<Column width="3rem" hAlign="Center">
 								<Text text="{i18n>lblYear}" width="auto"/>
 							</Column>
-							<Column width="8rem" hAlign="Center">
+							<Column width="5rem" hAlign="Center">
 								<Text text="{i18n>lblColour}" width="auto"/>
 							</Column>
 							<Column width="7rem" hAlign="Center">
 								<Text text="{i18n>lblDriver}" width="auto"/>
 							</Column>
-							<Column width="7rem" hAlign="Center">
+							<Column width="5rem" hAlign="Center">
 								<Text text="{i18n>lblReserver}" width="auto"/>
 							</Column>
-							<Column width="7rem" hAlign="Center">
+							<Column width="7rem" hAlign="Center" demandPopin="true" minScreenWidth="Desktop" >
 								<Text text="{i18n>lblWaitList}" width="auto"/>
 							</Column>
-							<Column width="4rem" hAlign="Center">
+							<Column width="4rem"  hAlign="Center" demandPopin="true" minScreenWidth="Desktop" >
 								<Text text="{i18n>lblSuffix}" width="auto"/>
 							</Column>
-							<Column width="4rem" hAlign="Center">
+							<Column width="5rem"  hAlign="Center" demandPopin="true"  minScreenWidth="Desktop">
 								<Text text="{i18n>lblRepaired}" width="auto"/>
 							</Column>
-							<Column width="4rem" hAlign="Center">
+							<Column width="4rem"  hAlign="Center" demandPopin="true" minScreenWidth="Desktop" >
 								<Text text="{i18n>lblStatus}" width="auto"/>
 							</Column>
 						</columns>
@@ -188,8 +193,9 @@
 							</ColumnListItem>
 						</items>
 					</Table>
-				</items>
-			</FlexBox>
+					<!--</ScrollContainer>-->
+			<!--	</items>-->
+			<!--</FlexBox>-->
 		</f:content>
 	</f:DynamicPage>
 </mvc:View>
