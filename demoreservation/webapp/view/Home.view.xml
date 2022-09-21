@@ -165,7 +165,7 @@ controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" heigh
 							<Column width="5rem"  hAlign="Center" demandPopin="true"  minScreenWidth="Desktop">
 								<Text text="{i18n>lblRepaired}" width="auto"/>
 							</Column>
-							<Column width="4rem"  hAlign="Center" demandPopin="true" minScreenWidth="Desktop" >
+							<Column width="4.5rem"  hAlign="Center" demandPopin="true" minScreenWidth="Desktop" >
 								<Text text="{i18n>lblStatus}" width="auto"/>
 							</Column>
 						</columns>
