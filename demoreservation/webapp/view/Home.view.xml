@@ -101,10 +101,10 @@ controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" heigh
 				<items>
 					<VBox>
 						<Button type="Default" id="MyResButton" text="{i18n>btnMyResrv}" enabled="true" width="auto" visible="true" press="onMyReservationPress"
-							iconDensityAware="false" iconFirst="true"/>
+							iconDensityAware="false" iconFirst="true" class="sapUiSmallMarginBegin"/>
 						<Button type="Default" id="AllResButton" text="{i18n>btnAllResrv}" enabled="true" width="auto" 
 					       visible="{UserDataModel>/AdminVisible}"
-							press="onAllReservationPress" iconDensityAware="false" iconFirst="true"/>
+							press="onAllReservationPress" iconDensityAware="false" iconFirst="true" class="sapUiSmallMarginBegin"/>
 					</VBox>
 					<!--<ScrollContainer height="{DateModel>/tableHeight}"  width="100%" vertical="true" horizontal="true" focusable="true" class="sapUiLargeMarginBottom">-->
 							
