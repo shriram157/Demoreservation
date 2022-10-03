@@ -97,8 +97,8 @@ controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" heigh
 		</f:header>
 		<!-- DynamicPage Content -->
 		<f:content>
-			<!--<FlexBox xmlns="sap.m" alignItems="Start" direction="Column">-->
-			<!--	<items>-->
+			<FlexBox xmlns="sap.m" alignItems="Start" direction="Column">
+				<items>
 					<VBox>
 						<Button type="Default" id="MyResButton" text="{i18n>btnMyResrv}" enabled="true" width="auto" visible="true" press="onMyReservationPress"
 							iconDensityAware="false" iconFirst="true"/>
@@ -194,8 +194,8 @@ controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" heigh
 						</items>
 					</Table>
 					<!--</ScrollContainer>-->
-			<!--	</items>-->
-			<!--</FlexBox>-->
+				</items>
+			</FlexBox>
 		</f:content>
 	</f:DynamicPage>
 </mvc:View>
