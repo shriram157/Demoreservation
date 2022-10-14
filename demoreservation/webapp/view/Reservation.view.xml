@@ -89,7 +89,7 @@
 							<Text text="{i18n>lblModYear}"/>
 						</header>
 					</Column>
-					<Column width="2rem" hAlign="Center">
+					<Column width="4rem" hAlign="Center">
 						<header>
 							<Text text="{i18n>lblColour}"/>
 						</header>
