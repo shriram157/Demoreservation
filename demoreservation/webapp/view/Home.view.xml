@@ -97,14 +97,14 @@ controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" heigh
 		</f:header>
 		<!-- DynamicPage Content -->
 		<f:content>
-			<!--<FlexBox xmlns="sap.m" alignItems="Start" direction="Column">-->
-			<!--	<items>-->
+			<FlexBox xmlns="sap.m" alignItems="Start" direction="Column">
+				<items>
 					<VBox>
 						<Button type="Default" id="MyResButton" text="{i18n>btnMyResrv}" enabled="true" width="auto" visible="true" press="onMyReservationPress"
-							iconDensityAware="false" iconFirst="true"/>
+							iconDensityAware="false" iconFirst="true" class="sapUiSmallMarginBegin"/>					<!--changes by Shriram for MyReservation Buttton and added class and uncommented the code-->
 						<Button type="Default" id="AllResButton" text="{i18n>btnAllResrv}" enabled="true" width="auto" 
 					       visible="{UserDataModel>/AdminVisible}"
-							press="onAllReservationPress" iconDensityAware="false" iconFirst="true"/>
+							press="onAllReservationPress" iconDensityAware="false" iconFirst="true" class="sapUiSmallMarginBegin"/>    <!-- changes by Shriram for All Reservation Button and added class and uncommented the code-->
 					</VBox>
 					<!--<ScrollContainer height="{DateModel>/tableHeight}"  width="100%" vertical="true" horizontal="true" focusable="true" class="sapUiLargeMarginBottom">-->
 							
@@ -194,8 +194,8 @@ controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" heigh
 						</items>
 					</Table>
 					<!--</ScrollContainer>-->
-			<!--	</items>-->
-			<!--</FlexBox>-->
+				</items>
+			</FlexBox>
 		</f:content>
 	</f:DynamicPage>
 </mvc:View>
