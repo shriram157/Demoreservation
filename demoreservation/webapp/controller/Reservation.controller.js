@@ -12,6 +12,7 @@ sap.ui.define([
 
 		onInit: function () {
 			this.populateYear();
+
 			//	this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.getRoute("Reservation").attachMatched(this.onRouteMatched, this);
@@ -19,6 +20,7 @@ sap.ui.define([
 		},
 
 		onRouteMatched: function (oEvent) {
+
 			var oArgs = oEvent.getParameter("arguments");
 			var allClicked = oArgs.admin,
 				email, admin;
@@ -32,6 +34,8 @@ sap.ui.define([
 				email = sap.ui.getCore().getModel("UserDataModel").getData().Email;
 				admin = sap.ui.getCore().getModel("UserDataModel").getData().AdminVisible;
 			} else {
+				var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+				oRouter.navTo("Home");
 				email = "";
 				admin = false;
 			}
@@ -82,11 +86,11 @@ sap.ui.define([
 			yearFilter.setData(a_moreFilter);
 			this.getView().byId("yearFilter").setModel(yearFilter, "YearModel");
 		},
-		
-		WaitListNumFormattter : function(val){
-			if(val === "N"){
+
+		WaitListNumFormattter: function (val) {
+			if (val === "N") {
 				return "N/A";
-			}else{
+			} else {
 				return val;
 			}
 		},
@@ -143,7 +147,8 @@ sap.ui.define([
 			//		email = "anubha_pandey@toyota.ca";
 
 			var uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02/";
-			var sPath = "VehicleDetailSet(VHVIN='" + VHVIN + "',Email='" + requestorEmail + "')?$expand=NAVFACOPTION,NAVDEALEROPTION&$format=json",
+			var sPath = "VehicleDetailSet(VHVIN='" + VHVIN + "',Email='" + requestorEmail +
+				"')?$expand=NAVFACOPTION,NAVDEALEROPTION&$format=json",
 				that = this,
 				//	oDetailModel = 	that.getOwnerComponent().getModel("DemoOdataModel");
 				oDetailModel = new sap.ui.model.odata.ODataModel(uri, true);
@@ -442,7 +447,7 @@ sap.ui.define([
 			var binding = list.getBinding("items");
 			binding.filter(finalFilter, "Application");
 		},
-		
+
 		amountFormatter: function (val) {
 			if (val !== "" && val !== null && val != undefined) {
 				val = val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -467,6 +472,16 @@ sap.ui.define([
 		},
 
 		filterReservationListAdmin: function (admin, email) {
+			//var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			// if (!admin && (email == "" || email == undefined)) {
+
+			// 	sap.m.MessageBox.show("Email is not defined", {
+			// 			icon: sap.m.MessageBox.Icon.ERROR,
+			// 			title: "Error",
+			// 			actions: [sap.m.MessageBox.Action.OK]
+			// 		});
+			// 	oRouter.navTo("Home");
+			// } else {
 			if (admin) {
 				email = "";
 			}
@@ -480,6 +495,8 @@ sap.ui.define([
 				and: true
 			});
 			this.getView().byId("tabRservation").getBinding("items").filter(finalFilter, "Application");
+			//}
+
 		},
 		_onEditPress: function (oEvent) {
 			var vhvin = this.getView().byId("tabRservation").getModel("DemoOdataModel").getData(this._selectedPath).VHVIN;

@@ -281,14 +281,23 @@ sap.ui.define([
 			}
 		},
 		onSubmitPress: function (oEvent) {
-			var headerModel = this.getView().getModel("Header");
-			var oWaitList = headerModel.getProperty("/VehicleDetailSet/WaitList");
+		
 
 			var that = this;
 			if (this.isValidateTrue() && this.onSelectDate()) {
 				var oVerb;
 				var resrv;
-				if (oWaitList > 0) {
+				
+				var oDetailModel = that.getOwnerComponent().getModel("DemoOdataModel");
+			var oBusyDialog = new sap.m.BusyDialog();
+			oBusyDialog.open();
+			// read OData model data into local JSON model 
+			oDetailModel.read("/vehicleListSet('" + this.vhvin + "')", {
+				method: "GET",
+				success: $.proxy(function (oData, oResponse) {
+				
+					var oWaitList = oData.WaitList;
+						if (oWaitList > 0) {
 					if(oWaitList == 1){
 						oVerb = "is";
 						resrv = "reservation";
@@ -338,6 +347,21 @@ sap.ui.define([
 						that._createData();
 					}
 				}
+					// release busy indicator
+					oBusyDialog.close();
+				},this),
+				error: function (oError) {
+					//alert("Error!");
+					// release busy indicator
+					oBusyDialog.close();
+				}
+			});
+				
+				
+				
+				
+				
+			
 
 			}
 		},

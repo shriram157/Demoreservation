@@ -240,3 +240,6 @@
 .disclamerStyle {
 	color: #ff0000; font-family: 'Arial',sans-serif; font-size: 10pt;
 }
+.clColumnBreak .sapMText {    display: inline !important; word-break: break-word !important;}
+
+.sapFDynamicPageContent { padding: 1rem 0rem 0 0rem !important;}
