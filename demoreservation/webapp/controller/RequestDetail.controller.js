@@ -752,7 +752,7 @@ sap.ui.define([
 				};
 				$.ajax({
 					dataType: "json",
-					url: "/demoreservation-node/node/tci/internal/api/v1.0/security/ldap/rest/getUserByUID",
+					url: "/node/tci/internal/api/v1.0/security/ldap/rest/getUserByUID",
 					type: "POST",
 					data: JSON.stringify(reqData),
 					headers: {
