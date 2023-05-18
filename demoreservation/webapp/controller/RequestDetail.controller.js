@@ -415,7 +415,8 @@ sap.ui.define([
 				"ZCREATED_ON": "",
 				"Vehicleaction": "",
 				"Vehiclenumber": headerModel.getProperty("/VehicleDetailSet/Vehiclenumber"),
-				"Vehicleidentnumb": headerModel.getProperty("/VehicleDetailSet/VHVIN")
+				"Vehicleidentnumb": headerModel.getProperty("/VehicleDetailSet/VHVIN"),
+				"User":sap.ui.getCore().getModel("UserDataModel").getProperty("/Type")//DMND0003976  17-Mar-2023
 			};
 			var sPath = "/zc_demo_reservationSet('" + resModel.getProperty("/Zresreq") + "')",
 				oModifyModel = that.getOwnerComponent().getModel("DemoOdataModel");
@@ -485,7 +486,8 @@ sap.ui.define([
 				"ZCREATED_ON": "",
 				"Vehicleaction": "",
 				"Vehiclenumber": headerModel.getProperty("/VehicleDetailSet/Vehiclenumber"),
-				"Vehicleidentnumb": headerModel.getProperty("/VehicleDetailSet/VHVIN")
+				"Vehicleidentnumb": headerModel.getProperty("/VehicleDetailSet/VHVIN"),
+				"User":sap.ui.getCore().getModel("UserDataModel").getProperty("/Type")//DMND0003976  17-Mar-2023
 			};
 			var sPath = "/zc_demo_reservationSet",
 				oModifyModel = that.getOwnerComponent().getModel("DemoOdataModel");
