@@ -43,7 +43,7 @@ sap.ui.define([
 			this._oRouter.navTo(routerName, {
 				vguid: param
 			});
-			// this._oRouter.navTo(routerName,param);
+			//this._oRouter.navTo(routerName,param);
 		},
 		doReqRoute: function (routerName, param1, param2) {
 			this._oRouter = this.getRouter();
