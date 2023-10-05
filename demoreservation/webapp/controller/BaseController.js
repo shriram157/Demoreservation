@@ -11,7 +11,7 @@ sap.ui.define([
 		
 		},
 		/* 
-		 * Abstract Method - Will be implemented in SubClasses 
+		 *  Abstract Method - Will be implemented in SubClasses 
 		 */
 		onRouteMatched: function () {
 
