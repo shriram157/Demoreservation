@@ -22,6 +22,17 @@ controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" heigh
 									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
+							<!--changes by swetha for DMND0004168 adding Region filter Start-->
+							<fb:FilterItem label="{i18n>lblRegion}">
+								<fb:control>
+									<ComboBox xmlns="sap.m" id="RegionFilter" placeholder="{i18n>plRegion}"
+										items="{ path: 'DemoModel>/Regio'}"
+										>
+										<core:Item xmlns:core="sap.ui.core" text="{DemoModel>Regio}" key="{DemoModel>Regio}"/>
+									</ComboBox>
+								</fb:control>
+							</fb:FilterItem>
+							<!--changes by swetha for DMND0004168 adding Region filter End-->
 							<fb:FilterItem label="{i18n>lblYear}" name="D">
 								<fb:control>
 									<ComboBox xmlns="sap.m" id="yearFilter" placeholder="{i18n>plYear}" items="{YearModel>/}" >
@@ -185,7 +196,7 @@ controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" heigh
 									<Text text="{DemoModel>ModelDesc}" width="13rem" textDirection="LTR"/>
 									<Text text="{DemoModel>ZoneDesc}" width="5rem" textDirection="LTR"/>
 									<!--changes by Swetha for DMND0004168 adding Region Column Start-->
-									<Text text="{DemoModel>REGIO}" width="5rem" textDirection="LTR"/>
+									<Text text="{DemoModel>Regio}" width="5rem" textDirection="LTR"/>
 									<!--changes by Swetha for DMND0004168 adding Region Column End-->
 									<Text text="{path:'DemoModel>Price',formatter:'.amountFormatter'}" width="7rem" textDirection="LTR"/>
 									<Text text="{DemoModel>EndDate}" width="8rem" textDirection="LTR"/>
