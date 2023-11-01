@@ -22,7 +22,7 @@ controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" heigh
 									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
-							<!--changes by swetha for DMND0004168 adding Region filter Start-->
+							<!--changes by swetha for DMND0004168 adding Region filter Start -->
 							<fb:FilterItem label="{i18n>lblRegion}">
 								<fb:control>
 									<ComboBox xmlns="sap.m" id="RegionFilter" placeholder="{i18n>plRegion}"
