@@ -23,15 +23,15 @@ controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" heigh
 								</fb:control>
 							</fb:FilterItem>
 							<!--changes by swetha for DMND0004168 adding Region filter Start-->
-						<!--	<fb:FilterItem label="{i18n>lblRegion}">
+							<fb:FilterItem label="{i18n>lblRegion}">
 								<fb:control>
 									<ComboBox xmlns="sap.m" id="RegionFilter" placeholder="{i18n>plRegion}"
-										items="{ path: 'DemoModel>/Regio'}"
+										items="{ path: 'DemoOdataModel>/vehicleList/Regio'}"
 										>
-										<core:Item xmlns:core="sap.ui.core" text="{DemoModel>Regio}" key="{DemoModel>Regio}"/>
+										<core:Item xmlns:core="sap.ui.core" text="{DemoOdataModel>/vehicleList/Regio}" key="{DemoOdataModel>/vehicleList/Regio}"/>
 									</ComboBox>
 								</fb:control>
-							</fb:FilterItem>-->
+							</fb:FilterItem>
 							<!--changes by swetha for DMND0004168 adding Region filter End-->
 							<fb:FilterItem label="{i18n>lblYear}" name="D">
 								<fb:control>
