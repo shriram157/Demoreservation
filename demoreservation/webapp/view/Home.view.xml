@@ -138,6 +138,11 @@ controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" heigh
 							<Column width="6rem" hAlign="Center">
 								<Text text="{i18n>lblZone}" width="auto"/>
 							</Column>
+							<!--changes by Swetha for DMND0004168 adding Region Column Start-->
+							<Column width="6rem" hAlign="Center">
+								<Text text="{i18n>lblRegion}" width="auto"/>
+							</Column>
+							<!--changes by Swetha for DMND0004168 adding Region Column End-->
 							<Column width="7rem" hAlign="Center">
 								<Text text="{i18n>lblPrice}" width="auto"/>
 							</Column>
@@ -179,6 +184,9 @@ controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" heigh
 									<Text text="{DemoModel>ZZSERIES}" width="3rem" textDirection="LTR"/>
 									<Text text="{DemoModel>ModelDesc}" width="13rem" textDirection="LTR"/>
 									<Text text="{DemoModel>ZoneDesc}" width="5rem" textDirection="LTR"/>
+									<!--changes by Swetha for DMND0004168 adding Region Column Start-->
+									<Text text="{DemoModel>REGIO}" width="5rem" textDirection="LTR"/>
+									<!--changes by Swetha for DMND0004168 adding Region Column End-->
 									<Text text="{path:'DemoModel>Price',formatter:'.amountFormatter'}" width="7rem" textDirection="LTR"/>
 									<Text text="{DemoModel>EndDate}" width="8rem" textDirection="LTR"/>
 									<Text text="{DemoModel>ZZMOYR}" width="3rem" textDirection="LTR"/>
