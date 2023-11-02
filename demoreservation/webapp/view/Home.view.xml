@@ -26,9 +26,9 @@ controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" heigh
 							<fb:FilterItem label="{i18n>lblRegion}" name="E">
 								<fb:control>
 									<ComboBox xmlns="sap.m" id="RegionFilter" placeholder="{i18n>plRegion}" filterSecondaryValues="true" showSecondaryValues="true"
-										items="{ path: 'DemoOdataModel>/vehicleList'}"
+										items="{ path: 'DemoOdataModel>/ZC_REGI0'}"
 										>
-										<core:Item xmlns:core="sap.ui.core" text="{path: 'DemoOdataModel>/vehicleList/Regio'}" key="{path: 'DemoOdataModel>/vehicleList/Regio'}"/>
+										<core:Item xmlns:core="sap.ui.core" text="{DemoOdataModel>regio}" key="{DemoOdataModel>kunnr}"/>
 									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
