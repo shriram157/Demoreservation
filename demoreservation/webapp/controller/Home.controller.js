@@ -164,7 +164,7 @@ sap.ui.define([
 
 			var aFilters = [];
 			var ZZZONE = new sap.ui.model.Filter("ZZZONE", sap.ui.model.FilterOperator.EQ, zoneFilter, true);
-			var ZZRegion = new sap.ui.model.Filter("ZZRegion", sap.ui.model.FilterOperator.EQ, RegionFilter, true); //changes by swetha for DMND0004168 on 1st Nov, 2023
+			var ZZRegion = new sap.ui.model.Filter("ZZRegion", sap.ui.model.FilterOperator.contains, RegionFilter, true); //changes by swetha for DMND0004168 on 1st Nov, 2023
 			var ZZSERIES = new sap.ui.model.Filter("ZZSERIES", sap.ui.model.FilterOperator.EQ, seriesFilter, true);
 			var MATNR = new sap.ui.model.Filter("MATNR", sap.ui.model.FilterOperator.EQ, modelFilter, true);
 			var ZZMOYR = new sap.ui.model.Filter("ZZMOYR", sap.ui.model.FilterOperator.EQ, yearFilter, true);
