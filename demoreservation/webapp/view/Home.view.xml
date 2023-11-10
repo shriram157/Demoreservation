@@ -23,8 +23,8 @@
 							<!--changes by swetha for DMND0004168 adding Region filter Start 1st Nov, 2023 -->
 							<fb:FilterItem label="{i18n>lblRegion}" name="E">
 								<fb:control>
-									<ComboBox xmlns="sap.m" id="regionFilter" placeholder="{i18n>plRegion}" items="{DemoOdataModel>Region}" >
-										<core:Item xmlns:core="sap.ui.core" text="{DemoOdataModel>Regio}" key="{DemoOdataModel>Regio}"/>
+									<ComboBox xmlns="sap.m" id="regionFilter" placeholder="{i18n>plRegion}" items="{DemoOdataModel>RegionSet}" >
+										<core:Item xmlns:core="sap.ui.core" text="{DemoOdataModel>Regio}" key="{DemoOdataModel>VHVIN}"/>
 									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
