@@ -140,7 +140,7 @@
 							</ColumnListItem>
 						</items>
 					</Table>
-	<!--------------------------------------------------------- changes for Testing  -------------------------- -->
+	<!--                                     changes for Testing Region Filter                     -->
 					<Table id="idMyReservationsTable" class="clColumnBreak" width="100%"
 						items="{ path: 'DemoModel>/vehicleListSet', sorter : {path : 'SeriesDesc'} }" updateFinished="onUpdateFinished" growing="true">
 						<headerToolbar>
