@@ -146,7 +146,7 @@ sap.ui.define([
 		},
 		onSearch: function (oEvent) {
 			var zoneFilter = this.getView().byId("zoneFilter").getSelectedKey();
-			var regionFilter = this.getView().byId("regionFilter").getSelectedText();           //changes by swetha for DMND0004168 on 1st Nov, 2023
+			var regionFilter = this.getView().byId("regionFilter").getSelectedKey();           //changes by swetha for DMND0004168 on 1st Nov, 2023
 			var seriesFilter = this.getView().byId("seriesFilter").getSelectedKey();
 			var suffixFilter = this.getView().byId("suffixFilter").getValue();
 			var modelFilter = this.getView().byId("modelFilter").getValue();
