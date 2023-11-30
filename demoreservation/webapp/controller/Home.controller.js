@@ -80,13 +80,14 @@ sap.ui.define([
 			this.initAppConfig();
 			this.initSecurity();
 			//changes for Test filter by swetha on 30th Nov
+			var that = this;
 			this.getView().getModel("DemoOdataModel").read("/RegionSet", {
 				
 				success: function (oData, oResponse) {
 					console.log("Response from RegionSet :" + oData);
 					var TestModel = new sap.ui.model.json.JSONModel();
 					TestModel.setData(oData);
-					//this.getView().setModel(TestModel,"RegionModel");
+					that.getView().setModel(TestModel,"RegionModel");
 					sap.ui.getCore().setModel(TestModel,"RegionModel");
 					
 				},
