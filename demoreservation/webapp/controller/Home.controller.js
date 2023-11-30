@@ -84,7 +84,7 @@ sap.ui.define([
 				
 				success: function (oData, oResponse) {
 					console.log("Response from RegionSet :" + oData);
-					var TestModel = new sap.ui.model.JSONModel();
+					var TestModel = new sap.ui.model.json.JSONModel();
 					TestModel.setData(oData);
 					this.getView().setModel(TestModel,"RegionModel");
 					sap.ui.getCore().setModel(TestModel,"RegionModel");
