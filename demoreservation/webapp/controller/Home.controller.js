@@ -59,29 +59,6 @@ sap.ui.define([
 					callback([]);
 				}
 			});
-			//changes by swetha for Testing
-			if (that.UserData.getProperty("/Type") == "TCI_User") {
-				sPath = "/RegionSet;
-			} else {
-				sPath = "/RegionSet;
-			}
-			var oTestModel = new sap.ui.model.odata.ODataModel(uri, true);
-			oTestModel.read(sPath, {
-				
-				success: function (oData, oResponse) {
-					
-					if (!!oData && !!oData.results) {
-						callback(oData.results);
-					} else {
-						callback([]);
-					}
-				},
-				error: function (err) {
-					
-					callback([]);
-				}
-			});
-			//changes by Swetha for Testing
 		},
 		amountFormatter: function (val) {
 			if (val !== "" && val !== null && val != undefined) {
