@@ -83,13 +83,10 @@ sap.ui.define([
 			this.getView().getModel("DemoOdataModel").read("/RegionSet", {
 				
 				success: function (oData, oResponse) {
-					oBusyDialog.close();
 					console.log("Response from RegionSet :" + oData);
-					callback(oData.results);
 				},
 				error: function (err) {
-					oBusyDialog.close();
-					callback([]);
+					console.log("Response from RegionSet Err :" + err);	
 				}
 			});
 			var DemoOdataModel = this.getView().getModel("DemoOdataModel");
