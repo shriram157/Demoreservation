@@ -59,30 +59,7 @@ sap.ui.define([
 					callback([]);
 				}
 			});
-		},
-		amountFormatter: function (val) {
-			if (val !== "" && val !== null && val != undefined) {
-				val = val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-				return "$" + val;
-			} else {
-				return "";
-			}
-		},
-		initialFilter: function () {
-		//	this.getView().byId("zoneFilter").setSelectedKey("3000");
-		},
-		onRouteMatched: function (oEvent) {
-		
-		
-			this.populateYear();
-			//	this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
-			this.initialFilter();
-			this.initAppConfig();
-			this.initSecurity();
-			//changes by Swetha for testing.
-			var that = this,
-				uri = "/demoreservation-node/node/Z_VEHICLE_DEMO_RESERVATION_SRV_02",
-				sPath;
+			//changes by swetha for Testing
 			if (that.UserData.getProperty("/Type") == "TCI_User") {
 				sPath = "/RegionSet;
 			} else {
@@ -104,7 +81,27 @@ sap.ui.define([
 					callback([]);
 				}
 			});
-			//changes by Swetha for testing
+			//changes by Swetha for Testing
+		},
+		amountFormatter: function (val) {
+			if (val !== "" && val !== null && val != undefined) {
+				val = val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+				return "$" + val;
+			} else {
+				return "";
+			}
+		},
+		initialFilter: function () {
+		//	this.getView().byId("zoneFilter").setSelectedKey("3000");
+		},
+		onRouteMatched: function (oEvent) {
+		
+		
+			this.populateYear();
+			//	this.getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
+			this.initialFilter();
+			this.initAppConfig();
+			this.initSecurity();
 		},
 
 		onListItemPress: function (oEvent) {
