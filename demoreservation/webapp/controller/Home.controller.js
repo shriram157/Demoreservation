@@ -79,6 +79,19 @@ sap.ui.define([
 			this.initialFilter();
 			this.initAppConfig();
 			this.initSecurity();
+			
+			DemoOdataModel.read("/RegionSet", {
+				
+				success: function (oData, oResponse) {
+					oBusyDialog.close();
+					console.log("Response from RegionSet :" + oData);
+					callback(oData.results);
+				},
+				error: function (err) {
+					oBusyDialog.close();
+					callback([]);
+				}
+			});
 		},
 
 		onListItemPress: function (oEvent) {
