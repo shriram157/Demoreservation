@@ -80,7 +80,7 @@ sap.ui.define([
 			this.initAppConfig();
 			this.initSecurity();
 			
-			DemoOdataModel.read("/RegionSet", {
+			this.getView().getModel("DemoOdataModel").read("/RegionSet", {
 				
 				success: function (oData, oResponse) {
 					oBusyDialog.close();
