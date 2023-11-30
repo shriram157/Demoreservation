@@ -114,35 +114,6 @@
 						<!-- changes by Shriram for All Reservation Button and added class and uncommented the code-->
 					</VBox>
 					<!--<ScrollContainer height="{DateModel>/tableHeight}"  width="100%" vertical="true" horizontal="true" focusable="true" class="sapUiLargeMarginBottom">-->
-					<Table id="idRegion" items="{DemoOdataModel>/RegionSet}">
-						<columns>
-							<Column width="3rem" hAlign="Center">
-								<Text text="VHVIN" width="auto" />
-							</Column>
-							<Column width="3.5rem" hAlign="Center">
-								<Text text="Region" width="auto"/>
-							</Column>
-							<Column width="10rem" hAlign="Center">
-								<Text text="Series" width="auto"/>
-							</Column>
-							<Column width="6rem" hAlign="Center">
-								<Text text="Zone" width="auto"/>
-							</Column>
-							
-						</columns>
-						<items>
-							<ColumnListItem type="Navigation" press="onListItemPress" vAlign="Middle">
-								<cells>
-									
-									<Text text="{DemoOdataModel>VHVIN}" width="3rem" textDirection="LTR"/>
-									<Text text="{DemoOdataModel>Regio}" width="13rem" textDirection="LTR"/>
-									<Text text="{DemoOdataModel>ZZSERIES}" width="5rem" textDirection="LTR"/>
-									<Text text="{DemoOdataModel>ZZZONE}" width="5rem" textDirection="LTR"/>
-								</cells>
-							</ColumnListItem>
-						</items>
-					</Table>
-	<!--                                     changes for Testing Region Filter                     -->
 					<Table id="idMyReservationsTable" class="clColumnBreak" width="100%"
 						items="{ path: 'DemoModel>/vehicleListSet', sorter : {path : 'SeriesDesc'} }" updateFinished="onUpdateFinished" growing="true">
 						<headerToolbar>

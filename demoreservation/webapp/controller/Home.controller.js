@@ -79,33 +79,24 @@ sap.ui.define([
 			this.initialFilter();
 			this.initAppConfig();
 			this.initSecurity();
-			//changes for Test filter by swetha on 30th Nov
+			//changes for Region filter DMND0004168 by swetha on 30th Nov ------- Start
 			var that = this;
 			this.getView().getModel("DemoOdataModel").read("/RegionSet", {
 				
 				success: function (oData, oResponse) {
 					console.log("Response from RegionSet :" + oData);
-					var TestModel = new sap.ui.model.json.JSONModel();
-					TestModel.setData(oData);
-					that.getView().setModel(TestModel,"RegionModel");
-					sap.ui.getCore().setModel(TestModel,"RegionModel");
+					var RegionModel = new sap.ui.model.json.JSONModel();
+					RegionModel.setData(oData);
+					that.getView().setModel(RegionModel,"RegionModel");
+					sap.ui.getCore().setModel(RegionModel,"RegionModel");
 					
 				},
 				error: function (err) {
 					console.log("Response from RegionSet Err :" + err);	
 				}
 			});
-			
-			// var DemoOdataModel = this.getView().getModel("DemoOdataModel");
-			// this.getView().byId('regionFilter').bindItems({
-			// 		path: "DemoOdataModel>/RegionSet",
-			// 		template: new sap.ui.core.ListItem({
-			// 			key: "{DemoOdataModel>Regio}",
-			// 			text: "{DemoOdataModel>Regio}"
-			// 		})
-			// 	});
-			//changes for Test filter by swetha on 30th Nov
-		},
+			//changes for Region filter DMND0004168 by swetha on 30th Nov ------- End
+			},
 
 		onListItemPress: function (oEvent) {
 			var listItemContext = oEvent.getSource().getBindingContext("DemoModel");
@@ -171,7 +162,7 @@ sap.ui.define([
 		},
 		onSearch: function (oEvent) {
 			var zoneFilter = this.getView().byId("zoneFilter").getSelectedKey();
-			var regionFilter = this.getView().byId("regionFilter").getSelectedKey();           //changes by swetha for DMND0004168 on 1st Nov, 2023
+			var regionFilter = this.getView().byId("regionFilter").getValue();           //changes by swetha for DMND0004168 on 1st Nov, 2023
 			var seriesFilter = this.getView().byId("seriesFilter").getSelectedKey();
 			var suffixFilter = this.getView().byId("suffixFilter").getValue();
 			var modelFilter = this.getView().byId("modelFilter").getValue();
