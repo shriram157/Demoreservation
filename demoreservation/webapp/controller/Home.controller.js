@@ -84,19 +84,25 @@ sap.ui.define([
 				
 				success: function (oData, oResponse) {
 					console.log("Response from RegionSet :" + oData);
+					var TestModel = new sap.ui.model.JSONModel();
+					TestModel.setData(oData);
+					this.getView().setModel(TestModel,"RegionModel");
+					sap.ui.getCore().setModel(TestModel,"RegionModel");
+					
 				},
 				error: function (err) {
 					console.log("Response from RegionSet Err :" + err);	
 				}
 			});
-			var DemoOdataModel = this.getView().getModel("DemoOdataModel");
-			this.getView().byId('regionFilter').bindItems({
-					path: "DemoOdataModel>/RegionSet",
-					template: new sap.ui.core.ListItem({
-						key: "{DemoOdataModel>Regio}",
-						text: "{DemoOdataModel>Regio}"
-					})
-				});
+			
+			// var DemoOdataModel = this.getView().getModel("DemoOdataModel");
+			// this.getView().byId('regionFilter').bindItems({
+			// 		path: "DemoOdataModel>/RegionSet",
+			// 		template: new sap.ui.core.ListItem({
+			// 			key: "{DemoOdataModel>Regio}",
+			// 			text: "{DemoOdataModel>Regio}"
+			// 		})
+			// 	});
 			//changes for Test filter by swetha on 30th Nov
 		},
 
