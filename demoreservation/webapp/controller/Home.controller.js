@@ -79,7 +79,7 @@ sap.ui.define([
 			this.initialFilter();
 			this.initAppConfig();
 			this.initSecurity();
-			
+			//changes for Test filter by swetha on 30th Nov
 			this.getView().getModel("DemoOdataModel").read("/RegionSet", {
 				
 				success: function (oData, oResponse) {
@@ -92,6 +92,15 @@ sap.ui.define([
 					callback([]);
 				}
 			});
+			var DemoOdataModel = this.getView().getModel("DemoOdataModel");
+			this.getView().byId('regionFilter').bindItems({
+					path: "DemoOdataModel>/RegionSet",
+					template: new sap.ui.core.ListItem({
+						key: "{DemoOdataModel>Regio}",
+						text: "{DemoOdataModel>Regio}"
+					})
+				});
+			//changes for Test filter by swetha on 30th Nov
 		},
 
 		onListItemPress: function (oEvent) {
