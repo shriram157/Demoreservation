@@ -12,22 +12,22 @@
 		}],
 		"RequestorType": [{
 			"key": "E",
-			"name": "Employee"
+			"name": "TCI associate"
 			},{
 			"key": "C",
-			"name": "Contractor"
+			"name": "TCI Contractor"
 			},{
 			"key": "D",
-			"name": "Department"
+			"name": "Department(Admin use only)"
 			},{
 			"key": "R",
 			"name": "TCI Retiree"
 			},{
 			"key": "T",
-			"name": "TCCI Retiree"
+			"name": "TFS Retiree"
 			},{
 			"key": "TE",
-			"name": "TCCI Associate"
+			"name": "TFS Associate"
 			}
 			
 			],
@@ -42,10 +42,10 @@
 			"name": "TCI Retiree"
 			},{
 			"key": "A",
-			"name": "TCCI Associate"
+			"name": "TFS Associate"
 			},{
 			"key": "T",
-			"name": "TCCI Retiree"
+			"name": "TFS Retiree"
 			},{
 			"key": "O",
 			"name": "Other"
