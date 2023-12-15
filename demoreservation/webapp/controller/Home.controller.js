@@ -79,8 +79,24 @@ sap.ui.define([
 			this.initialFilter();
 			this.initAppConfig();
 			this.initSecurity();
-			
-		},
+			//changes for Region filter DMND0004168 by swetha on 30th Nov ------- Start
+			var that = this;
+			this.getView().getModel("DemoOdataModel").read("/RegionSet", {
+				
+				success: function (oData, oResponse) {
+					console.log("Response from RegionSet :" + oData);
+					var RegionModel = new sap.ui.model.json.JSONModel();
+					RegionModel.setData(oData);
+					that.getView().setModel(RegionModel,"RegionModel");
+					sap.ui.getCore().setModel(RegionModel,"RegionModel");
+					
+				},
+				error: function (err) {
+					console.log("Response from RegionSet Err :" + err);	
+				}
+			});
+			//changes for Region filter DMND0004168 by swetha on 30th Nov ------- End
+			},
 
 		onListItemPress: function (oEvent) {
 			var listItemContext = oEvent.getSource().getBindingContext("DemoModel");
@@ -146,7 +162,7 @@ sap.ui.define([
 		},
 		onSearch: function (oEvent) {
 			var zoneFilter = this.getView().byId("zoneFilter").getSelectedKey();
-		//	var RegionFilter = this.getView().byId("RegionFilter").getSelectedKey();           //changes by swetha for DMND0004168 on 1st Nov, 2023
+			var regionFilter = this.getView().byId("regionFilter").getValue();           //changes by swetha for DMND0004168 on 1st Nov, 2023
 			var seriesFilter = this.getView().byId("seriesFilter").getSelectedKey();
 			var suffixFilter = this.getView().byId("suffixFilter").getValue();
 			var modelFilter = this.getView().byId("modelFilter").getValue();
@@ -164,7 +180,7 @@ sap.ui.define([
 
 			var aFilters = [];
 			var ZZZONE = new sap.ui.model.Filter("ZZZONE", sap.ui.model.FilterOperator.EQ, zoneFilter, true);
-		//	var ZZRegion = new sap.ui.model.Filter("ZZRegion", sap.ui.model.FilterOperator.EQ, RegionFilter, true); //changes by swetha for DMND0004168 on 1st Nov, 2023
+			var Regio = new sap.ui.model.Filter("Regio", sap.ui.model.FilterOperator.Contains, regionFilter, true); //changes by swetha for DMND0004168 on 1st Nov, 2023
 			var ZZSERIES = new sap.ui.model.Filter("ZZSERIES", sap.ui.model.FilterOperator.EQ, seriesFilter, true);
 			var MATNR = new sap.ui.model.Filter("MATNR", sap.ui.model.FilterOperator.EQ, modelFilter, true);
 			var ZZMOYR = new sap.ui.model.Filter("ZZMOYR", sap.ui.model.FilterOperator.EQ, yearFilter, true);
@@ -175,7 +191,7 @@ sap.ui.define([
 			var Driver = new sap.ui.model.Filter("Driver", sap.ui.model.FilterOperator.Contains, DriverFilter, true);
 			aFilters = [
 				ZZZONE,
-			//	ZZRegion,             //changes by swetha for DMND0004168 on 1st Nov, 2023
+				Regio,             //changes by swetha for DMND0004168 on 1st Nov, 2023
 				ZZSERIES,
 				MATNR,
 				ZZMOYR,

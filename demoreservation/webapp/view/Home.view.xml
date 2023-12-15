@@ -1,12 +1,11 @@
-<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns:core1="sap.ui.core" 
-xmlns="sap.m"
-controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" height="100%">
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns:core1="sap.ui.core" xmlns="sap.m"
+	controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" height="100%">
 	<f:DynamicPage xmlns:f="sap.f" id="dynamicPageId" headerExpanded="{/headerExpanded}">
 		<f:header>
 			<f:DynamicPageHeader pinnable="false">
 				<f:content>
-					<fb:FilterBar xmlns:fb="sap.ui.comp.filterbar" id="filterbar" filterContainerWidth="14rem" showGoOnFB="true" useToolbar="false" showRestoreOnFB="true"
-						search="onSearch" reset="onReset" showFilterConfiguration="false" deltaVariantMode ="false">
+					<fb:FilterBar xmlns:fb="sap.ui.comp.filterbar" id="filterbar" filterContainerWidth="14rem" showGoOnFB="true" useToolbar="false"
+						showRestoreOnFB="true" search="onSearch" reset="onReset" showFilterConfiguration="false" deltaVariantMode="false">
 						<fb:filterItems>
 							<fb:FilterItem label="{i18n>lblVIN}" name="V">
 								<fb:control>
@@ -16,26 +15,25 @@ controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" heigh
 							<fb:FilterItem label="{i18n>lblZone}" name="A">
 								<fb:control>
 									<ComboBox xmlns="sap.m" id="zoneFilter" placeholder="{i18n>plZone}"
-										items="{ path: 'DemoOdataModel>/ZC_ZONES', filters: {path: 'spras',operator: 'EQ',value1: 'E'}, sorter : {path : 'bezei'} }"
-										>
+										items="{ path: 'DemoOdataModel>/ZC_ZONES', filters: {path: 'spras',operator: 'EQ',value1: 'E'}, sorter : {path : 'bezei'} }">
 										<core:Item xmlns:core="sap.ui.core" text="{DemoOdataModel>bezei}" key="{DemoOdataModel>vkbur}"/>
 									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
-							<!--changes by swetha for DMND0004168 adding Region filter Start -->
-						<!--	<fb:FilterItem label="{i18n>lblRegion}">
+							<!--changes by swetha for DMND0004168 adding Region filter Start 1st Nov, 2023 -->
+							<fb:FilterItem label="{i18n>lblRegion}" name="E">
 								<fb:control>
-									<ComboBox xmlns="sap.m" id="RegionFilter" placeholder="{i18n>plRegion}"
-										items="{ path: 'DemoOdataModel>/vehicleList'}"
-										>
-										<core:Item xmlns:core="sap.ui.core" text="{DemoOdataModel>/vehicleList/Regio}" key="{DemoOdataModel>/vehicleList/Regio}"/>
+									<ComboBox xmlns="sap.m" id="regionFilter" placeholder="{i18n>plRegion}" items="{RegionModel>/results}" >
+										<!--items="{DemoOdataModel>/RegionSet}"-->
+										<core:Item xmlns:core="sap.ui.core" text="{RegionModel>Regio}"/>
+								<!--		<core:Item xmlns:core="sap.ui.core" text="{DemoOdataModel>Regio}" key="{DemoOdataModel>Regio}"/>-->
 									</ComboBox>
 								</fb:control>
-							</fb:FilterItem>-->
-							<!--changes by swetha for DMND0004168 adding Region filter End-->
+							</fb:FilterItem>
+							<!--changes by swetha for DMND0004168 adding Region filter End 1st Nov, 2023-->
 							<fb:FilterItem label="{i18n>lblYear}" name="D">
 								<fb:control>
-									<ComboBox xmlns="sap.m" id="yearFilter" placeholder="{i18n>plYear}" items="{YearModel>/}" >
+									<ComboBox xmlns="sap.m" id="yearFilter" placeholder="{i18n>plYear}" items="{YearModel>/}">
 										<core:Item xmlns:core="sap.ui.core" text="{YearModel>dtext}" key="{YearModel>dkey}"/>
 									</ComboBox>
 								</fb:control>
@@ -44,7 +42,7 @@ controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" heigh
 								<fb:control>
 									<ComboBox xmlns="sap.m" id="seriesFilter" placeholder="{i18n>plSeries}"
 										items="{ path: 'DemoOdataModel>/ZC_SERIES', sorter : {path : 'TCISeriesDescriptionEN'}, filters: [{path: 'zzzadddata2',operator: 'EQ',value1: 'X'}, {path: 'ModelSeriesNo',operator: 'NE',value1: 'L/C'}, {path: 'zzzadddata4',operator: 'NE',value1: '0'}]}"
-										 filterSecondaryValues="true" showSecondaryValues="true">
+										filterSecondaryValues="true" showSecondaryValues="true">
 										<core:ListItem xmlns:core="sap.ui.core" text="{DemoOdataModel>TCISeriesDescriptionEN}" key="{DemoOdataModel>ModelSeriesNo}"
 											additionalText="{DemoOdataModel>ModelSeriesNo}"/>
 									</ComboBox>
@@ -54,7 +52,7 @@ controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" heigh
 								<fb:control>
 									<Input xmlns="sap.m" type="Text" id="modelFilter" placeholder="{i18n>plModel}" suggestionItems="{DemoOdataModel>/ZC_MODEL_YEAR}"
 										suggestionItemSelected="suggestionItemSelected" valueHelpRequest="handleModelValueHelp" showValueHelp="true" showSuggestion="true"
-										textFormatMode="KeyValue" >
+										textFormatMode="KeyValue">
 										<suggestionItems>
 											<core:ListItem xmlns:core="sap.ui.core" key="{DemoOdataModel>model}" text="{DemoOdataModel>model_desc_en}"/>
 										</suggestionItems>
@@ -65,7 +63,7 @@ controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" heigh
 								<fb:control>
 									<Input xmlns="sap.m" type="Text" id="suffixFilter" placeholder="{i18n>plSuffix}" suggestionItems="{ path: 'DemoOdataModel>/ZC_MODEL_YEAR'}"
 										suggestionItemSelected="suggestionItemSelected" valueHelpRequest="handleSuffixValueHelp" showValueHelp="true" showSuggestion="true"
-										textFormatMode="KeyValue" >
+										textFormatMode="KeyValue">
 										<suggestionItems>
 											<core:ListItem xmlns:core="sap.ui.core" key="{DemoOdataModel>suffix}" text="{DemoOdataModel>suffix}"/>
 										</suggestionItems>
@@ -80,27 +78,24 @@ controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" heigh
 							<fb:FilterItem label="{i18n>lblStatus}" name="F">
 								<fb:control>
 									<!--<Input id="inpStatus" placeholder="Enter Status"/>-->
-									<ComboBox xmlns="sap.m" id="inpStatus" placeholder="{i18n>plStatus}" items="{path: 'vehicles>/FilterData/ReservationStatus'}"
-										>
+									<ComboBox xmlns="sap.m" id="inpStatus" placeholder="{i18n>plStatus}" items="{path: 'vehicles>/FilterData/ReservationStatus'}">
 										<core:Item xmlns:core="sap.ui.core" text="{vehicles>name}" key="{vehicles>key}"/>
 									</ComboBox>
 								</fb:control>
 							</fb:FilterItem>
 							<!--Commented by Pradeep Sharma<fb:FilterItem label="{i18n>lblReserver}" name="RI" visible="{= ${UserDataModel>/AdminVisible} === true ? false : true }">-->
-								<fb:FilterItem label="{i18n>lblReserver}" name="RI" > 
+							<fb:FilterItem label="{i18n>lblReserver}" name="RI">
 								<fb:control>
-									<Input xmlns="sap.m" id="ReserverFilter" placeholder="{i18n>plReserver}" />
+									<Input xmlns="sap.m" id="ReserverFilter" placeholder="{i18n>plReserver}"/>
 								</fb:control>
 							</fb:FilterItem>
 							<!--Added by Pradeep Sharma-->
 							<!--<fb:FilterItem label="{i18n>lblDriver}" name="DR" visible="{= ${UserDataModel>/AdminVisible} === true ? false : true }">-->
-								<fb:FilterItem label="{i18n>lblDriver}" name="DR">
+							<fb:FilterItem label="{i18n>lblDriver}" name="DR">
 								<fb:control>
-								<Input xmlns="sap.m" id="DriverFilter" placeholder="{i18n>plDriver}" />
+									<Input xmlns="sap.m" id="DriverFilter" placeholder="{i18n>plDriver}"/>
 								</fb:control>
 							</fb:FilterItem>
-							
-							
 						</fb:filterItems>
 					</fb:FilterBar>
 				</f:content>
@@ -112,34 +107,28 @@ controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" heigh
 				<items>
 					<VBox>
 						<Button type="Default" id="MyResButton" text="{i18n>btnMyResrv}" enabled="true" width="auto" visible="true" press="onMyReservationPress"
-							iconDensityAware="false" iconFirst="true" class="sapUiSmallMarginBegin"/>					<!--changes by Shriram for MyReservation Buttton and added class and uncommented the code-->
-						<Button type="Default" id="AllResButton" text="{i18n>btnAllResrv}" enabled="true" width="auto" 
-					       visible="{UserDataModel>/AdminVisible}"
-							press="onAllReservationPress" iconDensityAware="false" iconFirst="true" class="sapUiSmallMarginBegin"/>    <!-- changes by Shriram for All Reservation Button and added class and uncommented the code-->
+							iconDensityAware="false" iconFirst="true" class="sapUiSmallMarginBegin"/>
+						<!--changes by Shriram for MyReservation Buttton and added class and uncommented the code-->
+						<Button type="Default" id="AllResButton" text="{i18n>btnAllResrv}" enabled="true" width="auto" visible="{UserDataModel>/AdminVisible}"
+							press="onAllReservationPress" iconDensityAware="false" iconFirst="true" class="sapUiSmallMarginBegin"/>
+						<!-- changes by Shriram for All Reservation Button and added class and uncommented the code-->
 					</VBox>
 					<!--<ScrollContainer height="{DateModel>/tableHeight}"  width="100%" vertical="true" horizontal="true" focusable="true" class="sapUiLargeMarginBottom">-->
-							
-					<Table id="idMyReservationsTable" class="clColumnBreak"
-					 width="100%"
-						items="{ path: 'DemoModel>/vehicleListSet', sorter : {path : 'SeriesDesc'} }"
-						 updateFinished="onUpdateFinished" growing="true">
+					<Table id="idMyReservationsTable" class="clColumnBreak" width="100%"
+						items="{ path: 'DemoModel>/vehicleListSet', sorter : {path : 'SeriesDesc'} }" updateFinished="onUpdateFinished" growing="true">
 						<headerToolbar>
 							<Toolbar>
 								<Title id="tabTitle" level="H2"/>
 								<ToolbarSpacer/>
-								
-							<Button icon="sap-icon://excel-attachment" type="Emphasized" press="handleExcelPressed" visible="{UserDataModel>/AdminVisible}"/>
-							<!--<Button icon="sap-icon://excel-attachment" type="Emphasized" press="handleExcelPressed"/>-->
-							
+								<Button icon="sap-icon://excel-attachment" type="Emphasized" press="handleExcelPressed" visible="{UserDataModel>/AdminVisible}"/>
+								<!--<Button icon="sap-icon://excel-attachment" type="Emphasized" press="handleExcelPressed"/>-->
 								<Button class="sapMBtnIconSort" tooltip="{i18n>tooltipSort}" icon="sap-icon://sort" press="handleSortButtonPressed"/>
 							</Toolbar>
 						</headerToolbar>
 						<columns>
-							
-							<Column width="3rem" hAlign="Center"  >
+							<Column width="3rem" hAlign="Center">
 								<Text text="" width="auto" visible="{UserDataModel>/AdminVisible}"/>
 							</Column>
-					
 							<Column width="3.5rem" hAlign="Center">
 								<Text text="{i18n>lblSeries}" width="auto"/>
 							</Column>
@@ -149,11 +138,11 @@ controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" heigh
 							<Column width="6rem" hAlign="Center">
 								<Text text="{i18n>lblZone}" width="auto"/>
 							</Column>
-							<!--changes by Swetha for DMND0004168 adding Region Column Start-->
-						<!--	<Column width="6rem" hAlign="Center">
+							<!--changes by Swetha for DMND0004168 adding Region Column Start 1st Nov, 2023-->
+							<Column width="6rem" hAlign="Center">
 								<Text text="{i18n>lblRegion}" width="auto"/>
-							</Column>-->
-							<!--changes by Swetha for DMND0004168 adding Region Column End-->
+							</Column>
+							<!--changes by Swetha for DMND0004168 adding Region Column End 1st Nov, 2023-->
 							<Column width="7rem" hAlign="Center">
 								<Text text="{i18n>lblPrice}" width="auto"/>
 							</Column>
@@ -172,32 +161,29 @@ controllerName="ca.toyota.demoreservation.demoreservation.controller.Home" heigh
 							<Column width="5rem" hAlign="Center">
 								<Text text="{i18n>lblReserver}" width="auto"/>
 							</Column>
-							<Column width="7rem" hAlign="Center" demandPopin="true" minScreenWidth="Desktop" >
+							<Column width="7rem" hAlign="Center" demandPopin="true" minScreenWidth="Desktop">
 								<Text text="{i18n>lblWaitList}" width="auto"/>
 							</Column>
-							<Column width="4rem"  hAlign="Center" demandPopin="true" minScreenWidth="Desktop" >
+							<Column width="4rem" hAlign="Center" demandPopin="true" minScreenWidth="Desktop">
 								<Text text="{i18n>lblSuffix}" width="auto"/>
 							</Column>
-							<Column width="5rem"  hAlign="Center" demandPopin="true"  minScreenWidth="Desktop">
+							<Column width="5rem" hAlign="Center" demandPopin="true" minScreenWidth="Desktop">
 								<Text text="{i18n>lblRepaired}" width="auto"/>
 							</Column>
-							<Column width="4.5rem"  hAlign="Center" demandPopin="true" minScreenWidth="Desktop" >
+							<Column width="4.5rem" hAlign="Center" demandPopin="true" minScreenWidth="Desktop">
 								<Text text="{i18n>lblStatus}" width="auto"/>
 							</Column>
 						</columns>
 						<items>
 							<ColumnListItem type="Navigation" press="onListItemPress" vAlign="Middle">
 								<cells>
-												
-							<core1:Icon size="1.5rem" 
-                                 src="sap-icon://circle-task" color="green" visible="{= ${DemoModel>SDSTA} === 'E100'}"   /> 
-						
+									<core1:Icon size="1.5rem" src="sap-icon://circle-task" color="green" visible="{= ${DemoModel>SDSTA} === 'E100'}"/>
 									<Text text="{DemoModel>ZZSERIES}" width="3rem" textDirection="LTR"/>
 									<Text text="{DemoModel>ModelDesc}" width="13rem" textDirection="LTR"/>
 									<Text text="{DemoModel>ZoneDesc}" width="5rem" textDirection="LTR"/>
-									<!--changes by Swetha for DMND0004168 adding Region Column Start-->
-								<!--	<Text text="{DemoModel>Regio}" width="5rem" textDirection="LTR"/>-->
-									<!--changes by Swetha for DMND0004168 adding Region Column End-->
+									<!--changes by Swetha for DMND0004168 adding Region Column Start 1st Nov, 2023-->
+									<Text text="{DemoModel>Regio}" width="5rem" textDirection="LTR"/>
+									<!--changes by Swetha for DMND0004168 adding Region Column End 1st Nov, 2023-->
 									<Text text="{path:'DemoModel>Price',formatter:'.amountFormatter'}" width="7rem" textDirection="LTR"/>
 									<Text text="{DemoModel>EndDate}" width="8rem" textDirection="LTR"/>
 									<Text text="{DemoModel>ZZMOYR}" width="3rem" textDirection="LTR"/>
