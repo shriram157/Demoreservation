@@ -83,25 +83,21 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 					var mod = that.getOwnerComponent().getModel("vehicles"),
 						i,
 						objR = mod.getContext("/FilterData/RequestorType").getObject();
-					//changes by Swetha for INC0246642 on 3rd January, 2024 --- added if condition
-					if (objR!="undefined" || objR!=undefined || objR!=""||objR!=[]){
-						for (i = 0; i < objR.length; i++) {
+					for (i = 0; i < objR.length; i++) {
 							if (objR[i].key === oData.ZZREQTYP) {
 								oData.ZZREQTYPTXT = objR[i].name;
 							}
 						}
-					}
+					
 					// extract Purchaser type text
 					
 					var objP = mod.getContext("/FilterData/PurchaserType").getObject();
-					//changes by Swetha for INC0246642 on 3rd January, 2024 --- added if condition
-					if (objR !="undefined" || objR!=undefined || objR!=""||objR!=[]){
-						for (i = 0; i < objP.length; i++) {
+					for (i = 0; i < objP.length; i++) {
 							if (objP[i].key === oData.ZZPURTYP) {
 								oData.ZZPURTYPTXT = objP[i].name;
 							}
 						}
-					}
+					
 					oJSONModel.setData({
 						VehicleDetailSet: oData
 					});
