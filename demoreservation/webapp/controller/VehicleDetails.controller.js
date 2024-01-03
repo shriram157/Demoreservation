@@ -84,19 +84,20 @@ sap.ui.define(["ca/toyota/demoreservation/demoreservation/controller/BaseControl
 						i,
 						objR = mod.getContext("/FilterData/RequestorType").getObject();
 					for (i = 0; i < objR.length; i++) {
-						if (objR[i].key === oData.ZZREQTYP) {
-							oData.ZZREQTYPTXT = objR[i].name;
+							if (objR[i].key === oData.ZZREQTYP) {
+								oData.ZZREQTYPTXT = objR[i].name;
+							}
 						}
-					}
-
+					
 					// extract Purchaser type text
+					
 					var objP = mod.getContext("/FilterData/PurchaserType").getObject();
 					for (i = 0; i < objP.length; i++) {
-						if (objP[i].key === oData.ZZPURTYP) {
-							oData.ZZPURTYPTXT = objP[i].name;
+							if (objP[i].key === oData.ZZPURTYP) {
+								oData.ZZPURTYPTXT = objP[i].name;
+							}
 						}
-					}
-
+					
 					oJSONModel.setData({
 						VehicleDetailSet: oData
 					});
