@@ -10,26 +10,25 @@
 			"key": "All",
 			"name": "All"
 		}],
-		//changes by Shriram for DMND0004168
 		"RequestorType": [{
 			"key": "E",
 			"name": "TCI Associate"
-			},{
+		},{
 			"key": "C",
 			"name": "TCI Contractor"
-			},{
+		},{
 			"key": "D",
 			"name": "Department(Admin use only)"
-			},{
+		},{
 			"key": "R",
 			"name": "TCI Retiree"
-			},{
+		},{
 			"key": "T",
 			"name": "TFS Retiree"
-			},{
+		},{
 			"key": "TE",
 			"name": "TFS Associate"
-			}],
+		}],
 		"PurchaserType": [{
 			"key": "S",
 			"name": "TCI Associate’s Spouse or Child"
